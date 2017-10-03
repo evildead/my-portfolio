@@ -1,0 +1,37 @@
+{
+  "name": "my-portfolio",
+  "version": "1.0.0",
+  "description": "Build your own portfolio",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/evildead/my-portfolio.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/evildead/my-portfolio/issues"
+  },
+  "homepage": "https://github.com/evildead/my-portfolio#readme",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.18.2",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.3",
+    "dotenv": "^4.0.0",
+    "ejs": "^2.5.7",
+    "express": "^4.14.0",
+    "express-ejs-layouts": "^2.3.1",
+    "express-session": "^1.15.6",
+    "express-validator": "^4.2.1",
+    "mongoose": "^4.11.13",
+    "passport": "^0.4.0",
+    "passport-facebook": "^2.1.1",
+    "passport-google-oauth": "^1.0.0",
+    "passport-local": "^1.0.0",
+    "passport-twitter": "^1.0.4"
+  }
+}
