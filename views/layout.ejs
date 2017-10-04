@@ -19,10 +19,21 @@
                     <a href="/" class="navbar-brand">My <i class="fa fa-thumbs-o-up" aria-hidden="true"></i> Portfolio</a>
                 </div>
 
+                <ul class="nav navbar-nav navbar-right">
+                    <% if (user) { %>
+                        <li><img alt="<%= user.google.name %>" src="<%= user.google.imageUrl %>"></li>
+                        <li><a href="/logout">Logout</a></li>
+                    <% } else { %>
+                        <li><a href="/auth/google">Login with <span class="fa fa-google-plus"></span></a></li>
+                    <% } %>
+                </ul>
+
+                <!-- 
                 <ul class="nav navbar-nav">
                     <li><a href="/events">Events</a></li>
                     <li><a href="/events/create">Create an Event</a></li>
                 </ul>
+                -->
             </div>
         </div>
     </header>

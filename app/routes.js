@@ -2,31 +2,46 @@
 const express = require('express'),
     router = express.Router(),
     mainController = require('./controllers/main.controller'),
-    eventsController = require('./controllers/events.controller');
+    authController = require('./controllers/auth.controller');
+
+var _passport;
+
+// route middleware to make sure a user is logged in
+function isLoggedIn(req, res, next) {
+    // if user is authenticated in the session, pass the control to the "next()" handler
+    if (req.isAuthenticated()) {
+        return next();
+    }
+
+    // if they aren't redirect them to the home page
+    res.redirect('/');
+}
 
 // export router
-module.exports = router;
+module.exports = function(passport) {
+    _passport = passport;
+    //console.log('routes -> module.exports');
+    //console.log(_passport);
+    return router;
+}
 
 // define routes
 // main routes
 router.get('/', mainController.showHome);
 
-// events routes
-router.get('/events', eventsController.showEvents);
+// Google OAuth authentication
+router.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
 
-// seed events
-router.get('/events/seed', eventsController.seedEvents);
+// the callback after Google has authenticated the user
+router.get('/auth/google/callback',
+    passport.authenticate('google', {
+        successRedirect : '/account',
+        failureRedirect : '/'
+    })
+);
 
-// create events
-router.get('/events/create', eventsController.showCreate);
-router.post('/events/create', eventsController.processCreate);
+// route for showing the profile page
+router.get('/account', isLoggedIn, authController.showAccount);
 
-// edit events
-router.get('/events/:slug/edit', eventsController.showEdit);
-router.post('/events/:slug', eventsController.processEdit);
-
-// delete events
-router.get('/events/:slug/delete', eventsController.deleteEvent);
-
-// show a single event
-router.get('/events/:slug', eventsController.showSingle);
+// route for logging out
+router.get('/logout', authController.doLogout);

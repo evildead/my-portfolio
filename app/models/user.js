@@ -2,6 +2,8 @@
 var mongoose = require('mongoose');
 var bcrypt   = require('bcrypt-nodejs');
 
+// google profile: https://developers.google.com/+/web/api/rest/latest/people#resource
+
 // define the schema for our user model
 var userSchema = mongoose.Schema({
 
@@ -25,11 +27,8 @@ var userSchema = mongoose.Schema({
         id           : String,
         token        : String,
         email        : String,
-        name         : String
-    },
-    avatarlink       : {
-        type         : String,
-        default      : ''
+        name         : String,
+        imageUrl     : String
     }
 
 });

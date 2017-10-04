@@ -7,6 +7,7 @@ const express = require('express'),
     port = process.env.PORT || 8080
     expressLayouts = require('express-ejs-layouts'),
     mongoose = require('mongoose'),
+    passport = require('passport'),
     bodyParser = require('body-parser'),
     session = require('express-session'),
     cookieParser = require('cookie-parser'),
@@ -40,8 +41,13 @@ app.use(bodyParser.urlencoded({extended: true}));
 // express validator -> validate form or URL parameters
 app.use(expressValidator());
 
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+
+require('./config/passport')(passport); // pass passport for configuration
+
 // set the routes
-app.use(require('./app/routes'));
+app.use(require('./app/routes')(passport)); // pass passport for routing
 
 // start our server
 app.listen(port, () => {
