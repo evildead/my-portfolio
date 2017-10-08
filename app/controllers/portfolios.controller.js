@@ -39,7 +39,7 @@ function createDummy(req, res) {
         }
     ];
     // save the project1
-    project1.save((err) => {
+    var promise1 = project1.save((err) => {
         if(err) {
             throw err;
         }
@@ -66,26 +66,27 @@ function createDummy(req, res) {
         }
     ];
     // save the project2
-    project2.save((err) => {
+    var promise2 = project2.save((err) => {
         if(err) {
             throw err;
         }
         newUserPortfolio.projectList.push(project2.id);
     });
 
-    // save the portfolio
-    newUserPortfolio.save((err) => {
-        if(err) {
-            throw err;
-        }
+    Promise.all([promise1, promise2]).then(values => { 
+        console.log(values);
 
-        // set a successful flash message
-        req.flash('success', 'Successfully created dummy portfolio!');
+        // save the portfolio
+        newUserPortfolio.save((err) => {
+            if(err) {
+                throw err;
+            }
 
-        // redirect to the newly created portfolio
-        res.redirect(`/portfolios/${req.user.google.id}`);
+            // set a successful flash message
+            req.flash('success', 'Successfully created dummy portfolio!');
+
+            // redirect to the newly created portfolio
+            res.redirect(`/portfolios/${req.user.google.id}`);
+        });
     });
-
-    // seeded!
-    res.send('Portfolio created!');
 }
