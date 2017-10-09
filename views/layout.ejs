@@ -20,7 +20,7 @@
                 </div>
 
                 <ul class="nav navbar-nav navbar-right">
-                    <% if (user) { %>
+                    <% if ((typeof user !== 'undefined') && (user)) { %>
                         <li><img alt="<%= user.google.name %>" src="<%= user.google.imageUrl %>"></li>
                         <li><a href="/logout">Logout</a></li>
                     <% } else { %>

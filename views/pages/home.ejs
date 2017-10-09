@@ -1,4 +1,12 @@
 <div class="jumbotron text-center">
     <h1>Home-Folio</h1>
     <h2>Welcome to your own amazing portfolio builder</h2>
+
+    <% if(errors.length > 0) { %>
+        <div class="alert alert-danger">
+            <% for(error of errors) { %>
+                <%= error %><br>
+            <% } %>
+        </div>
+    <% } %>
 </div>

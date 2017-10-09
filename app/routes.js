@@ -54,3 +54,6 @@ router.get('/logout', authController.doLogout);
 
 // route for creating a dummy portfolio for the logged user
 router.get('/portfolios/createDummy', isLoggedIn, portfoliosController.createDummy);
+
+// route for viewing the portfolio for the logged user
+router.get('/portfolios/:googleid', portfoliosController.viewPortfolio);

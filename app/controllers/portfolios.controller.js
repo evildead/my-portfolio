@@ -1,3 +1,6 @@
+// User model
+const User = require('../models/user');
+
 // Project model
 const Project = require('../models/project');
 
@@ -5,7 +8,8 @@ const Project = require('../models/project');
 const Portfolio = require('../models/portfolio');
 
 module.exports = {
-    createDummy: createDummy
+    createDummy: createDummy,
+    viewPortfolio: viewPortfolio
 }
 
 /**
@@ -21,7 +25,7 @@ function createDummy(req, res) {
 
     const project1 = new Project();
     project1.createdBy = req.user.id;
-    project1.name = 'reacttocurrex';
+    project1.name = 'react to curr ex';
     project1.title = 'React to Currency Exchange';
     project1.briefDescription = '"React to Currency Exchange" is a one-page application built using ReactJS';
     project1.detailedDescription = '"React to Currency Exchange" is a one-page application built using ReactJS. It computes currency exchange by using the latest exchange rates provided by the fixer.io API <br><a href="https://evildead.github.io/reacttocurrex">https://evildead.github.io/reacttocurrex</a>';
@@ -48,7 +52,7 @@ function createDummy(req, res) {
 
     const project2 = new Project();
     project2.createdBy = req.user.id;
-    project2.name = 'create-a-crud-app-with-node-and-mongodb';
+    project2.name = 'create crud app node mongodb';
     project2.title = 'Create a CRUD App with NodeJS and Mongodb';
     project2.briefDescription = 'This is a CRUD application built with NodeJS in a Scotch.io course';
     project2.detailedDescription = 'This is a CRUD application built with NodeJS in a Scotch.io course<br>It features: Create, Read, Update, Delete of Olympics events';
@@ -88,5 +92,43 @@ function createDummy(req, res) {
             // redirect to the newly created portfolio
             res.redirect(`/portfolios/${req.user.google.id}`);
         });
+    });
+}
+
+/**
+ * View the user's portfolio
+ * @param {request} req 
+ * @param {response} res 
+ */
+function viewPortfolio(req, res) {
+    User.findOne({'google.id' : req.params.googleid}, function(err, user) {
+        if(err) {
+            throw err;
+        }
+
+        console.log(user);
+
+        if(user == null) {
+            // set a error flash message
+            req.flash('errors', 'Oooops: No portfolio found');
+            
+            // redirect to the home page
+            res.redirect('/');
+        }
+        else {
+            Portfolio.findOne({'createdBy' : user.id})
+                .populate('createdBy')
+                .populate('projectList')
+                .exec(function(err, portfolio) {
+                    /*
+                    for(project of portfolio.projectList) {
+                        console.log(project);
+                    }
+                    */
+                    res.render('pages/viewPortfolio', {
+                        portfolio: portfolio
+                    });
+                });
+        }
     });
 }
