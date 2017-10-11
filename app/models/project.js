@@ -37,6 +37,10 @@ var projectSchema = new mongoose.Schema({
                 type: String,
                 default: ''
             },
+            mediaTitle: {
+                type: String,
+                default: ''
+            },
             description: {
                 type: String,
                 default: ''
@@ -55,12 +59,13 @@ projectSchema.pre('save', function (next) {
 // create the model for project and expose it to our app
 module.exports = mongoose.model('Project', projectSchema);
 
-// function to slugify a name
+// function to slugify a project name
 function slugify(text) {
     return text.toString().toLowerCase()
         .replace(/\s+/g, '-') // Replace spaces with -
         .replace(/[^\w\-]+/g, '') // Remove all non-word chars
         .replace(/\-\-+/g, '-') // Replace multiple - with single -
         .replace(/^-+/, '') // Trim - from start of text
-        .replace(/-+$/, ''); // Trim - from end of text
+        .replace(/-+$/, '') // Trim - from end of text
+        .replace(/-+/, '_'); // Replace remaining '-' with '_'
 }

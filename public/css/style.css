@@ -1,28 +1,119 @@
 body  {
     font-size: 16px;
     line-height: 1.5;
-  }
+    background-color: #E5E5E5;
+}
   
-  /* header */
-  #site-header .navbar  {
+/* header */
+#site-header .navbar  {
     border-radius: 0;
     border: none;
     margin: 0;
-  }
+}
   
-  /* main section */
-  #site-main  {
+/* main section */
+#site-main  {
     padding-bottom: 50px;
     padding-top: 50px;
-  }
+}
   
-  /* footer */
-  #site-footer  {
+/* footer */
+#site-footer  {
     text-align: center;
     padding-bottom: 30px;
     padding-top: 30px;
     font-size: 12px;
     background: #222;
     color: #999;
-  }
+}
+
+.jumbotron.customizedBig {
+    height: 500px;
+    background-image: url("../images/Iceland03.jpg");
+}
+
+.jumbotron.customizedNormal {
+    background-image: url("../images/Iceland02.jpg");
+}
+
+div.contentCentered {
+    text-align: center;
+}
+
+.textInTransparentBlack {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    color: white !important;
+}
+.backInBlack {
+    background-color: black;
+}
+.backInWhite {
+    background-color: white;
+}
+.backInSilver {
+    background-color: #C0C0C0;
+}
+.backInLightSlateGray {
+    background-color: #778899;
+}
+
+/* Projects' carousels */
+.carousel-div-left {
+    border-top-left-radius: 10px;
+    border-width: 2px;
+}
+
+.carousel-div-right {
+    border-top-right-radius: 10px;
+    border-width: 2px;
+}
+
+.row {
+    margin-bottom: 50px;
+}
+
+.carousel-inner > .item {
+    height: 650px;
+}
+
+.carousel-inner > .item > a > img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    max-height: 450px;
+    width: auto;
+}
+
+.carousel-control.left,
+.carousel-control.right {
+    background-image: none;
+}
+
+.white-text {
+    color: white;
+}
+
+.progDescription-right {
+    height: 100%;
+    vertical-align: middle;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    margin-bottom: 50px;
+}
+
+.progDescription-left {
+    height: 100%;
+    vertical-align: middle;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    margin-bottom: 50px;
+}
   

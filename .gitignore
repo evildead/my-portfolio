@@ -1,5 +1,7 @@
 .env
 
+public/users/*
+
 # Logs
 logs
 *.log

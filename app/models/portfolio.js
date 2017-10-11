@@ -7,12 +7,27 @@ var portfolioSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
+    createdOn: {
+        type: Date,
+        default: Date.now
+    },
+    userDescription: {
+        type: String,
+        default: ''
+    },
     projectList: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Project'
         }
-    ]
+    ],
+    webportals: {
+        github:         String,
+        stackoverflow:  String,
+        linkedin:       String,
+        hackerrank:     String
+    },
+    cv: String
 });
 
 // create the model for users and expose it to our app

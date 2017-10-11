@@ -21,6 +21,12 @@ function createDummy(req, res) {
     // create dummy portfolio
     const newUserPortfolio = new Portfolio();
     newUserPortfolio.createdBy = req.user.id;
+    newUserPortfolio.userDescription = "<h2>Senior web full-stack, desktop, mobile developer</h2><ul><li>Expert in advanced development methodologies, tools and processes contributing to the design and rollout of cutting-edge software applications.</li><li>Troubleshooting skills – able to analyse code and engineer well-researched, cost-effective and responsive solutions, used to work both alone and in team with high-quality results.</li><li>Lust for knowledge and for new technologies (NodeJS, ReactJS, QML, Npm, ES6)</li><li>Top ranking in C++ practice on HackerRank: www.hackerrank.com/danilo_carrabino</li><li>Always looking for the most appropriate algorithmic technique to accomplish the task</li></ul>";
+    newUserPortfolio.webportals.github = "https://github.com/evildead";
+    newUserPortfolio.webportals.stackoverflow = "https://stackoverflow.com/users/1424179/danilo-carrabino";
+    newUserPortfolio.webportals.linkedin = "https://www.linkedin.com/in/danilocarrabino/";
+    newUserPortfolio.webportals.hackerrank = "https://www.hackerrank.com/danilo_carrabino";
+    newUserPortfolio.cv = "/users/117555122180909325816/cv/DaniloCarrabino_Resume.pdf";
     newUserPortfolio.projectList = [];
 
     const project1 = new Project();
@@ -30,15 +36,18 @@ function createDummy(req, res) {
     project1.briefDescription = '"React to Currency Exchange" is a one-page application built using ReactJS';
     project1.detailedDescription = '"React to Currency Exchange" is a one-page application built using ReactJS. It computes currency exchange by using the latest exchange rates provided by the fixer.io API <br><a href="https://evildead.github.io/reacttocurrex">https://evildead.github.io/reacttocurrex</a>';
     project1.mediaList = [{
-            mediaUrl: 'https://www.broadlandshoa.org/wp-content/uploads/2016/02/basketball_hoop.png',
+            mediaUrl: 'https://ichef.bbci.co.uk/news/660/cpsprodpb/1456/production/_93260250_gettyimages-622113366.jpg',
+            mediaTitle: 'Basketball',
             description: 'Throwing into a basket.'
         },
         {
             mediaUrl: 'http://www.nhs.uk/Livewell/fitness/PublishingImages/getting%20started%20guides/T_1216_swimming_612848960_A.jpg',
+            mediaTitle: 'Swimming',
             description: 'Michael Phelps is the fast fish.'
         },
         {
             mediaUrl: 'http://tamildiplomat.com/wp-content/uploads/2016/09/Weight-Lifting.gif',
+            mediaTitle: 'Heavy Weights',
             description: 'Lifting heavy things up'
         }
     ];
@@ -58,14 +67,17 @@ function createDummy(req, res) {
     project2.detailedDescription = 'This is a CRUD application built with NodeJS in a Scotch.io course<br>It features: Create, Read, Update, Delete of Olympics events';
     project2.mediaList = [{
             mediaUrl: 'http://www.bloglet.com/gallery/country-artists/country-artists.png',
+            mediaTitle: 'Country',
             description: 'Country is beautiful.'
         },
         {
-            mediaUrl: 'https://pbs.twimg.com/profile_images/755476864563613697/z1GgG2Ht.jpg',
+            mediaUrl: 'http://photos.prnewswire.com/prnvar/20120405/CL82910LOGO',
+            mediaTitle: 'Hard Rock',
             description: 'Hard Rock kicks asses!'
         },
         {
-            mediaUrl: 'https://i.pinimg.com/736x/42/ca/bd/42cabd4006153a3856f7a5863dff8549--heavy-metal-music-heavy-metal-bands.jpg',
+            mediaUrl: 'http://www.macsome.com/guide/images/heavy-metal.jpg',
+            mediaTitle: 'Heavy Metal',
             description: 'Heavy Metal is the law \mm/'
         }
     ];
@@ -120,13 +132,9 @@ function viewPortfolio(req, res) {
                 .populate('createdBy')
                 .populate('projectList')
                 .exec(function(err, portfolio) {
-                    /*
-                    for(project of portfolio.projectList) {
-                        console.log(project);
-                    }
-                    */
                     res.render('pages/viewPortfolio', {
-                        portfolio: portfolio
+                        portfolio: portfolio,
+                        errors: req.flash('errors')
                     });
                 });
         }

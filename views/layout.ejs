@@ -8,6 +8,14 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
     <link rel="stylesheet" href="/css/style.css">
+
+    <!-- JS  -->
+    <script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!-- Fancybox 3 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.1.25/jquery.fancybox.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.1.25/jquery.fancybox.min.js"></script>
 </head>
 <body>
 
@@ -21,7 +29,7 @@
 
                 <ul class="nav navbar-nav navbar-right">
                     <% if ((typeof user !== 'undefined') && (user)) { %>
-                        <li><img alt="<%= user.google.name %>" src="<%= user.google.imageUrl %>"></li>
+                        <li><img class="img-circle" alt="<%= user.google.name %>" src="<%= user.google.imageUrl %>"></li>
                         <li><a href="/logout">Logout</a></li>
                     <% } else { %>
                         <li><a href="/auth/google">Login with <span class="fa fa-google-plus"></span></a></li>
