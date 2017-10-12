@@ -13,11 +13,12 @@ var projectSchema = new mongoose.Schema({
     },
     name: {
         type: String,
-        default: ''
+        default: function() {
+            return("Project " + (Math.floor(Math.random()*2000000000) + 1000));
+        }
     },
     slug: {
-        type: String,
-        unique: true
+        type: String
     },
     title: {
         type: String,
@@ -51,7 +52,7 @@ var projectSchema = new mongoose.Schema({
 
 // middleware section
 // make sure that the slug is created from the name
-projectSchema.pre('save', function (next) {
+projectSchema.pre('save', function(next) {
     this.slug = slugify(this.name);
     next();
 });

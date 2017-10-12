@@ -7,9 +7,13 @@ const Project = require('../models/project');
 // Portfolio model
 const Portfolio = require('../models/portfolio');
 
+// require path module
+const path = require('path');
+
 module.exports = {
     createDummy: createDummy,
-    viewPortfolio: viewPortfolio
+    viewPortfolio: viewPortfolio,
+    viewProject: viewProject
 }
 
 /**
@@ -21,7 +25,7 @@ function createDummy(req, res) {
     // create dummy portfolio
     const newUserPortfolio = new Portfolio();
     newUserPortfolio.createdBy = req.user.id;
-    newUserPortfolio.userDescription = "<h2>Senior web full-stack, desktop, mobile developer</h2><ul><li>Expert in advanced development methodologies, tools and processes contributing to the design and rollout of cutting-edge software applications.</li><li>Troubleshooting skills – able to analyse code and engineer well-researched, cost-effective and responsive solutions, used to work both alone and in team with high-quality results.</li><li>Lust for knowledge and for new technologies (NodeJS, ReactJS, QML, Npm, ES6)</li><li>Top ranking in C++ practice on HackerRank: www.hackerrank.com/danilo_carrabino</li><li>Always looking for the most appropriate algorithmic technique to accomplish the task</li></ul>";
+    newUserPortfolio.userDescription = "<h2>Senior web full-stack, desktop, mobile developer</h2><ul><li>Expert in advanced development methodologies, tools and processes contributing to the design and rollout of cutting-edge software applications.</li><li>Troubleshooting skills – able to analyse code and engineer well-researched, cost-effective and responsive solutions, used to work both alone and in team with high-quality results.</li><li>Lust for knowledge and for new technologies (NodeJS, ReactJS, QML, Npm, ES6)</li><li>Top ranking in C++ practice on HackerRank: <a href='www.hackerrank.com/danilo_carrabino' target='_blank'>Danilo Carrabino</a></li><li>Always looking for the most appropriate algorithmic technique to accomplish the task</li></ul>";
     newUserPortfolio.webportals.github = "https://github.com/evildead";
     newUserPortfolio.webportals.stackoverflow = "https://stackoverflow.com/users/1424179/danilo-carrabino";
     newUserPortfolio.webportals.linkedin = "https://www.linkedin.com/in/danilocarrabino/";
@@ -61,7 +65,7 @@ function createDummy(req, res) {
 
     const project2 = new Project();
     project2.createdBy = req.user.id;
-    project2.name = 'create crud app node mongodb';
+    project2.name = 'create crud app - node mongodb';
     project2.title = 'Create a CRUD App with NodeJS and Mongodb';
     project2.briefDescription = 'This is a CRUD application built with NodeJS in a Scotch.io course';
     project2.detailedDescription = 'This is a CRUD application built with NodeJS in a Scotch.io course<br>It features: Create, Read, Update, Delete of Olympics events';
@@ -122,7 +126,7 @@ function viewPortfolio(req, res) {
 
         if(user == null) {
             // set a error flash message
-            req.flash('errors', 'Oooops: No portfolio found');
+            req.flash('errors', 'Oooops: No user found with id ' + req.params.googleid);
             
             // redirect to the home page
             res.redirect('/');
@@ -132,11 +136,70 @@ function viewPortfolio(req, res) {
                 .populate('createdBy')
                 .populate('projectList')
                 .exec(function(err, portfolio) {
-                    res.render('pages/viewPortfolio', {
-                        portfolio: portfolio,
+                    if(portfolio == null) {
+                        // set a error flash message
+                        req.flash('errors', 'Oooops: No portfolio found for user ' + user.google.name);
+                        
+                        // redirect to the home page
+                        res.redirect('/');
+                    }
+                    else {
+                        res.render('pages/viewPortfolio', {
+                            portfolio: portfolio,
+                            path: path,
+                            errors: req.flash('errors')
+                        });
+                    }
+                });
+        }
+    });
+}
+
+/**
+ * View the user's project
+ * @param {request} req 
+ * @param {response} res 
+ */
+function viewProject(req, res) {
+    User.findOne({'google.id' : req.params.googleid}, function(err, user) {
+        if(err) {
+            throw err;
+        }
+
+        console.log(user);
+
+        if(user == null) {
+            // set a error flash message
+            req.flash('errors', 'Oooops: No user found with id ' + req.params.googleid);
+            
+            // redirect to the home page
+            res.redirect('/');
+        }
+        else {
+            // look for the project created by user.id with slug = req.params.projectslug
+            Project.findOne({'createdBy' : user.id, 'slug' : req.params.projectslug})
+                .populate('createdBy')
+                .exec(function(err, project) {
+                if(err) {
+                    throw err;
+                }
+        
+                console.log(project);
+        
+                if(project == null) {
+                    // set a error flash message
+                    req.flash('errors', 'Oooops: No project "' + req.params.projectslug + '" found for user ' + user.name);
+                    
+                    // redirect to the home page
+                    res.redirect('/');
+                }
+                else {
+                    res.render('pages/viewProject', {
+                        project: project,
                         errors: req.flash('errors')
                     });
-                });
+                }
+            });
         }
     });
 }

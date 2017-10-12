@@ -40,8 +40,32 @@ div.contentCentered {
     text-align: center;
 }
 
+div.weblinks {
+    margin-bottom: 25px;
+    /*
+    border-style: solid;
+    border-bottom-width: 2px;
+    border-top-width: 0px;
+    border-right-width: 0px;
+    border-left-width: 0px;
+    border-bottom-color: black;
+    */
+}
+
+.row.rowwithmargins {
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+.userdetails {
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
 .textInTransparentBlack {
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.7);
     border-radius: 10px;
     color: white !important;
 }
@@ -57,6 +81,9 @@ div.contentCentered {
 .backInLightSlateGray {
     background-color: #778899;
 }
+.backInCustomLightBlue {
+    background-color: #A1CEFF
+}
 
 /* Projects' carousels */
 .carousel-div-left {
@@ -65,7 +92,7 @@ div.contentCentered {
 }
 
 .carousel-div-right {
-    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
     border-width: 2px;
 }
 
@@ -103,17 +130,15 @@ div.contentCentered {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     padding-top: 50px;
-    padding-bottom: 50px;
-    margin-bottom: 50px;
+    padding-bottom: 20px;
 }
 
 .progDescription-left {
     height: 100%;
     vertical-align: middle;
     border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
+    /*border-bottom-left-radius: 10px;*/
     padding-top: 50px;
-    padding-bottom: 50px;
-    margin-bottom: 50px;
+    padding-bottom: 20px;
 }
   

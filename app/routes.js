@@ -5,8 +5,6 @@ const express = require('express'),
     authController = require('./controllers/auth.controller'),
     portfoliosController = require('./controllers/portfolios.controller');
 
-//var _passport;
-
 // route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {
     // if user is authenticated in the session, pass the control to the "next()" handler
@@ -20,16 +18,6 @@ function isLoggedIn(req, res, next) {
 
 // export router
 module.exports = router;
-
-/*
-// export router
-module.exports = function(passport) {
-    _passport = passport;
-    //console.log('routes -> module.exports');
-    //console.log(_passport);
-    return router;
-}
-*/
 
 // define routes
 // main routes
@@ -55,5 +43,8 @@ router.get('/logout', authController.doLogout);
 // route for creating a dummy portfolio for the logged user
 router.get('/portfolios/createDummy', isLoggedIn, portfoliosController.createDummy);
 
-// route for viewing the portfolio for the logged user
+// route for viewing the portfolio page
 router.get('/portfolios/:googleid', portfoliosController.viewPortfolio);
+
+// route for viewing the project page
+router.get('/portfolios/:googleid/:projectslug', portfoliosController.viewProject);

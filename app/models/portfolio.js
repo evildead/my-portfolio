@@ -27,7 +27,10 @@ var portfolioSchema = new mongoose.Schema({
         linkedin:       String,
         hackerrank:     String
     },
-    cv: String
+    cv: {
+        type: String,
+        default: ''
+    }
 });
 
 // create the model for users and expose it to our app

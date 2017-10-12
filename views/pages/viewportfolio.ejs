@@ -1,6 +1,11 @@
 <div class="jumbotron text-center customizedNormal bg-no-overlay">
-    <h1 class="textInTransparentBlack"><%= portfolio.createdBy.google.name %></h1>
-    <h2 class="textInTransparentBlack">Portfolio</h2>
+    <div class="row">
+        <div class="col-sm-12 contentCentered">
+            <img class="img-circle" src="<%= portfolio.createdBy.google.imageUrl %>" alt="<%= portfolio.createdBy.google.name %>">
+            <h1 class="textInTransparentBlack"><%= portfolio.createdBy.google.name %></h1>
+            <h2 class="textInTransparentBlack">Portfolio</h2>
+        </div>
+    </div>
 </div>
 
 <% if(errors.length > 0) { %>
@@ -12,18 +17,30 @@
 <% } %>
 
 <!-- User's details -->
-<div class="row">
-    <!-- Image -->
-    <div class="col-sm-4 contentCentered">
-        <img class="img-circle" src="<%= portfolio.createdBy.google.imageUrl %>" alt="<%= portfolio.createdBy.google.name %>">
-        <h2><%= portfolio.createdBy.google.name %></h2>
-    </div>
+<div class="row rowwithmargins">
+    <div class="col-sm-2"></div>
     <!-- Description -->
-    <div class="col-sm-8">
+    <div class="col-sm-8 userdetails">
         <div class="userDescription">
             <%- portfolio.userDescription %>
         </div>
+        <% if(portfolio.cv.length > 0) { %>
+        <br>
+        <div class="row">
+            <div class="col-sm-6 contentCentered">
+                <a class="btn btn-default backInCustomLightBlue" href="<%= portfolio.cv %>" target="_blank" role="button">
+                        <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Open CV
+                </a>
+            </div>
+            <div class="col-sm-6 contentCentered">
+                <a class="btn btn-default backInCustomLightBlue" href="<%= portfolio.cv %>" download="<%= portfolio.createdBy.google.name + ' - CV' + path.extname(portfolio.cv) %>" role="button">
+                    <span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Download CV
+                </a>
+            </div>
+        </div>
+        <% } %>
     </div>
+    <div class="col-sm-2"></div>
 </div>
 
 <hr class="featurette-divider">
@@ -47,12 +64,20 @@
         <div class="row">
             <!-- project carousel -->
             <% if(isEven) { %>
-            <div class="col-sm-9 carousel-div-left backInLightSlateGray">
+            <!-- project brief description -->
+            <div class="progDescription-left col-sm-3 white-text backInLightSlateGray">
+                <h1><%= project.title %></h1>
+                <div><%= project.briefDescription %></div>
+            </div>
+
+            <div class="col-sm-9 carousel-div-right backInLightSlateGray">
             <% } else { %>
+            <!-- project brief description -->
             <div class="progDescription-left col-sm-3 white-text backInSilver">
                 <h1><%= project.title %></h1>
                 <div><%= project.briefDescription %></div>
             </div>
+
             <div class="col-sm-9 carousel-div-right backInSilver">
             <% }  %>
                 <div id="<%= carouselId %>" class="carousel slide" data-ride="carousel">
@@ -76,7 +101,7 @@
                             <% } else { %>
                             <div class="item">
                             <% }  %>
-                                <a data-fancybox="<%= project.slug %>" data-caption="<%= media.mediaTitle %>" href="<%= media.mediaUrl %>">
+                                <a data-fancybox="<%= project.slug %>" data-caption="<%= media.mediaTitle + ' - ' + media.description %>" href="<%= media.mediaUrl %>">
                                     <img class="img-responsive center-block" src="<%= media.mediaUrl %>" alt="<%= media.mediaTitle %>">
                                 </a>
                                 <div class="container">
@@ -100,14 +125,6 @@
                     </a>
                 </div>
             </div>
-
-            <!-- project brief description -->
-            <% if(isEven) { %>
-            <div class="progDescription-right col-sm-3 white-text backInLightSlateGray">
-                <h1><%= project.title %></h1>
-                <div><%= project.briefDescription %></div>
-            </div>
-            <% } %>
                 
         </div>
 <%  }  %>
@@ -118,27 +135,43 @@
 
 <div class="row">
     <!-- Github -->
-    <div class="col-sm-3 contentCentered">
+    <div class="col-sm-3 contentCentered weblinks">
         <img class="img-circle" src="/images/github-140.png" alt="Github" width="140" height="140">
         <h2>Github</h2>
-        <a class="btn btn-default" href="<%= portfolio.webportals.github %>" target="_blank" role="button">Go!</a>
+        <% if(portfolio.webportals.github.length > 0) { %>
+        <a class="btn btn-default backInCustomLightBlue" href="<%= portfolio.webportals.github %>" target="_blank" role="button">
+            <span class="glyphicon glyphicon-link" aria-hidden="true"></span> Go!
+        </a>
+        <% } %>
     </div>
     <!-- Stack Overflow -->
-    <div class="col-sm-3 contentCentered">
+    <div class="col-sm-3 contentCentered weblinks">
         <img class="img-circle" src="/images/stackoverflow-140.png" alt="Stack Overflow" width="140" height="140">
         <h2>Stack Overflow</h2>
-        <a class="btn btn-default" href="<%= portfolio.webportals.stackoverflow %>" target="_blank" role="button">Go!</a>
+        <% if(portfolio.webportals.stackoverflow.length > 0) { %>
+        <a class="btn btn-default backInCustomLightBlue" href="<%= portfolio.webportals.stackoverflow %>" target="_blank" role="button">
+            <span class="glyphicon glyphicon-link" aria-hidden="true"></span> Go!
+        </a>
+        <% } %>
     </div>
     <!-- LinkedIn -->
-    <div class="col-sm-3 contentCentered">
+    <div class="col-sm-3 contentCentered weblinks">
         <img class="img-circle" src="/images/linkedin-140.png" alt="LinkedIn" width="140" height="140">
         <h2>LinkedIn</h2>
-        <a class="btn btn-default" href="<%= portfolio.webportals.linkedin %>" target="_blank" role="button">Go!</a>
+        <% if(portfolio.webportals.linkedin.length > 0) { %>
+        <a class="btn btn-default backInCustomLightBlue" href="<%= portfolio.webportals.linkedin %>" target="_blank" role="button">
+            <span class="glyphicon glyphicon-link" aria-hidden="true"></span> Go!
+        </a>
+        <% } %>
     </div>
     <!-- Hackerrank -->
-    <div class="col-sm-3 contentCentered">
+    <div class="col-sm-3 contentCentered weblinks">
         <img class="img-circle" src="/images/hackerrank-140.png" alt="Hackerrank" width="140" height="140">
         <h2>Hackerrank</h2>
-        <a class="btn btn-default" href="<%= portfolio.webportals.hackerrank %>" target="_blank" role="button">Go!</a>
+        <% if(portfolio.webportals.hackerrank.length > 0) { %>
+        <a class="btn btn-default backInCustomLightBlue" href="<%= portfolio.webportals.hackerrank %>" target="_blank" role="button">
+            <span class="glyphicon glyphicon-link" aria-hidden="true"></span> Go!
+        </a>
+        <% } %>
     </div>
 </div>
