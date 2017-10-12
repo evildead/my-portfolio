@@ -40,6 +40,9 @@ router.get('/account', isLoggedIn, authController.showAccount);
 // route for logging out
 router.get('/logout', authController.doLogout);
 
+// route for viewing the portfolio list on My-Portfolio
+router.get('/portfolios', portfoliosController.viewPortfolioList);
+
 // route for creating a dummy portfolio for the logged user
 router.get('/portfolios/createDummy', isLoggedIn, portfoliosController.createDummy);
 

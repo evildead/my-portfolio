@@ -1,0 +1,84 @@
+<!-- breadcrumbs -->
+<ol class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li><a href="/portfolios">Portfolios</a></li>
+    <li><a href="/portfolios/<%= project.createdBy.google.id %>"><%= project.createdBy.google.name %></a></li>
+    <li class="active"><%= project.slug %></li>
+</ol>
+
+<div class="jumbotron text-center customizedNormal bg-no-overlay">
+    <div class="row">
+        <div class="col-sm-12 contentCentered">
+            <img class="img-circle" src="<%= project.createdBy.google.imageUrl %>" alt="<%= project.createdBy.google.name %>">
+            <h1 class="textInTransparentBlack"><%= project.createdBy.google.name %></h1>
+            <h2 class="textInTransparentBlack">Project: <%= project.name %></h2>
+        </div>
+    </div>
+</div>
+
+<!-- Project's carousel -->
+<%  const carouselId = "myCarousel_" + project.slug;
+    const carouselIndicatorsId = "myCarouselIndicators_" + project.slug;
+    const carouselInnerId = "myCarouselInner_" + project.slug; %>
+<div class="row carousel-row">
+    <div class="col-sm-12 carousel-div-right backInCustomLightBlue">
+        <div id="<%= carouselId %>" class="carousel slide" data-ride="carousel">
+            <ol id="<%= carouselIndicatorsId %>" class="carousel-indicators">
+                <%  var mediaId = 0;
+                    for(media of project.mediaList) { 
+                        if(mediaId === 0) { %>
+                        <li data-target="#<%= carouselId %>" data-slide-to="<%= mediaId %>" class="active"></li>
+                        <% } else { %>
+                        <li data-target="#<%= carouselId %>" data-slide-to="<%= mediaId %>"></li>
+                        <% }  %>
+                <%  mediaId++;
+                    }  %>
+            </ol>
+
+            <div id="m<%= carouselInnerId %>" class="carousel-inner" role="listbox">
+                <%  mediaId = 0;
+                    for(media of project.mediaList) { 
+                    if(mediaId === 0) { %>
+                    <div class="item active">
+                    <% } else { %>
+                    <div class="item">
+                    <% }  %>
+                        <a data-fancybox="<%= project.slug %>" data-caption="<%= media.mediaTitle + ' - ' + media.description %>" href="<%= media.mediaUrl %>">
+                            <img class="img-responsive center-block" src="<%= media.mediaUrl %>" alt="<%= media.mediaTitle %>">
+                        </a>
+                        <div class="container">
+                            <div class="carousel-caption">
+                                <h2><%= media.mediaTitle %></h2>
+                                <p><%= media.description %></p>
+                            </div>
+                        </div>
+                    </div>
+                <%  mediaId++;
+                    }  %>
+            </div>
+
+            <a class="left carousel-control" href="#<%= carouselId %>" role="button" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#<%= carouselId %>" role="button" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </div>
+        
+</div>
+
+<!-- Project's details -->
+<div class="row rowwithmargins projectdetails">
+    <!-- Project's title -->
+    <h2><%- project.title %></h2>
+
+    <!-- Detailed Description -->
+    <div class="col-sm-12">
+        <div class="projectDescription">
+            <%- project.detailedDescription %>
+        </div>
+    </div>
+</div>

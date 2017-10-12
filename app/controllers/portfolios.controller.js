@@ -12,6 +12,7 @@ const path = require('path');
 
 module.exports = {
     createDummy: createDummy,
+    viewPortfolioList: viewPortfolioList,
     viewPortfolio: viewPortfolio,
     viewProject: viewProject
 }
@@ -94,7 +95,7 @@ function createDummy(req, res) {
     });
 
     Promise.all([promise1, promise2]).then(values => { 
-        console.log(values);
+        //console.log(values);
 
         // save the portfolio
         newUserPortfolio.save((err) => {
@@ -112,6 +113,42 @@ function createDummy(req, res) {
 }
 
 /**
+ * View the portfolio list
+ * @param {request} req 
+ * @param {response} res 
+ */
+function viewPortfolioList(req, res) {
+    // get all the portfolios
+    Portfolio.find({})
+        .populate('createdBy')
+        .populate('projectList')
+        .exec(function(err, portfolios) {
+            // error found
+            if(err) {
+                res.status(404);
+                res.send('No portfolio found');
+            }
+
+            if(portfolios == null) {
+                // set a error flash message
+                req.flash('errors', 'Oooops: No portfolio found!');
+                
+                // redirect to the home page
+                res.redirect('/');
+            }
+            else {
+                res.render('pages/viewPortfolioList', {
+                    user : req.user,
+                    portfolios: portfolios,
+                    path: path,
+                    errors: req.flash('errors'),
+                    success: req.flash('success')
+                });
+            }
+        });
+}
+
+/**
  * View the user's portfolio
  * @param {request} req 
  * @param {response} res 
@@ -122,7 +159,7 @@ function viewPortfolio(req, res) {
             throw err;
         }
 
-        console.log(user);
+        //console.log(user);
 
         if(user == null) {
             // set a error flash message
@@ -145,6 +182,7 @@ function viewPortfolio(req, res) {
                     }
                     else {
                         res.render('pages/viewPortfolio', {
+                            user : req.user,
                             portfolio: portfolio,
                             path: path,
                             errors: req.flash('errors')
@@ -166,7 +204,7 @@ function viewProject(req, res) {
             throw err;
         }
 
-        console.log(user);
+        //console.log(user);
 
         if(user == null) {
             // set a error flash message
@@ -184,17 +222,18 @@ function viewProject(req, res) {
                     throw err;
                 }
         
-                console.log(project);
+                //console.log(project);
         
                 if(project == null) {
                     // set a error flash message
-                    req.flash('errors', 'Oooops: No project "' + req.params.projectslug + '" found for user ' + user.name);
+                    req.flash('errors', 'Oooops: No project "' + req.params.projectslug + '" found for user ' + user.google.name);
                     
                     // redirect to the home page
                     res.redirect('/');
                 }
                 else {
                     res.render('pages/viewProject', {
+                        user : req.user,
                         project: project,
                         errors: req.flash('errors')
                     });

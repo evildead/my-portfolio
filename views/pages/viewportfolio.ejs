@@ -1,3 +1,10 @@
+<!-- breadcrumbs -->
+<ol class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li><a href="/portfolios">Portfolios</a></li>
+    <li class="active"><%= portfolio.createdBy.google.name %></li>
+</ol>
+
 <div class="jumbotron text-center customizedNormal bg-no-overlay">
     <div class="row">
         <div class="col-sm-12 contentCentered">
@@ -28,12 +35,12 @@
         <br>
         <div class="row">
             <div class="col-sm-6 contentCentered">
-                <a class="btn btn-default backInCustomLightBlue" href="<%= portfolio.cv %>" target="_blank" role="button">
+                <a class="btn btn-primary" href="<%= portfolio.cv %>" target="_blank" role="button">
                         <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Open CV
                 </a>
             </div>
             <div class="col-sm-6 contentCentered">
-                <a class="btn btn-default backInCustomLightBlue" href="<%= portfolio.cv %>" download="<%= portfolio.createdBy.google.name + ' - CV' + path.extname(portfolio.cv) %>" role="button">
+                <a class="btn btn-primary" href="<%= portfolio.cv %>" download="<%= portfolio.createdBy.google.name + ' - CV' + path.extname(portfolio.cv) %>" role="button">
                     <span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Download CV
                 </a>
             </div>
@@ -61,24 +68,32 @@
             isEven = false;
         } %>
 
-        <div class="row">
+        <div class="row carousel-row">
             <!-- project carousel -->
             <% if(isEven) { %>
             <!-- project brief description -->
-            <div class="progDescription-left col-sm-3 white-text backInLightSlateGray">
+            <div class="progDescription-left col-sm-3 white-text backInCustomLightBlue">
                 <h1><%= project.title %></h1>
                 <div><%= project.briefDescription %></div>
+                <hr class="featurette-divider">
+                <a class="btn btn-success" href="/portfolios/<%= portfolio.createdBy.google.id %>/<%= project.slug %>" role="button">
+                    <span class="glyphicon glyphicon-link" aria-hidden="true"></span> View Project
+                </a>
             </div>
 
-            <div class="col-sm-9 carousel-div-right backInLightSlateGray">
+            <div class="col-sm-9 carousel-div-right backInCustomLightBlue">
             <% } else { %>
             <!-- project brief description -->
-            <div class="progDescription-left col-sm-3 white-text backInSilver">
+            <div class="progDescription-left col-sm-3 white-text backInCustomLightBlue">
                 <h1><%= project.title %></h1>
                 <div><%= project.briefDescription %></div>
+                <hr class="featurette-divider">
+                <a class="btn btn-success" href="/portfolios/<%= portfolio.createdBy.google.id %>/<%= project.slug %>" role="button">
+                    <span class="glyphicon glyphicon-link" aria-hidden="true"></span> View Project
+                </a>
             </div>
 
-            <div class="col-sm-9 carousel-div-right backInSilver">
+            <div class="col-sm-9 carousel-div-right backInCustomLightBlue">
             <% }  %>
                 <div id="<%= carouselId %>" class="carousel slide" data-ride="carousel">
                     <ol id="<%= carouselIndicatorsId %>" class="carousel-indicators">
@@ -139,7 +154,7 @@
         <img class="img-circle" src="/images/github-140.png" alt="Github" width="140" height="140">
         <h2>Github</h2>
         <% if(portfolio.webportals.github.length > 0) { %>
-        <a class="btn btn-default backInCustomLightBlue" href="<%= portfolio.webportals.github %>" target="_blank" role="button">
+        <a class="btn btn-primary" href="<%= portfolio.webportals.github %>" target="_blank" role="button">
             <span class="glyphicon glyphicon-link" aria-hidden="true"></span> Go!
         </a>
         <% } %>
@@ -149,7 +164,7 @@
         <img class="img-circle" src="/images/stackoverflow-140.png" alt="Stack Overflow" width="140" height="140">
         <h2>Stack Overflow</h2>
         <% if(portfolio.webportals.stackoverflow.length > 0) { %>
-        <a class="btn btn-default backInCustomLightBlue" href="<%= portfolio.webportals.stackoverflow %>" target="_blank" role="button">
+        <a class="btn btn-primary" href="<%= portfolio.webportals.stackoverflow %>" target="_blank" role="button">
             <span class="glyphicon glyphicon-link" aria-hidden="true"></span> Go!
         </a>
         <% } %>
@@ -159,7 +174,7 @@
         <img class="img-circle" src="/images/linkedin-140.png" alt="LinkedIn" width="140" height="140">
         <h2>LinkedIn</h2>
         <% if(portfolio.webportals.linkedin.length > 0) { %>
-        <a class="btn btn-default backInCustomLightBlue" href="<%= portfolio.webportals.linkedin %>" target="_blank" role="button">
+        <a class="btn btn-primary" href="<%= portfolio.webportals.linkedin %>" target="_blank" role="button">
             <span class="glyphicon glyphicon-link" aria-hidden="true"></span> Go!
         </a>
         <% } %>
@@ -169,7 +184,7 @@
         <img class="img-circle" src="/images/hackerrank-140.png" alt="Hackerrank" width="140" height="140">
         <h2>Hackerrank</h2>
         <% if(portfolio.webportals.hackerrank.length > 0) { %>
-        <a class="btn btn-default backInCustomLightBlue" href="<%= portfolio.webportals.hackerrank %>" target="_blank" role="button">
+        <a class="btn btn-primary" href="<%= portfolio.webportals.hackerrank %>" target="_blank" role="button">
             <span class="glyphicon glyphicon-link" aria-hidden="true"></span> Go!
         </a>
         <% } %>

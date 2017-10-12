@@ -1,0 +1,25 @@
+<!-- breadcrumbs -->
+<ol class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li class="active">Portfolios</li>
+</ol>
+
+<div class="jumbotron text-center customizedNormal bg-no-overlay">
+    <div class="row">
+        <div class="col-sm-12 contentCentered">
+            <h1 class="textInTransparentBlack">Portfolios List</h1>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <% for(var portfolio of portfolios) { %>
+        <div class="col-sm-4 contentCentered userPortfolio">
+            <img class="img-circle" src="<%= portfolio.createdBy.google.imageUrl %>" alt="<%= portfolio.createdBy.google.name %>">
+            <h2><%= portfolio.createdBy.google.name %></h2>
+            <a class="btn btn-primary" href="/portfolios/<%= portfolio.createdBy.google.id %>" role="button">
+                <span class="glyphicon glyphicon-link" aria-hidden="true"></span> Go!
+            </a>
+        </div>
+    <% } %>
+</div>

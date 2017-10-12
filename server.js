@@ -18,7 +18,10 @@ const express = require('express'),
 // set sessions and cookie parser
 app.use(cookieParser());
 app.use(session({
-    secret: process.env.SECRET
+    secret: process.env.SECRET,
+    cookie: {maxAge: 8*60*60*1000}, // 8 hours
+    resave: false,      // forces the session to be saved back to the store
+    saveUninitialized: false    // don't save unmodified sessions
 }));
 app.use(flash());
 

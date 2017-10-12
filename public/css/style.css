@@ -13,8 +13,8 @@ body  {
   
 /* main section */
 #site-main  {
-    padding-bottom: 50px;
-    padding-top: 50px;
+    padding-bottom: 30px;
+    padding-top: 30px;
 }
   
 /* footer */
@@ -62,6 +62,14 @@ div.weblinks {
     border-radius: 10px;
     padding-left: 20px;
     padding-right: 20px;
+    padding-bottom: 20px;
+}
+
+.projectdetails {
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .textInTransparentBlack {
@@ -69,6 +77,15 @@ div.weblinks {
     border-radius: 10px;
     color: white !important;
 }
+
+.userPortfolio {
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 10px;
+    color: black !important;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
 .backInBlack {
     background-color: black;
 }
@@ -82,7 +99,7 @@ div.weblinks {
     background-color: #778899;
 }
 .backInCustomLightBlue {
-    background-color: #A1CEFF
+    background-color: #337AB7
 }
 
 /* Projects' carousels */
@@ -94,10 +111,6 @@ div.weblinks {
 .carousel-div-right {
     border-bottom-right-radius: 10px;
     border-width: 2px;
-}
-
-.row {
-    margin-bottom: 50px;
 }
 
 .carousel-inner > .item {
@@ -118,6 +131,10 @@ div.weblinks {
 .carousel-control.left,
 .carousel-control.right {
     background-image: none;
+}
+
+.carousel-row {
+    margin-bottom: 40px;
 }
 
 .white-text {
