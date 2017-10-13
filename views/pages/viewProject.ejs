@@ -71,14 +71,11 @@
 </div>
 
 <!-- Project's details -->
-<div class="row rowwithmargins projectdetails">
-    <!-- Project's title -->
-    <h2><%- project.title %></h2>
-
-    <!-- Detailed Description -->
-    <div class="col-sm-12">
-        <div class="projectDescription">
-            <%- project.detailedDescription %>
-        </div>
+<div data-example-id="contextual-panels-project">
+    <div class="panel panel-primary">
+        <!-- Project's title -->
+        <div class="panel-heading"><h3 class="panel-title"><%- project.title %></h3></div>
+        <!-- Detailed Description -->
+        <div class="panel-body"> <%- project.detailedDescription %> </div>
     </div>
 </div>

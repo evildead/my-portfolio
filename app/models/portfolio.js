@@ -11,7 +11,11 @@ var portfolioSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    userDescription: {
+    profileTitle: {
+        type: String,
+        default: ''
+    },
+    profileDescription: {
         type: String,
         default: ''
     },
@@ -33,5 +37,5 @@ var portfolioSchema = new mongoose.Schema({
     }
 });
 
-// create the model for users and expose it to our app
+// create the model for portfolio and expose it to our app
 module.exports = mongoose.model('Portfolio', portfolioSchema);
