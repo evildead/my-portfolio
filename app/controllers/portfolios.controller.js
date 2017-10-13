@@ -14,7 +14,9 @@ module.exports = {
     createDummy: createDummy,
     viewPortfolioList: viewPortfolioList,
     viewPortfolio: viewPortfolio,
-    viewProject: viewProject
+    viewProject: viewProject,
+    showEditPortfolio: showEditPortfolio,
+    processEditPortfolio: processEditPortfolio
 }
 
 /**
@@ -122,7 +124,7 @@ function viewPortfolioList(req, res) {
     // get all the portfolios
     Portfolio.find({})
         .populate('createdBy')
-        .populate('projectList')
+        .sort('createdOn')  // ascending order by creation date
         .exec(function(err, portfolios) {
             // error found
             if(err) {
@@ -239,6 +241,132 @@ function viewProject(req, res) {
                         errors: req.flash('errors')
                     });
                 }
+            });
+        }
+    });
+}
+
+/**
+ * View logged user's portfolio editing page
+ * @param {request} req 
+ * @param {response} res 
+ */
+function showEditPortfolio(req, res) {
+    Portfolio.findOne({'createdBy' : req.user.id})
+        .populate('createdBy')
+        .populate('projectList')
+        .exec(function(err, portfolio) {
+            // No portfolio found for user req.user
+            if(portfolio == null) {
+                // create an empty portfolio
+                const newUserPortfolio = new Portfolio();
+                newUserPortfolio.createdBy = req.user.id;
+                newUserPortfolio.projectList = [];
+                newUserPortfolio.save((err) => {
+                    if(err) {
+                        // set a error flash message
+                        req.flash('errors', 'Oooops: Cannot create empty portfolio for user ' + req.user.google.name);
+                        
+                        // redirect to the home page
+                        res.redirect('/');
+                    }
+
+                    res.render('pages/showEditPortfolio', {
+                        user : req.user,
+                        portfolio: newUserPortfolio,
+                        path: path,
+                        errors: req.flash('errors'),
+                        success: req.flash('success')
+                    });
+                });
+            }
+            // A portfolio already exists for user req.user
+            else {
+                res.render('pages/showEditPortfolio', {
+                    user : req.user,
+                    portfolio: portfolio,
+                    path: path,
+                    errors: req.flash('errors'),
+                    success: req.flash('success')
+                });
+            }
+        });
+}
+
+/**
+ * Update logged user's portfolio
+ * @param {request} req 
+ * @param {response} res 
+ */
+function processEditPortfolio(req, res) {
+    // validate information
+    req.checkBody('profileTitle', 'profileTitle is required!').notEmpty();
+    req.checkBody('profileDescription', 'profileDescription is required!').notEmpty();
+
+    // if there are errors, redirect and save errors to flash
+    const errors = req.validationErrors();
+    if(errors) {
+        req.flash('errors', errors.map(err => err.msg));
+        return res.redirect(`/portfolios/editPortfolio`);
+    }
+
+    Portfolio.findOne({'createdBy' : req.user.id})
+    .populate('createdBy')
+    .populate('projectList')
+    .exec(function(err, portfolio) {
+        // No portfolio found for user req.user
+        if(portfolio == null) {
+            // create an empty portfolio
+            const newUserPortfolio = new Portfolio();
+            newUserPortfolio.createdBy = req.user.id;
+            newUserPortfolio.profileTitle = req.body.profileTitle;
+            newUserPortfolio.profileDescription = req.body.profileDescription;
+            newUserPortfolio.projectList = [];
+            newUserPortfolio.save((err) => {
+                if(err) {
+                    // set a error flash message
+                    req.flash('errors', 'Oooops: Cannot create portfolio for user ' + req.user.google.name);
+                    
+                    // redirect to the home page
+                    res.redirect('/');
+                }
+
+                // set a successful flash message
+                req.flash('success', 'Successfully updated portfolio!');
+
+                res.render('pages/showEditPortfolio', {
+                    user : req.user,
+                    portfolio: newUserPortfolio,
+                    path: path,
+                    errors: req.flash('errors'),
+                    success: req.flash('success')
+                });
+            });
+        }
+        // A portfolio already exists for user req.user
+        else {
+            portfolio.profileTitle = req.body.profileTitle;
+            portfolio.profileDescription = req.body.profileDescription;
+
+            portfolio.save((err) => {
+                if(err) {
+                    // set a error flash message
+                    req.flash('errors', 'Oooops: Cannot edit portfolio for user ' + req.user.google.name);
+                    
+                    // redirect to the home page
+                    res.redirect('/');
+                }
+
+                // set a successful flash message
+                req.flash('success', 'Successfully updated portfolio!');
+
+                res.render('pages/showEditPortfolio', {
+                    user : req.user,
+                    portfolio: portfolio,
+                    path: path,
+                    errors: req.flash('errors'),
+                    success: req.flash('success')
+                });
             });
         }
     });

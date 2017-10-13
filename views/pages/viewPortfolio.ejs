@@ -12,6 +12,9 @@
             <div class="textInTransparentBlack">
                 <h1><%= portfolio.createdBy.google.name %></h1>
                 <h2>Portfolio</h2>
+                <% if ((typeof user !== 'undefined') && (user) && (user.google.id === portfolio.createdBy.google.id)) { %>
+                    <h3><a href="/portfolios/editPortfolio"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a></h3>
+                <% } %>
             </div>
         </div>
     </div>

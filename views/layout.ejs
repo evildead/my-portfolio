@@ -6,6 +6,7 @@
 
     <!-- css -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="/css/style.css">
 
     <!-- JS  -->
@@ -15,6 +16,14 @@
     <!-- Fancybox 3 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.1.25/jquery.fancybox.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.1.25/jquery.fancybox.min.js"></script>
+
+    <!-- Include Code Mirror CSS. -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/codemirror.min.css">
+
+    <!-- Summernote WYSIWYG -->
+    <link href="/extern/summernote/summernote.css" rel="stylesheet">
+    <script src="/extern/summernote/summernote.min.js"></script>
+
 </head>
 <body>
 
@@ -40,12 +49,12 @@
 
                     <ul class="nav navbar-nav navbar-right">
                         <% if ((typeof user !== 'undefined') && (user)) { %>
+                            <li><a href="/portfolios/editPortfolio"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit portfolio</a></li>
+                            <li><a href="/logout"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Logout</a></li>
                             <li><img class="img-circle" alt="<%= user.google.name %>" src="<%= user.google.imageUrl %>"></li>
-                            <li><a href="/logout">Logout</a></li>
                         <% } else { %>
                             <li>
-                                <a href="/auth/google">Login with Google</a>
-                                <!-- <a href="/auth/google">Login with <img class="img-thumbnail" alt="Google account" src="/images/google-plus.svg" width="30" height="30"></a> -->
+                                <a href="/auth/google"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Login with Google</a>
                             </li>
                         <% } %>
                     </ul>

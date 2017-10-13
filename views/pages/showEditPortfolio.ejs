@@ -1,0 +1,60 @@
+<!-- breadcrumbs -->
+<ol class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li><a href="/portfolios">Portfolios</a></li>
+    <li class="active">Edit portfolio</li>
+</ol>
+
+<div class="jumbotron text-center customizedNormal bg-no-overlay">
+    <div class="row">
+        <div class="col-sm-12 contentCentered">
+            <img class="img-circle" src="<%= user.google.imageUrl %>" alt="<%= user.google.name %>">
+            <div class="textInTransparentBlack">
+                <h1><%= user.google.name %></h1>
+                <h2>Edit Portfolio</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<% if(errors.length > 0) { %>
+    <div class="alert alert-danger">
+        <% for(error of errors) { %>
+            <%= error %><br>
+        <% } %>
+    </div>
+<% } %>
+
+<% if(success.length > 0) { %>
+    <div class="alert alert-success">
+        <%= success %>
+    </div>
+<% } %>
+
+<form action="/portfolios/editPortfolio" method="POST">
+    <div class="form-group">
+        <label for="profileTitle">Profile Title</label>
+        <input type="text" name="profileTitle" class="form-control" value="<%= portfolio.profileTitle %>">
+    </div>
+
+    <div class="form-group">
+        <label for="profileDescription">Profile Description</label>
+        <textarea name="profileDescription" id="profileDescription" class="form-control"><%= portfolio.profileDescription %></textarea>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-success btn-lg">Update</button>
+    </div>
+</form>
+
+<script>
+    $(function () {
+        $('#profileDescription').summernote();
+
+        /*
+        $("textarea").each(function(textarea) {
+            $(this).height( $(this)[0].scrollHeight );
+        });
+        */
+    });
+</script>

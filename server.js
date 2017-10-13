@@ -35,8 +35,10 @@ app.use(expressLayouts);
 // connect to the database
 mongoose.connect(process.env.DB_URI);
 
+// use bodyParser to grab info from a json
+app.use(bodyParser.json({limit: '50mb'}));
 // use bodyParser to grab info from a form
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
 // express validator -> validate form or URL parameters
 app.use(expressValidator());
