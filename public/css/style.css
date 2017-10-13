@@ -42,14 +42,6 @@ div.contentCentered {
 
 div.weblinks {
     margin-bottom: 25px;
-    /*
-    border-style: solid;
-    border-bottom-width: 2px;
-    border-top-width: 0px;
-    border-right-width: 0px;
-    border-left-width: 0px;
-    border-bottom-color: black;
-    */
 }
 
 .row.rowwithmargins {
@@ -113,8 +105,13 @@ div.weblinks {
     border-width: 2px;
 }
 
+.carousel-div-center {
+    border-radius: 10px;
+    border-width: 2px;
+}
+
 .carousel-inner > .item {
-    height: 650px;
+    height: 520px;
 }
 
 .carousel-inner > .item > a > img {

@@ -21,7 +21,7 @@
     const carouselIndicatorsId = "myCarouselIndicators_" + project.slug;
     const carouselInnerId = "myCarouselInner_" + project.slug; %>
 <div class="row carousel-row">
-    <div class="col-sm-12 carousel-div-right backInCustomLightBlue">
+    <div class="col-sm-12 carousel-div-center backInCustomLightBlue">
         <div id="<%= carouselId %>" class="carousel slide" data-ride="carousel">
             <ol id="<%= carouselIndicatorsId %>" class="carousel-indicators">
                 <%  var mediaId = 0;
@@ -47,7 +47,7 @@
                             <img class="img-responsive center-block" src="<%= media.mediaUrl %>" alt="<%= media.mediaTitle %>">
                         </a>
                         <div class="container">
-                            <div class="carousel-caption">
+                            <div class="carousel-caption textInTransparentBlack">
                                 <h2><%= media.mediaTitle %></h2>
                                 <p><%= media.description %></p>
                             </div>
