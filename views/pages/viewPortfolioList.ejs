@@ -14,12 +14,13 @@
 
 <div class="row">
     <% for(var portfolio of portfolios) { %>
-        <div class="col-sm-4 contentCentered userPortfolio">
+        <div class="col-sm-4 col-sm-offset-1 contentCentered userPortfolio">
             <img class="img-circle" src="<%= portfolio.createdBy.google.imageUrl %>" alt="<%= portfolio.createdBy.google.name %>">
             <h2><%= portfolio.createdBy.google.name %></h2>
             <a class="btn btn-primary" href="/portfolios/<%= portfolio.createdBy.google.id %>" role="button">
                 <span class="glyphicon glyphicon-link" aria-hidden="true"></span> Go!
             </a>
         </div>
+        <div class="col-sm-1"></div>
     <% } %>
 </div>

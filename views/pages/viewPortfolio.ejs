@@ -9,8 +9,10 @@
     <div class="row">
         <div class="col-sm-12 contentCentered">
             <img class="img-circle" src="<%= portfolio.createdBy.google.imageUrl %>" alt="<%= portfolio.createdBy.google.name %>">
-            <h1 class="textInTransparentBlack"><%= portfolio.createdBy.google.name %></h1>
-            <!-- <h2 class="textInTransparentBlack">Portfolio</h2> -->
+            <div class="textInTransparentBlack">
+                <h1><%= portfolio.createdBy.google.name %></h1>
+                <h2>Portfolio</h2>
+            </div>
         </div>
     </div>
 </div>
@@ -24,13 +26,13 @@
 <% } %>
 
 <ul class="nav nav-tabs nav-justified">
-    <li class="active"><a data-toggle="tab" href="#portfoliotab">Portfolio</a></li>
+    <li class="active"><a data-toggle="tab" href="#projectstab">Projects (<%= portfolio.projectList.length %>)</a></li>
     <li><a data-toggle="tab" href="#infotab">Info</a></li>
 </ul>
 
 <div class="tab-content">
-    <!-- Portfolio Tab -->
-    <div id="portfoliotab" class="tab-pane fade in active">
+    <!-- Projects Tab -->
+    <div id="projectstab" class="tab-pane fade in active">
         <!-- User's projects -->
         <div id="projectsdiv">
         <%  var progCounter = 0;
@@ -50,7 +52,7 @@
                 <div class="row carousel-row">
                     <!-- project brief description -->
                     <div class="progDescription-left col-sm-3 white-text backInCustomLightBlue">
-                        <h1><%= project.title %></h1>
+                        <h3><%= project.title %></h3>
                         <div><%= project.briefDescription %></div>
                         <hr class="featurette-divider">
                         <a class="btn btn-success" href="/portfolios/<%= portfolio.createdBy.google.id %>/<%= project.slug %>" role="button">
