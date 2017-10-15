@@ -3,6 +3,10 @@ body  {
     line-height: 1.5;
     background-color: #E5E5E5;
 }
+
+.myPortfolioLogo {
+    margin-top: 5px;
+}
   
 /* header */
 #site-header .navbar  {
@@ -14,7 +18,7 @@ body  {
 /* main section */
 #site-main  {
     padding-bottom: 30px;
-    padding-top: 30px;
+    padding-top: 50px;
 }
   
 /* footer */
