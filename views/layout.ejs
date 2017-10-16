@@ -52,8 +52,19 @@
                     <ul class="nav navbar-nav navbar-right">
                         <% if ((typeof user !== 'undefined') && (user)) { %>
                             <li><a href="/portfolios/editPortfolio"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit portfolio</a></li>
-                            <li><a href="/logout"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Logout</a></li>
-                            <li><a class="userImage" href="/portfolios/<%= user.google.id %>"><img class="img-circle" alt="<%= user.google.name %>" src="<%= user.google.imageUrl %>"></a></li>
+                            
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle userImage" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                    <img class="img-circle" alt="<%= user.google.name %>" src="<%= user.google.imageUrl %>"> <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><p class="dropdownUserDetails"><%= user.google.name %></p></li>
+                                    <li><p class="dropdownUserDetails"><%= user.google.email %></p></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="/portfolios/<%= user.google.id %>">View portfolio</a></li>
+                                    <li><a href="/logout">Logout</a></li>
+                                </ul>
+                            </li>
                         <% } else { %>
                             <li>
                                 <a href="/auth/google"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Login with Google</a>

@@ -49,6 +49,12 @@ a.userImage {
     padding-top: 0px !important;
 }
 
+p.dropdownUserDetails {
+    color: #9d9d9d;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
 div.weblinks {
     margin-bottom: 25px;
 }
