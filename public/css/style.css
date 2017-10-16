@@ -44,6 +44,11 @@ div.contentCentered {
     text-align: center;
 }
 
+a.userImage {
+    padding-bottom: 0px !important;
+    padding-top: 0px !important;
+}
+
 div.weblinks {
     margin-bottom: 25px;
 }

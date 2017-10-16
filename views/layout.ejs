@@ -53,7 +53,7 @@
                         <% if ((typeof user !== 'undefined') && (user)) { %>
                             <li><a href="/portfolios/editPortfolio"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit portfolio</a></li>
                             <li><a href="/logout"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Logout</a></li>
-                            <li><img class="img-circle" alt="<%= user.google.name %>" src="<%= user.google.imageUrl %>"></li>
+                            <li><a class="userImage" href="/portfolios/<%= user.google.id %>"><img class="img-circle" alt="<%= user.google.name %>" src="<%= user.google.imageUrl %>"></a></li>
                         <% } else { %>
                             <li>
                                 <a href="/auth/google"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Login with Google</a>

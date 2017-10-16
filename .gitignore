@@ -1,6 +1,7 @@
 .env
 
 public/users/*
+uploads/*
 
 # Logs
 logs

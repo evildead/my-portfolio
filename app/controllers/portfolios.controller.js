@@ -9,6 +9,8 @@ const Portfolio = require('../models/portfolio');
 
 // require path module
 const path = require('path');
+// require fs module
+const fs = require('fs');
 
 module.exports = {
     createDummy: createDummy,
@@ -262,6 +264,12 @@ function showEditPortfolio(req, res) {
                 const newUserPortfolio = new Portfolio();
                 newUserPortfolio.createdBy = req.user.id;
                 newUserPortfolio.projectList = [];
+                newUserPortfolio.webportals = {
+                    github: '',
+                    stackoverflow: '',
+                    linkedin: '',
+                    hackerrank: ''
+                };
                 newUserPortfolio.save((err) => {
                     if(err) {
                         // set a error flash message
@@ -316,37 +324,71 @@ function processEditPortfolio(req, res) {
     .exec(function(err, portfolio) {
         // No portfolio found for user req.user
         if(portfolio == null) {
-            // create an empty portfolio
-            const newUserPortfolio = new Portfolio();
-            newUserPortfolio.createdBy = req.user.id;
-            newUserPortfolio.profileTitle = req.body.profileTitle;
-            newUserPortfolio.profileDescription = req.body.profileDescription;
-            newUserPortfolio.projectList = [];
-            newUserPortfolio.save((err) => {
-                if(err) {
-                    // set a error flash message
-                    req.flash('errors', 'Oooops: Cannot create portfolio for user ' + req.user.google.name);
-                    
-                    // redirect to the home page
-                    res.redirect('/');
-                }
-
-                // set a successful flash message
-                req.flash('success', 'Successfully updated portfolio!');
-
-                res.render('pages/showEditPortfolio', {
-                    user : req.user,
-                    portfolio: newUserPortfolio,
-                    path: path,
-                    errors: req.flash('errors'),
-                    success: req.flash('success')
-                });
-            });
+            // set a error flash message
+            req.flash('errors', 'Oooops: no portfolio found for user ' + req.user.google.name);
+            
+            // redirect to the edit portfolio page
+            res.redirect(`/portfolios/editPortfolio`);
         }
         // A portfolio already exists for user req.user
         else {
             portfolio.profileTitle = req.body.profileTitle;
             portfolio.profileDescription = req.body.profileDescription;
+
+            // github
+            if (typeof req.body.githubLink !== 'undefined') {
+                if((req.body.githubLink) && (req.body.githubLink.length > 0)) {
+                    portfolio.webportals.github = "https://github.com/" + req.body.githubLink;
+                }
+                else {
+                    portfolio.webportals.github = "";
+                }
+            }
+
+            // stackoverflow
+            if (typeof req.body.stackoverflowLink !== 'undefined') {
+                if((req.body.stackoverflowLink) && (req.body.stackoverflowLink.length > 0)) {
+                    portfolio.webportals.stackoverflow = "https://stackoverflow.com/users/" + req.body.stackoverflowLink;
+                }
+                else {
+                    portfolio.webportals.stackoverflow = "";
+                }
+            }
+
+            // linkedin
+            if (typeof req.body.linkedinLink !== 'undefined') {
+                if((req.body.linkedinLink) && (req.body.linkedinLink.length > 0)) {
+                    portfolio.webportals.linkedin = "https://www.linkedin.com/in/" + req.body.linkedinLink;
+                }
+                else {
+                    portfolio.webportals.linkedin = "";
+                }
+            }
+
+            // hackerrank
+            if (typeof req.body.hackerrankLink !== 'undefined') {
+                if((req.body.hackerrankLink) && (req.body.hackerrankLink.length > 0)) {
+                    portfolio.webportals.hackerrank = "https://www.hackerrank.com/" + req.body.hackerrankLink;
+                }
+                else {
+                    portfolio.webportals.hackerrank = "";
+                }
+            }
+
+            // A CV file is present
+            if((req.files !== 'undefined') && (req.files) && (Array.isArray(req.files)) && (req.files.length > 0)) {
+                const cvObj = req.files[0];
+                const publicCVFolder = "/users/" + req.user.google.id + "/cv/";
+                if(portfolio.cv.length > 0) {
+                    fs.unlink("/public" + portfolio.cv, (err, result) => {
+                        fs.rename(cvObj.path, "/public" + publicCVFolder + cvObj.originalname);
+                    });
+                }
+
+                
+                // remove any previous uploaded CV files
+                // move file from upload folder to user's cv folder
+            }
 
             portfolio.save((err) => {
                 if(err) {

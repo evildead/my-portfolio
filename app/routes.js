@@ -1,6 +1,8 @@
 // create a new express Router
 const express = require('express'),
     router = express.Router(),
+    multer = require('multer'),
+    multerupload = multer({ dest: 'uploads/' }),
     mainController = require('./controllers/main.controller'),
     authController = require('./controllers/auth.controller'),
     portfoliosController = require('./controllers/portfolios.controller');
@@ -12,7 +14,7 @@ function isLoggedIn(req, res, next) {
         return next();
     }
 
-    // if they aren't redirect them to the home page
+    // otherwise redirect him to the home page
     res.redirect('/');
 }
 
@@ -29,7 +31,7 @@ router.get('/auth/google', passport.authenticate('google', { scope : ['profile',
 // the callback after Google has authenticated the user
 router.get('/auth/google/callback',
     passport.authenticate('google', {
-        successRedirect : '/account',
+        successRedirect : '/portfolios/editPortfolio',
         failureRedirect : '/'
     })
 );
@@ -50,7 +52,7 @@ router.get('/portfolios/createDummy', isLoggedIn, portfoliosController.createDum
 router.get('/portfolios/editPortfolio', isLoggedIn, portfoliosController.showEditPortfolio);
 
 // route to update logged user's portfolio
-router.post('/portfolios/editPortfolio', isLoggedIn, portfoliosController.processEditPortfolio);
+router.post('/portfolios/editPortfolio', isLoggedIn, multerupload.any(), portfoliosController.processEditPortfolio);
 
 // route for viewing the portfolio page
 router.get('/portfolios/:googleid', portfoliosController.viewPortfolio);
