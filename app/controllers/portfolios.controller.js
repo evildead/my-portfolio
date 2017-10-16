@@ -381,7 +381,9 @@ function processEditPortfolio(req, res) {
                 const publicCVFolder = "/users/" + req.user.google.id + "/cv/";
                 if(portfolio.cv.length > 0) {
                     fs.unlink("/public" + portfolio.cv, (err, result) => {
-                        fs.rename(cvObj.path, "/public" + publicCVFolder + cvObj.originalname);
+                        fs.rename(cvObj.path, "/public" + publicCVFolder + cvObj.originalname, (err) => {
+                            
+                        });
                     });
                 }
 
