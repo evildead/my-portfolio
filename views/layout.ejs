@@ -23,9 +23,9 @@
     <link rel="stylesheet" href="/extern/fancybox/jquery.fancybox.min.css" />
     <script src="/extern/fancybox/jquery.fancybox.min.js"></script>
 
-    <!-- Code Mirror -->
-    <link rel="stylesheet" href="/extern/codemirror/codemirror.css">
-    <script src="/extern/codemirror/codemirror.js"></script>
+    <!-- Google Code Prettify -->
+    <link rel="stylesheet" type="text/css" href="/extern/google-code-prettify/prettify.css">
+    <script type="text/javascript" src="/extern/google-code-prettify/prettify.js"></script>
 
     <!-- Summernote WYSIWYG -->
     <link href="/extern/summernote/summernote.css" rel="stylesheet">
@@ -34,8 +34,11 @@
     <!-- Custom styles -->
     <link rel="stylesheet" href="/css/style.css">
 
+    <!-- Custom js -->
+    <script type="text/javascript" src="/js/summernote-custom-highlight.js"></script>
+
 </head>
-<body>
+<body onload="PR.prettyPrint()">
 
     <!-- header -->
     <header id="site-header">
