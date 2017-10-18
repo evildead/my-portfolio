@@ -11,6 +11,8 @@ const Portfolio = require('../models/portfolio');
 const path = require('path');
 // require fs module
 const fs = require('fs');
+// require summernote image saver
+const summernoteSave = require('summernote-nodejs');
 
 module.exports = {
     createDummy: createDummy,
@@ -340,8 +342,18 @@ function processEditPortfolio(req, res) {
         }
         // A portfolio already exists for user req.user
         else {
+            // profile title
             portfolio.profileTitle = req.body.profileTitle;
-            portfolio.profileDescription = req.body.profileDescription;
+
+            // profile description: summernote save images (if there are any)
+            var pathToSaveImg = "./public/users/" + req.user.google.id + "/media";
+            var baseUrl = "/users/" + req.user.google.id + "/media";
+            var outputSummernoteSave = summernoteSave(req.body.profileDescription,  // htmlContentsFromSummernote
+                                                      pathToSaveImg,                // destinationFolder
+                                                      baseUrl,                      // baseUrl
+                                                      false);                       // append
+            portfolio.profileDescription = outputSummernoteSave;
+
 
             // github
             if (typeof req.body.githubLink !== 'undefined') {
