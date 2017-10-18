@@ -32,7 +32,7 @@
     </div>
 <% } %>
 
-<form action="/portfolios/editPortfolio" enctype="multipart/form-data" method="POST">
+<form id="editPortfolioForm" action="/portfolios/editPortfolio" enctype="multipart/form-data" method="POST">
     <div class="form-group">
         <label for="profileTitle">Profile Title</label>
         <input type="text" name="profileTitle" class="form-control" value="<%= portfolio.profileTitle %>">
@@ -126,18 +126,43 @@
 
     <hr class="featurette-divider">
 
+    <div data-example-id="contextual-panels-projects">
+        <div class="panel panel-primary">
+            <div class="panel-heading"><h3 class="panel-title">Projects list</h3></div>
+            <div class="panel-body">
+                <ol class='project-orderable-list'>
+                    <% for(project of portfolio.projectList) { %>
+                    <li data-id="<%= project.id %>"><i class="fa fa-arrows" aria-hidden="true"></i> <%= project.name %></li>
+                    <% } %>
+                </ol>
+            </div>
+        </div>
+        <input type="hidden" id="hiddenProjectList" name="hiddenProjectList" value="[]">
+    </div>
+
+    <hr class="featurette-divider">
+
     <div class="form-group">
-        <button type="submit" class="btn btn-success btn-lg">Update all</button>
+        <button type="submit" id="editPortfolioSubmitBtn" class="btn btn-success btn-lg">Update all</button>
     </div>
 </form>
 
 <script>
     $(function () {
         $('#profileDescription').summernote();
+        
+        var sortableProjectList = $("ol.project-orderable-list").sortable();
+        
+        $('#editPortfolioForm').submit(function() {
+            var data = sortableProjectList.sortable("serialize").get();
+            var jsonString = JSON.stringify(data, null, ' ');
+            $("#hiddenProjectList").val(jsonString);
+            //event.preventDefault();
+        });
 
         /*
-        $("textarea").each(function(textarea) {
-            $(this).height( $(this)[0].scrollHeight );
+        $("#editPortfolioSubmitBtn").on("click", function() {
+            $("#hiddenProjectList").val(sortableProjectList.sortable("serialize").get());
         });
         */
     });

@@ -442,6 +442,8 @@ function processEditPortfolio(req, res) {
                 }
             }
 
+            console.log(req.body.hiddenProjectList);
+
             /*
             checkCvFile(req, res, portfolio, () => {
                 portfolio.save((err) => {

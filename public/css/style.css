@@ -85,6 +85,13 @@ div.weblinks {
     color: white !important;
 }
 
+div.homePageList {
+    text-align: left;
+    padding-bottom: 10px;
+    padding-top: 20px;
+    margin-top: 70px;
+}
+
 .userPortfolio {
     background-color: rgba(255, 255, 255, 0.7);
     border-radius: 10px;
@@ -174,5 +181,49 @@ div.weblinks {
 
 ul.nav.nav-tabs {
     margin-bottom: 30px;
+}
+
+/* jquery-sortable */
+body.dragging, body.dragging * {
+    cursor: move !important;
+}
+  
+.dragged {
+    position: absolute;
+    opacity: 0.5;
+    z-index: 2000;
+}
+  
+ol.project-orderable-list li.placeholder {
+    position: relative;
+    /** More li styles **/
+    border: 1px solid #CCC;
+    border-radius: 10px;
+    margin: 5px;
+    padding: 15px;
+}
+ol.project-orderable-list li {
+    display: block;
+    margin: 5px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border: 1px solid #CCC;
+    color: black;
+    background-color: #C0C0C0;
+    border-radius: 10px;
+}
+ol.project-orderable-list li.placeholder:before {
+    position: absolute;
+    /** Define arrowhead **/
+    border: 1px solid #CCC;
+    border-radius: 10px;
+    margin: 5px;
+    padding: 15px;
+}
+
+ol i.icon-move {
+    cursor: pointer;
 }
   
