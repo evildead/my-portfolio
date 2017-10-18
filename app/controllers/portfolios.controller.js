@@ -302,65 +302,6 @@ function showEditPortfolio(req, res) {
 }
 
 /**
- * checkCvFile controls if in req object is present a file.
- * If a cv file is present it removes any previously uploaded file and changes the portfolio.cv element.
- * If no error occurred, it eventually invokes the callback.
- * 
- * @param {request} req 
- * @param {response} res 
- * @param {the portfolio object} portfolio 
- * @param {a callback to be invoked at the end of the function} callback 
- */
-function checkCvFile(req, res, portfolio, callback) {
-    // A CV file is present in req object
-    if((req.files !== 'undefined') && (req.files) && (Array.isArray(req.files)) && (req.files.length > 0)) {
-        const cvObj = req.files[0];
-        const publicCVFolder = "/users/" + req.user.google.id + "/cv/";
-        
-        // A cv file was already uploaded
-        if(portfolio.cv.length > 0) {
-            // remove any previous uploaded CV files
-            fs.unlink("/public" + portfolio.cv, (err, result) => {
-                // move file from upload folder to user's cv folder
-                fs.rename(cvObj.path, "/public" + publicCVFolder + cvObj.originalname, (err) => {
-                    if(err) {
-                        // set a error flash message
-                        req.flash('errors', 'Oooops: Error trying to move cv file from uploads folder');
-                        
-                        // redirect to the home page
-                        res.redirect('/');
-                    }
-
-                    portfolio.cv = publicCVFolder + cvObj.originalname;
-                    callback();
-                });
-            });
-        }
-        // No cv file was previously uploaded
-        else {
-            // move file from upload folder to user's cv folder
-            fs.rename(cvObj.path, "/public" + publicCVFolder + cvObj.originalname, (err) => {
-                if(err) {
-                    // set a error flash message
-                    req.flash('errors', 'Oooops: Error trying to move cv file from uploads folder');
-                    
-                    // redirect to the home page
-                    res.redirect('/');
-                }
-
-                portfolio.cv = publicCVFolder + cvObj.originalname;
-                callback();
-            });
-        }
-    }
-    // No CV file present in req object
-    else {
-        // just execute the callback
-        callback();
-    }
-}
-
-/**
  * Update logged user's portfolio
  * @param {request} req 
  * @param {response} res 
@@ -442,32 +383,23 @@ function processEditPortfolio(req, res) {
                 }
             }
 
-            console.log(req.body.hiddenProjectList);
-
-            /*
-            checkCvFile(req, res, portfolio, () => {
-                portfolio.save((err) => {
-                    if(err) {
-                        // set a error flash message
-                        req.flash('errors', 'Oooops: Cannot edit portfolio for user ' + req.user.google.name);
-                        
-                        // redirect to the home page
-                        res.redirect('/');
+            // check the hiddenProjectList string
+            if( (req.body.hiddenProjectList !== 'undefined') &&
+                (req.body.hiddenProjectList) &&
+                (req.body.hiddenProjectList.length > 0) ) {
+                // parse string to JSON
+                const hiddenProjectListJson = JSON.parse(req.body.hiddenProjectList);
+                
+                if((Array.isArray(hiddenProjectListJson)) && (hiddenProjectListJson.length > 0)) {
+                    const tmpProjectList = hiddenProjectListJson[0];
+                    var portfolioProjectList = [];
+                    for(obj of tmpProjectList) {
+                        portfolioProjectList.push(obj.id);
                     }
-    
-                    // set a successful flash message
-                    req.flash('success', 'Successfully updated portfolio!');
-    
-                    res.render('pages/showEditPortfolio', {
-                        user : req.user,
-                        portfolio: portfolio,
-                        path: path,
-                        errors: req.flash('errors'),
-                        success: req.flash('success')
-                    });
-                });
-            });
-            */
+                    
+                    portfolio.projectList = portfolioProjectList;
+                }
+            }
 
             /////////////  CV File  ///////////////////////////////////////////////////////////////////////////////////
             // A CV file is present in req object
@@ -505,14 +437,8 @@ function processEditPortfolio(req, res) {
                 
                                 // set a successful flash message
                                 req.flash('success', 'Successfully updated portfolio!');
-                
-                                res.render('pages/showEditPortfolio', {
-                                    user : req.user,
-                                    portfolio: portfolio,
-                                    path: path,
-                                    errors: req.flash('errors'),
-                                    success: req.flash('success')
-                                });
+
+                                res.redirect('/portfolios/editPortfolio');
                             });
                         });
                     });
@@ -542,13 +468,7 @@ function processEditPortfolio(req, res) {
                             // set a successful flash message
                             req.flash('success', 'Successfully updated portfolio!');
             
-                            res.render('pages/showEditPortfolio', {
-                                user : req.user,
-                                portfolio: portfolio,
-                                path: path,
-                                errors: req.flash('errors'),
-                                success: req.flash('success')
-                            });
+                            res.redirect('/portfolios/editPortfolio');
                         });
                     });
                 }
@@ -567,13 +487,7 @@ function processEditPortfolio(req, res) {
                     // set a successful flash message
                     req.flash('success', 'Successfully updated portfolio!');
     
-                    res.render('pages/showEditPortfolio', {
-                        user : req.user,
-                        portfolio: portfolio,
-                        path: path,
-                        errors: req.flash('errors'),
-                        success: req.flash('success')
-                    });
+                    res.redirect('/portfolios/editPortfolio');
                 });
             }
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////
