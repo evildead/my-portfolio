@@ -1,17 +1,19 @@
 <!-- breadcrumbs -->
 <ol class="breadcrumb">
-    <li><a href="/">Home</a></li>
-    <li><a href="/portfolios">Portfolios</a></li>
-    <li><a href="/portfolios/<%= project.createdBy.google.id %>"><%= project.createdBy.google.name %></a></li>
+    <li><a class="hvr-forward" href="/">Home</a></li>
+    <li><a class="hvr-forward" href="/portfolios">Portfolios</a></li>
+    <li><a class="hvr-forward" href="/portfolios/<%= project.createdBy.google.id %>"><%= project.createdBy.google.name %></a></li>
     <li class="active"><%= project.slug %></li>
 </ol>
 
 <div class="jumbotron text-center customizedNormal bg-no-overlay">
     <div class="row">
         <div class="col-sm-12 contentCentered">
-            <img class="img-circle" src="<%= project.createdBy.google.imageUrl %>" alt="<%= project.createdBy.google.name %>">
-            <h1 class="textInTransparentBlack"><%= project.createdBy.google.name %></h1>
-            <h2 class="textInTransparentBlack">Project: <%= project.name %></h2>
+            <img class="img-circle hvr-bounce-in" src="<%= project.createdBy.google.imageUrl %>" alt="<%= project.createdBy.google.name %>">
+            <div class="textInTransparentBlack">
+                <h1><%= project.createdBy.google.name %></h1>
+                <h2 class="hvr-bounce-in">Project: "<%= project.name %>"</h2>
+            </div>
         </div>
     </div>
 </div>

@@ -487,20 +487,49 @@ function processEditPortfolio(req, res) {
             }
             // No CV file present in req object
             else {
-                portfolio.save((err) => {
-                    if(err) {
-                        // set a error flash message
-                        req.flash('errors', 'Oooops: Cannot edit portfolio for user ' + req.user.google.name);
-                        
-                        // redirect to the home page
-                        res.redirect('/');
-                    }
-    
-                    // set a successful flash message
-                    req.flash('success', 'Successfully updated portfolio!');
-    
-                    res.redirect('/portfolios/editPortfolio');
-                });
+                const cvIsDeletedInt = parseInt(req.body.cvIsDeleted);
+                // user has deleted his Curriculum Vitae
+                if((cvIsDeletedInt > 0) && (portfolio.cv.length > 0)) {
+                    // remove any previous uploaded CV files
+                    fs.unlink("./public" + portfolio.cv, (err, result) => {
+                        if(err) {
+                            console.log("Failed to delete old cv file: " + err);
+                        }
+
+                        portfolio.cv = '';
+
+                        portfolio.save((err) => {
+                            if(err) {
+                                // set a error flash message
+                                req.flash('errors', 'Oooops: Cannot edit portfolio for user ' + req.user.google.name);
+                                
+                                // redirect to the home page
+                                res.redirect('/');
+                            }
+            
+                            // set a successful flash message
+                            req.flash('success', 'Successfully updated portfolio!');
+            
+                            res.redirect('/portfolios/editPortfolio');
+                        });
+                    });
+                }
+                else {
+                    portfolio.save((err) => {
+                        if(err) {
+                            // set a error flash message
+                            req.flash('errors', 'Oooops: Cannot edit portfolio for user ' + req.user.google.name);
+                            
+                            // redirect to the home page
+                            res.redirect('/');
+                        }
+        
+                        // set a successful flash message
+                        req.flash('success', 'Successfully updated portfolio!');
+        
+                        res.redirect('/portfolios/editPortfolio');
+                    });
+                }
             }
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////
         }

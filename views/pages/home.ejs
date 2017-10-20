@@ -5,16 +5,16 @@
 
 <div class="jumbotron text-center customizedBig bg-no-overlay">
     <div class="textInTransparentBlack">
-        <h1><img alt="MyPortfolio" class="img-circle" src="/images/myPortfolio-logo-black-100.png"><span>ortfolio</span></h1>
-        <h2>Welcome to your own portfolio builder</h2>
+        <h1><img alt="MyPortfolio" class="img-circle hvr-bounce-in" src="/images/myPortfolio-logo-black-100.png"><span>ortfolio</span></h1>
+        <h2 class="hvr-bounce-in">Welcome to your own portfolio builder</h2>
     </div>
 
     <div class="textInTransparentBlack homePageList">
         <ul>
-            <li>Access with your Google account to create and update your own portfolio</li>
-            <li>Share your portfolio</li>
-            <li>View other users' portfolios</li>
-            <li>...enjoy <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></li>
+            <li><span class="hvr-forward">Access with your Google account to create and update your own portfolio</span></li>
+            <li><span class="hvr-forward">Share your portfolio</span></li>
+            <li><span class="hvr-forward">View other users' portfolios</span></li>
+            <li><span class="hvr-forward">...enjoy <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></span></li>
         </ul>
     </div>
 </div>
@@ -28,9 +28,22 @@
 <% } %>
 
 <div class="row">
-    <div class="col-sm-12 contentCentered">
-        <a class="btn btn-primary" href="/portfolios" role="button">
-            <span class="glyphicon glyphicon-link" aria-hidden="true"></span> View Portfolios
+    <div class="col-sm-6 contentCentered">
+        <a class="btn btn-primary hvr-float-shadow" href="/portfolios" role="button">
+            <span class="glyphicon glyphicon-picture" aria-hidden="true"></span> View Portfolios
         </a>
     </div>
+    <% if ((typeof user !== 'undefined') && (user)) { %>
+    <div class="col-sm-6 contentCentered">
+        <a class="btn btn-primary hvr-float-shadow" href="#" role="button">
+            <span class="glyphicon glyphicon-share" aria-hidden="true"></span> Share portfolio
+        </a>
+    </div>
+    <% } else { %>
+    <div class="col-sm-6 contentCentered">
+        <a class="btn btn-primary hvr-float-shadow" href="/auth/google" role="button">
+            <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Login with Google
+        </a>
+    </div>
+    <% } %>
 </div>

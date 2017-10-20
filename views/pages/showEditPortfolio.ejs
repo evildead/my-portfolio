@@ -1,14 +1,14 @@
 <!-- breadcrumbs -->
 <ol class="breadcrumb">
-    <li><a href="/">Home</a></li>
-    <li><a href="/portfolios">Portfolios</a></li>
+    <li><a class="hvr-forward" href="/">Home</a></li>
+    <li><a class="hvr-forward" href="/portfolios">Portfolios</a></li>
     <li class="active">Edit portfolio</li>
 </ol>
 
 <div class="jumbotron text-center customizedNormal bg-no-overlay">
     <div class="row">
         <div class="col-sm-12 contentCentered">
-            <img class="img-circle" src="<%= user.google.imageUrl %>" alt="<%= user.google.name %>">
+            <img class="img-circle hvr-bounce-in" src="<%= user.google.imageUrl %>" alt="<%= user.google.name %>">
             <div class="textInTransparentBlack">
                 <h1><%= user.google.name %></h1>
                 <h2>Edit Portfolio</h2>
@@ -41,6 +41,21 @@
     <div class="form-group">
         <label for="profileDescription">Profile Description</label>
         <textarea name="profileDescription" id="profileDescription" class="form-control"><%= portfolio.profileDescription %></textarea>
+        <!--
+        <hr>
+        <div class="row">
+            <div class="col-sm-2">
+                <button type="button" id="preview-btn" class="btn btn-success">preview</button>
+            </div>
+            <div class="col-sm-2">
+                <button type="button" id="closepreview-btn" class="btn btn-success">close preview</button>
+            </div>
+        </div>
+        <hr>
+        <div id="preview-box">
+    
+        </div>
+        -->
     </div>
 
     <hr class="featurette-divider">
@@ -49,7 +64,22 @@
         <label for="cvInputFile">Curriculum Vitae</label>
         <input type="file" id="cvInputFile" name="cvInputFile">
         <% if(portfolio.cv.length > 0) { %>
-        <p class="help-block">You already uploaded a CV named <%= path.basename(portfolio.cv) %></p>
+        <!-- <p class="help-block">You already uploaded a CV named <%= path.basename(portfolio.cv) %></p> -->
+        <div class="row">
+            <div class="col-sm-6 col-md-4">
+                <div class="thumbnail contentCentered">
+                    <img src="/images/genericFileThumbnail-100.png" id="cvThumbnail" alt="<%= path.basename(portfolio.cv) %>">
+                    <div class="caption">
+                        <h4><%= path.basename(portfolio.cv) %></h4>
+                        <p id='cvButtons'>
+                            <button type="button" class="btn btn-primary hvr-float-shadow" id="btnCvDelete">Delete</button>
+                            <button type="button" class="btn btn-primary hvr-float-shadow" id="btnUndoCvDelete" style="display:none">Undelete</button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" name="cvIsDeleted" id="cvIsDeleted" value="0">
         <% } else { %>
         <p class="help-block">No uploaded CV so far</p>
         <% } %>
@@ -88,38 +118,49 @@
     }
     %>
     <div class="form-group">
-        <div class="row">
-            <!-- Github -->
-            <div class="col-sm-6 contentCentered weblinks">
-                <img src="/images/github-140.png" alt="Github" width="140" height="140">
-                <h2>Github</h2>
-                <span>
-                    https://github.com/<input type="text" name="githubLink" value="<%= githubFormVal %>">
-                </span>
-            </div>
-            <!-- Stack Overflow -->
-            <div class="col-sm-6 contentCentered weblinks">
-                <img src="/images/stackoverflow-140.png" alt="Stack Overflow" width="140" height="140">
-                <h2>Stack Overflow</h2>
-                <span>
-                    https://stackoverflow.com/users/<input type="text" name="stackoverflowLink" value="<%= stackoverflowFormVal %>">
-                </span>
-            </div>
-            <!-- LinkedIn -->
-            <div class="col-sm-6 contentCentered weblinks">
-                <img src="/images/linkedin-140.png" alt="LinkedIn" width="140" height="140">
-                <h2>LinkedIn</h2>
-                <span>
-                    https://www.linkedin.com/in/<input type="text" name="linkedinLink" value="<%= linkedinFormVal %>">
-                </span>
-            </div>
-            <!-- Hackerrank -->
-            <div class="col-sm-6 contentCentered weblinks">
-                <img src="/images/hackerrank-140.png" alt="Hackerrank" width="140" height="140">
-                <h2>Hackerrank</h2>
-                <span>
-                    https://www.hackerrank.com/<input type="text" name="hackerrankLink" value="<%= hackerrankFormVal %>">
-                </span>
+        <div data-example-id="contextual-panels-weblinks">
+            <div class="panel panel-primary">
+                <div class="panel-heading"><h3 class="panel-title">Web Links</h3></div>
+                <div class="panel-body">
+                    <div class="row">
+                        <!-- Github -->
+                        <div class="col-sm-6 contentCentered weblinks">
+                            <img src="/images/github-140.png" alt="Github" width="100" height="100">
+                            <h2>Github</h2>
+                            <div class="input-group">
+                                <span class="input-group-addon">https://github.com/</span>
+                                <input type="text" class="form-control" name="githubLink" value="<%= githubFormVal %>">
+                            </div>
+                        </div>
+                        <!-- Stack Overflow -->
+                        <div class="col-sm-6 contentCentered weblinks">
+                            <img src="/images/stackoverflow-140.png" alt="Stack Overflow" width="100" height="100">
+                            <h2>Stack Overflow</h2>
+                            <div class="input-group">
+                                <span class="input-group-addon">https://stackoverflow.com/users/</span>
+                                <input type="text" class="form-control" name="stackoverflowLink" value="<%= stackoverflowFormVal %>">
+                            </div>
+                        </div>
+                        <!-- LinkedIn -->
+                        <div class="col-sm-6 contentCentered weblinks">
+                            <img src="/images/linkedin-140.png" alt="LinkedIn" width="100" height="100">
+                            <h2>LinkedIn</h2>
+                            <div class="input-group">
+                                <span class="input-group-addon">https://www.linkedin.com/in/</span>
+                                <input type="text" class="form-control" name="linkedinLink" value="<%= linkedinFormVal %>">
+                            </div>
+                        </div>
+                        <!-- Hackerrank -->
+                        <div class="col-sm-6 contentCentered weblinks">
+                            <img src="/images/hackerrank-140.png" alt="Hackerrank" width="100" height="100">
+                            <h2>Hackerrank</h2>
+                            <div class="input-group">
+                                <span class="input-group-addon">https://www.hackerrank.com/</span>
+                                <input type="text" class="form-control" name="hackerrankLink" value="<%= hackerrankFormVal %>">
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -132,7 +173,7 @@
             <div class="panel-body">
                 <ol class='project-orderable-list'>
                     <% for(project of portfolio.projectList) { %>
-                    <li data-id="<%= project.id %>"><i class="fa fa-arrows" aria-hidden="true"></i> <%= project.name %></li>
+                    <li data-id="<%= project.id %>"><i class="fa fa-arrows hvr-rotate" aria-hidden="true"></i> <%= project.name %></li>
                     <% } %>
                 </ol>
             </div>
@@ -143,7 +184,7 @@
     <hr class="featurette-divider">
 
     <div class="form-group">
-        <button type="submit" id="editPortfolioSubmitBtn" class="btn btn-success btn-lg">Update all</button>
+        <button type="submit" id="editPortfolioSubmitBtn" class="btn btn-success btn-lg hvr-float-shadow">Update all</button>
     </div>
 </form>
 
@@ -164,6 +205,7 @@
                 ['insert', ['link', 'picture', 'hr']],
                 ['view', ['fullscreen', 'codeview']],
                 ['help', ['help']],
+                ['undo', ['undo', 'redo']],
                 ['highlight', ['highlight']]
             ],
             popover: {
@@ -183,6 +225,27 @@
                     ['insert', ['link', 'picture']]
                 ]
             }
+        });
+
+        $('#preview-btn').on('click', function () {
+            $('#preview-box').html( $('#profileDescription').summernote('code') );
+            prettyPrint();
+        });
+        $('#closepreview-btn').on('click', function () {
+            $('#preview-box').html('');
+        });
+
+        $('#btnCvDelete').on('click', function() {
+            $('#cvThumbnail').attr('src', "/images/genericDeletedFileThumbnail-100.png");
+            $('#cvIsDeleted').val('1');
+            $('#btnCvDelete').hide();
+            $('#btnUndoCvDelete').show();
+        });
+        $('#btnUndoCvDelete').on('click', function() {
+            $('#cvThumbnail').attr('src', "/images/genericFileThumbnail-100.png");
+            $('#cvIsDeleted').val('0');
+            $('#btnCvDelete').show();
+            $('#btnUndoCvDelete').hide();
         });
         
         var sortableProjectList = $("ol.project-orderable-list").sortable();

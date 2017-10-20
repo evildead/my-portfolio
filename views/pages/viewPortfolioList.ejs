@@ -1,13 +1,13 @@
 <!-- breadcrumbs -->
 <ol class="breadcrumb">
-    <li><a href="/">Home</a></li>
+    <li><a class="hvr-forward" href="/">Home</a></li>
     <li class="active">Portfolios</li>
 </ol>
 
 <div class="jumbotron text-center customizedNormal bg-no-overlay">
     <div class="row">
         <div class="col-sm-12 contentCentered">
-            <h1 class="textInTransparentBlack">Portfolios List</h1>
+            <h1 class="textInTransparentBlack"><span class="hvr-bounce-in">Portfolios List</span></h1>
         </div>
     </div>
 </div>
@@ -16,10 +16,10 @@
     <% for(var portfolio of portfolios) { %>
         <div class="col-sm-4 col-sm-offset-1 contentCentered userPortfolio">
             <a href="/portfolios/<%= portfolio.createdBy.google.id %>">
-                <img class="img-circle" src="<%= portfolio.createdBy.google.imageUrl %>" alt="<%= portfolio.createdBy.google.name %>">
+                <img class="img-circle hvr-bounce-in" src="<%= portfolio.createdBy.google.imageUrl %>" alt="<%= portfolio.createdBy.google.name %>">
             </a>
             <h2><%= portfolio.createdBy.google.name %></h2>
-            <a class="btn btn-primary" href="/portfolios/<%= portfolio.createdBy.google.id %>" role="button">
+            <a class="btn btn-primary hvr-float-shadow" href="/portfolios/<%= portfolio.createdBy.google.id %>" role="button">
                 <span class="glyphicon glyphicon-link" aria-hidden="true"></span> Go!
             </a>
         </div>

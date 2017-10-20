@@ -1,17 +1,17 @@
 <!-- breadcrumbs -->
 <ol class="breadcrumb">
-    <li><a href="/">Home</a></li>
-    <li><a href="/portfolios">Portfolios</a></li>
+    <li><a class="hvr-forward" href="/">Home</a></li>
+    <li><a class="hvr-forward" href="/portfolios">Portfolios</a></li>
     <li class="active"><%= portfolio.createdBy.google.name %></li>
 </ol>
 
 <div class="jumbotron text-center customizedNormal bg-no-overlay">
     <div class="row">
         <div class="col-sm-12 contentCentered">
-            <img class="img-circle" src="<%= portfolio.createdBy.google.imageUrl %>" alt="<%= portfolio.createdBy.google.name %>">
+            <img class="img-circle hvr-bounce-in" src="<%= portfolio.createdBy.google.imageUrl %>" alt="<%= portfolio.createdBy.google.name %>">
             <div class="textInTransparentBlack">
                 <h1><%= portfolio.createdBy.google.name %></h1>
-                <h2><img alt="MyPortfolio" class="img-circle" src="/images/myPortfolio-logo-black-100.png" width="60px"><span>ortfolio</span></h2>
+                <h2><img alt="MyPortfolio" class="img-circle hvr-bounce-in" src="/images/myPortfolio-logo-black-100.png" width="60px"><span>ortfolio</span></h2>
                 <% if ((typeof user !== 'undefined') && (user) && (user.google.id === portfolio.createdBy.google.id)) { %>
                     <h3><a href="/portfolios/editPortfolio"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a></h3>
                 <% } %>
@@ -29,13 +29,120 @@
 <% } %>
 
 <ul class="nav nav-tabs nav-justified">
-    <li class="active"><a data-toggle="tab" href="#projectstab">Projects (<%= portfolio.projectList.length %>)</a></li>
-    <li><a data-toggle="tab" href="#infotab">Info</a></li>
+    <li class="active"><a class="hvr-shadow-radial" data-toggle="tab" href="#infotab"><h4 class="hvr-icon-bounce">Info</h4></a></li>
+    <li><a class="hvr-shadow-radial" data-toggle="tab" href="#projectstab"><h4 class="hvr-icon-spin">Projects (<%= portfolio.projectList.length %>)</h4></a></li>
 </ul>
 
 <div class="tab-content">
+    <!-- Profile Tab -->
+    <div id="infotab" class="tab-pane fade in active">
+
+        <!-- User's details -->
+        <div data-example-id="contextual-panels-user">
+            <div class="panel panel-primary">
+                <!-- Profile's title -->
+                <div class="panel-heading"><h3 class="panel-title"><%- portfolio.profileTitle %></h3></div>
+                <!-- Profile Description -->
+                <div class="panel-body"> <%- portfolio.profileDescription %> </div>
+                <!-- CV -->
+                <% if(portfolio.cv.length > 0) { %>
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col-sm-6 contentCentered">
+                            <a class="btn btn-primary hvr-float-shadow" href="<%= portfolio.cv %>" target="_blank" role="button">
+                                <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Open CV
+                            </a>
+                        </div>
+                        <div class="col-sm-6 contentCentered">
+                            <a class="btn btn-primary hvr-float-shadow" href="<%= portfolio.cv %>" download="<%= portfolio.createdBy.google.name + ' - CV' + path.extname(portfolio.cv) %>" role="button">
+                                <span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Download CV
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <% } %>
+            </div>
+        </div>
+
+        <hr class="featurette-divider">
+
+        <!-- User's web links -->
+        <div data-example-id="contextual-panels-weblinks">
+            <div class="panel panel-primary">
+                <!-- Weblinks' panel title -->
+                <div class="panel-heading"><h3 class="panel-title">Pay a visit to my other profiles</h3></div>
+                <!-- Weblinks -->
+                <div class="panel-body">
+                    <div class="row">
+                        <!-- Github -->
+                        <div class="col-sm-3 contentCentered weblinks">
+                            <% if(portfolio.webportals.github.length > 0) { %>
+                            <a href="<%= portfolio.webportals.github %>" target="_blank">
+                                <img class="hvr-bounce-in" src="/images/github-140.png" alt="Github" width="100" height="100">
+                            </a>
+                            <h2>Github</h2>
+                            <a class="btn btn-primary hvr-float-shadow" href="<%= portfolio.webportals.github %>" target="_blank" role="button">
+                                <span class="glyphicon glyphicon-link" aria-hidden="true"></span> Go!
+                            </a>
+                            <% } else { %>
+                            <img src="/images/github-140.png" alt="Github" width="100" height="100">
+                            <h2>Github</h2>
+                            <% } %>
+                        </div>
+                        <!-- Stack Overflow -->
+                        <div class="col-sm-3 contentCentered weblinks">
+                            <% if(portfolio.webportals.stackoverflow.length > 0) { %>
+                            <a href="<%= portfolio.webportals.stackoverflow %>" target="_blank">
+                                <img class="hvr-bounce-in" src="/images/stackoverflow-140.png" alt="Stack Overflow" width="100" height="100">
+                            </a>
+                            <h2>Stack Overflow</h2>
+                            <a class="btn btn-primary hvr-float-shadow" href="<%= portfolio.webportals.stackoverflow %>" target="_blank" role="button">
+                                <span class="glyphicon glyphicon-link" aria-hidden="true"></span> Go!
+                            </a>
+                            <% } else { %>
+                            <img src="/images/stackoverflow-140.png" alt="Stack Overflow" width="100" height="100">
+                            <h2>Stack Overflow</h2>
+                            <% } %>
+                        </div>
+                        <!-- LinkedIn -->
+                        <div class="col-sm-3 contentCentered weblinks">
+                            <% if(portfolio.webportals.linkedin.length > 0) { %>
+                            <a href="<%= portfolio.webportals.linkedin %>" target="_blank">
+                                <img class="hvr-bounce-in" src="/images/linkedin-140.png" alt="LinkedIn" width="100" height="100">
+                            </a>
+                            <h2>LinkedIn</h2>
+                            <a class="btn btn-primary hvr-float-shadow" href="<%= portfolio.webportals.linkedin %>" target="_blank" role="button">
+                                <span class="glyphicon glyphicon-link" aria-hidden="true"></span> Go!
+                            </a>
+                            <% } else { %>
+                            <img src="/images/linkedin-140.png" alt="LinkedIn" width="100" height="100">
+                            <h2>LinkedIn</h2>
+                            <% } %>
+                        </div>
+                        <!-- Hackerrank -->
+                        <div class="col-sm-3 contentCentered weblinks">
+                            <% if(portfolio.webportals.hackerrank.length > 0) { %>
+                            <a href="<%= portfolio.webportals.hackerrank %>" target="_blank">
+                                <img class="hvr-bounce-in" src="/images/hackerrank-140.png" alt="Hackerrank" width="100" height="100">
+                            </a>
+                            <h2>Hackerrank</h2>
+                            <a class="btn btn-primary hvr-float-shadow" href="<%= portfolio.webportals.hackerrank %>" target="_blank" role="button">
+                                <span class="glyphicon glyphicon-link" aria-hidden="true"></span> Go!
+                            </a>
+                            <% } else { %>
+                            <img src="/images/hackerrank-140.png" alt="Hackerrank" width="100" height="100">
+                            <h2>Hackerrank</h2>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
     <!-- Projects Tab -->
-    <div id="projectstab" class="tab-pane fade in active">
+    <div id="projectstab" class="tab-pane fade">
         <!-- User's projects -->
         <div id="projectsdiv">
         <%  var progCounter = 0;
@@ -58,7 +165,7 @@
                         <h3><%= project.title %></h3>
                         <div><%= project.briefDescription %></div>
                         <hr class="featurette-divider">
-                        <a class="btn btn-success" href="/portfolios/<%= portfolio.createdBy.google.id %>/<%= project.slug %>" role="button">
+                        <a class="btn btn-success hvr-float-shadow" href="/portfolios/<%= portfolio.createdBy.google.id %>/<%= project.slug %>" role="button">
                             <span class="glyphicon glyphicon-link" aria-hidden="true"></span> View Project
                         </a>
                     </div>
@@ -114,103 +221,5 @@
         <%  }  %>
         </div>
         <hr class="featurette-divider">
-    </div>
-    
-    <!-- Profile Tab -->
-    <div id="infotab" class="tab-pane fade">
-
-        <!-- User's details -->
-        <div data-example-id="contextual-panels-user">
-            <div class="panel panel-primary">
-                <!-- Profile's title -->
-                <div class="panel-heading"><h3 class="panel-title"><%- portfolio.profileTitle %></h3></div>
-                <!-- Profile Description -->
-                <div class="panel-body"> <%- portfolio.profileDescription %> </div>
-                <!-- CV -->
-                <% if(portfolio.cv.length > 0) { %>
-                <div class="panel-footer">
-                    <div class="row">
-                        <div class="col-sm-6 contentCentered">
-                            <a class="btn btn-primary" href="<%= portfolio.cv %>" target="_blank" role="button">
-                                <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Open CV
-                            </a>
-                        </div>
-                        <div class="col-sm-6 contentCentered">
-                            <a class="btn btn-primary" href="<%= portfolio.cv %>" download="<%= portfolio.createdBy.google.name + ' - CV' + path.extname(portfolio.cv) %>" role="button">
-                                <span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Download CV
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <% } %>
-            </div>
-        </div>
-
-        <hr class="featurette-divider">
-
-        <!-- User's web links -->
-        <div class="row">
-            <!-- Github -->
-            <div class="col-sm-3 contentCentered weblinks">
-                <% if(portfolio.webportals.github.length > 0) { %>
-                <a href="<%= portfolio.webportals.github %>" target="_blank">
-                    <img src="/images/github-140.png" alt="Github" width="140" height="140">
-                </a>
-                <h2>Github</h2>
-                <a class="btn btn-primary" href="<%= portfolio.webportals.github %>" target="_blank" role="button">
-                    <span class="glyphicon glyphicon-link" aria-hidden="true"></span> Go!
-                </a>
-                <% } else { %>
-                <img src="/images/github-140.png" alt="Github" width="140" height="140">
-                <h2>Github</h2>
-                <% } %>
-            </div>
-            <!-- Stack Overflow -->
-            <div class="col-sm-3 contentCentered weblinks">
-                <% if(portfolio.webportals.stackoverflow.length > 0) { %>
-                <a href="<%= portfolio.webportals.stackoverflow %>" target="_blank">
-                    <img src="/images/stackoverflow-140.png" alt="Stack Overflow" width="140" height="140">
-                </a>
-                <h2>Stack Overflow</h2>
-                <a class="btn btn-primary" href="<%= portfolio.webportals.stackoverflow %>" target="_blank" role="button">
-                    <span class="glyphicon glyphicon-link" aria-hidden="true"></span> Go!
-                </a>
-                <% } else { %>
-                <img src="/images/stackoverflow-140.png" alt="Stack Overflow" width="140" height="140">
-                <h2>Stack Overflow</h2>
-                <% } %>
-            </div>
-            <!-- LinkedIn -->
-            <div class="col-sm-3 contentCentered weblinks">
-                <% if(portfolio.webportals.linkedin.length > 0) { %>
-                <a href="<%= portfolio.webportals.linkedin %>" target="_blank">
-                    <img src="/images/linkedin-140.png" alt="LinkedIn" width="140" height="140">
-                </a>
-                <h2>LinkedIn</h2>
-                <a class="btn btn-primary" href="<%= portfolio.webportals.linkedin %>" target="_blank" role="button">
-                    <span class="glyphicon glyphicon-link" aria-hidden="true"></span> Go!
-                </a>
-                <% } else { %>
-                <img src="/images/linkedin-140.png" alt="LinkedIn" width="140" height="140">
-                <h2>LinkedIn</h2>
-                <% } %>
-            </div>
-            <!-- Hackerrank -->
-            <div class="col-sm-3 contentCentered weblinks">
-                <% if(portfolio.webportals.hackerrank.length > 0) { %>
-                <a href="<%= portfolio.webportals.hackerrank %>" target="_blank">
-                    <img src="/images/hackerrank-140.png" alt="Hackerrank" width="140" height="140">
-                </a>
-                <h2>Hackerrank</h2>
-                <a class="btn btn-primary" href="<%= portfolio.webportals.hackerrank %>" target="_blank" role="button">
-                    <span class="glyphicon glyphicon-link" aria-hidden="true"></span> Go!
-                </a>
-                <% } else { %>
-                <img src="/images/hackerrank-140.png" alt="Hackerrank" width="140" height="140">
-                <h2>Hackerrank</h2>
-                <% } %>
-            </div>
-        </div>
-
     </div>
 </div>
