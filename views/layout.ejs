@@ -59,23 +59,28 @@
 
                 <div class="collapse navbar-collapse" id="myportfolio-navbar-collapse">
                     <ul class="nav navbar-nav navbar">
-                        <li><a href="/portfolios"><span class="glyphicon glyphicon-picture" aria-hidden="true"></span> Portfolios</a></li>
+                        <li><a href="/portfolios"><span class="glyphicon glyphicon-list" aria-hidden="true"></span> List Portfolios</a></li>
                     </ul>
 
                     <ul class="nav navbar-nav navbar-right">
                         <% if ((typeof user !== 'undefined') && (user)) { %>
+                            <!--
                             <li><a href="/portfolios/editPortfolio"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit portfolio</a></li>
-                            
+                            -->
+
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle userImage" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                     <img class="img-circle" alt="<%= user.google.name %>" src="<%= user.google.imageUrl %>"> <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><p class="dropdownUserDetails"><%= user.google.name %></p></li>
-                                    <li><p class="dropdownUserDetails"><%= user.google.email %></p></li>
+                                    <li><p class="dropdownUserDetails">Logged in as:</p></li>
+                                    <li><p class="dropdownUserDetails hvr-forward"><%= user.google.name %></p></li>
+                                    <li><p class="dropdownUserDetails hvr-forward"><%= user.google.email %></p></li>
                                     <li role="separator" class="divider"></li>
-                                    <li><a href="/portfolios/<%= user.google.id %>">View portfolio</a></li>
-                                    <li><a href="/logout">Logout</a></li>
+                                    <li><a class="hvr-glow" href="/portfolios/<%= user.google.id %>"><span class="glyphicon glyphicon-picture" aria-hidden="true"></span> View portfolio</a></li>
+                                    <li><a class="hvr-glow" href="/portfolios/editPortfolio"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Edit profile infos</a></li>
+                                    <li><a class="hvr-glow" href="/portfolios/editPortfolioProjects"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Edit projects</a></li>
+                                    <li><a class="hvr-glow" href="/logout"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Logout</a></li>
                                 </ul>
                             </li>
                         <% } else { %>

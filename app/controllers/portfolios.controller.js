@@ -20,7 +20,9 @@ module.exports = {
     viewPortfolio: viewPortfolio,
     viewProject: viewProject,
     showEditPortfolio: showEditPortfolio,
-    processEditPortfolio: processEditPortfolio
+    processEditPortfolio: processEditPortfolio,
+    showEditPortfolioProjects: showEditPortfolioProjects,
+    processEditPortfolioProjects: processEditPortfolioProjects
 }
 
 /**
@@ -251,7 +253,7 @@ function viewProject(req, res) {
 }
 
 /**
- * View logged user's portfolio editing page
+ * View logged user's infos editing page
  * @param {request} req 
  * @param {response} res 
  */
@@ -304,7 +306,7 @@ function showEditPortfolio(req, res) {
 }
 
 /**
- * Update logged user's portfolio
+ * Update logged user's infos
  * @param {request} req 
  * @param {response} res 
  */
@@ -534,4 +536,66 @@ function processEditPortfolio(req, res) {
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////
         }
     });
+}
+
+/**
+ * View logged user's projects editing page
+ * @param {request} req 
+ * @param {response} res 
+ */
+function showEditPortfolioProjects(req, res) {
+    Portfolio.findOne({'createdBy' : req.user.id})
+        .populate('createdBy')
+        .populate('projectList')
+        .exec(function(err, portfolio) {
+            // No portfolio found for user req.user
+            if(portfolio == null) {
+                // create an empty portfolio
+                const newUserPortfolio = new Portfolio();
+                newUserPortfolio.createdBy = req.user.id;
+                newUserPortfolio.projectList = [];
+                newUserPortfolio.webportals = {
+                    github: '',
+                    stackoverflow: '',
+                    linkedin: '',
+                    hackerrank: ''
+                };
+                newUserPortfolio.save((err) => {
+                    if(err) {
+                        // set a error flash message
+                        req.flash('errors', 'Oooops: Cannot create empty portfolio for user ' + req.user.google.name);
+                        
+                        // redirect to the home page
+                        res.redirect('/');
+                    }
+
+                    res.render('pages/showEditPortfolioProjects', {
+                        user : req.user,
+                        portfolio: newUserPortfolio,
+                        path: path,
+                        errors: req.flash('errors'),
+                        success: req.flash('success')
+                    });
+                });
+            }
+            // A portfolio already exists for user req.user
+            else {
+                res.render('pages/showEditPortfolioProjects', {
+                    user : req.user,
+                    portfolio: portfolio,
+                    path: path,
+                    errors: req.flash('errors'),
+                    success: req.flash('success')
+                });
+            }
+        });
+}
+
+/**
+ * Update logged user's projects
+ * @param {request} req 
+ * @param {response} res 
+ */
+function processEditPortfolioProjects(req, res) {
+    
 }

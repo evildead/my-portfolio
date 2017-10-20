@@ -48,11 +48,17 @@ router.get('/portfolios', portfoliosController.viewPortfolioList);
 // route for creating a dummy portfolio for the logged user
 router.get('/portfolios/createDummy', isLoggedIn, portfoliosController.createDummy);
 
-// route for showing logged user's portfolio editing page
+// route for showing logged user's portfolio infos editing page
 router.get('/portfolios/editPortfolio', isLoggedIn, portfoliosController.showEditPortfolio);
 
-// route to update logged user's portfolio
+// route to update logged user's portfolio infos
 router.post('/portfolios/editPortfolio', isLoggedIn, multerupload.any(), portfoliosController.processEditPortfolio);
+
+// route for showing logged user's portfolio projects editing page
+router.get('/portfolios/editPortfolioProjects', isLoggedIn, portfoliosController.showEditPortfolioProjects);
+
+// route to update logged user's portfolio projects
+router.post('/portfolios/editPortfolioProjects', isLoggedIn, multerupload.any(), portfoliosController.processEditPortfolioProjects);
 
 // route for viewing the portfolio page
 router.get('/portfolios/:googleid', portfoliosController.viewPortfolio);

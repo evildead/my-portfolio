@@ -2,18 +2,30 @@
 <ol class="breadcrumb">
     <li><a class="hvr-forward" href="/">Home</a></li>
     <li><a class="hvr-forward" href="/portfolios">Portfolios</a></li>
-    <li class="active">Edit portfolio</li>
+    <li class="active">Edit Profile Infos</li>
 </ol>
 
-<div class="jumbotron text-center customizedNormal bg-no-overlay">
+<div class="jumbotron text-center customizedNormalChichenItza bg-no-overlay">
     <div class="row">
         <div class="col-sm-12 contentCentered">
             <img class="img-circle hvr-bounce-in" src="<%= user.google.imageUrl %>" alt="<%= user.google.name %>">
             <div class="textInTransparentBlack">
                 <h1><%= user.google.name %></h1>
-                <h2>Edit Portfolio</h2>
-                <h3><a href="/portfolios/<%= user.google.id %>"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> View</a></h3>
+                <h2 class="hvr-bounce-in">Edit Profile Infos</h2>
             </div>
+        </div>
+    </div>
+    <hr class="featurette-divider">
+    <div class="row">
+        <div class="col-sm-6 contentCentered">
+            <a class="btn btn-primary hvr-float-shadow" href="/portfolios/editPortfolioProjects" role="button">
+                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Edit Projects
+            </a>
+        </div>
+        <div class="col-sm-6 contentCentered">
+            <a class="btn btn-primary hvr-float-shadow" href="/portfolios/<%= user.google.id %>" role="button">
+                <span class="glyphicon glyphicon-picture" aria-hidden="true"></span> View Portfolio
+            </a>
         </div>
     </div>
 </div>
@@ -44,10 +56,10 @@
         <!--
         <hr>
         <div class="row">
-            <div class="col-sm-2">
+            <div class="col-sm-6">
                 <button type="button" id="preview-btn" class="btn btn-success">preview</button>
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm-6">
                 <button type="button" id="closepreview-btn" class="btn btn-success">close preview</button>
             </div>
         </div>
@@ -68,7 +80,9 @@
         <div class="row">
             <div class="col-sm-6 col-md-4">
                 <div class="thumbnail contentCentered">
-                    <img src="/images/genericFileThumbnail-100.png" id="cvThumbnail" alt="<%= path.basename(portfolio.cv) %>">
+                    <a class="hvr-float-shadow" href="<%= portfolio.cv %>" download="<%= portfolio.createdBy.google.name + ' - CV' + path.extname(portfolio.cv) %>">
+                        <img src="/images/genericFileThumbnail-100.png" id="cvThumbnail" alt="<%= path.basename(portfolio.cv) %>">
+                    </a>
                     <div class="caption">
                         <h4><%= path.basename(portfolio.cv) %></h4>
                         <p id='cvButtons'>

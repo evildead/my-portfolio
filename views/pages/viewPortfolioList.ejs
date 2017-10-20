@@ -4,7 +4,7 @@
     <li class="active">Portfolios</li>
 </ol>
 
-<div class="jumbotron text-center customizedNormal bg-no-overlay">
+<div class="jumbotron text-center customizedNormalPetra bg-no-overlay">
     <div class="row">
         <div class="col-sm-12 contentCentered">
             <h1 class="textInTransparentBlack"><span class="hvr-bounce-in">Portfolios List</span></h1>
@@ -14,7 +14,7 @@
 
 <div class="row">
     <% for(var portfolio of portfolios) { %>
-        <div class="col-sm-4 col-sm-offset-1 contentCentered userPortfolio">
+        <div class="col-sm-4 col-sm-offset-1 contentCentered userPortfolio hvr-glow">
             <a href="/portfolios/<%= portfolio.createdBy.google.id %>">
                 <img class="img-circle hvr-bounce-in" src="<%= portfolio.createdBy.google.imageUrl %>" alt="<%= portfolio.createdBy.google.name %>">
             </a>

@@ -31,13 +31,42 @@ body  {
     color: #999;
 }
 
-.jumbotron.customizedBig {
+.jumbotron.customizedBigIceland {
     height: 500px;
     background-image: url("../images/Iceland03.jpg");
 }
 
-.jumbotron.customizedNormal {
+.jumbotron.customizedNormalIceland {
     background-image: url("../images/Iceland02.jpg");
+    min-height: 300px;
+}
+.jumbotron.customizedNormalChichenItza {
+    background-image: url("../images/Chichen_Itza01.jpg");
+    min-height: 300px;
+}
+.jumbotron.customizedNormalColosseo {
+    background-image: url("../images/Colosseo01.jpg");
+    min-height: 300px;
+}
+.jumbotron.customizedNormalCristoRedentor {
+    background-image: url("../images/CristoRedentor01.jpg");
+    min-height: 300px;
+}
+.jumbotron.customizedNormalGreatWall {
+    background-image: url("../images/GreatWallChina01.jpg");
+    min-height: 300px;
+}
+.jumbotron.customizedNormalMachuPicchu {
+    background-image: url("../images/MachuPicchu01.jpg");
+    min-height: 300px;
+}
+.jumbotron.customizedNormalPetra {
+    background-image: url("../images/Petra01.jpg");
+    min-height: 300px;
+}
+.jumbotron.customizedNormalTajMahal {
+    background-image: url("../images/Taj_Mahal01.jpg");
+    min-height: 300px;
 }
 
 div.contentCentered {
@@ -53,6 +82,8 @@ p.dropdownUserDetails {
     color: #9d9d9d;
     margin-right: 10px;
     margin-left: 10px;
+    margin-bottom: 0px;
+    margin-top: 0px;
 }
 
 div.weblinks {
@@ -115,6 +146,10 @@ div.homePageList {
 }
 .backInCustomLightBlue {
     background-color: #337AB7
+}
+
+span.projectListBtnHolder {
+    float: right;
 }
 
 /* Projects' carousels */
@@ -228,6 +263,22 @@ ol i.icon-move {
 }
 
 /*************************  Hover.css  *****************************/
+/* Glow */
+.hvr-glow {
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    box-shadow: 0 0 1px transparent;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-property: box-shadow;
+    transition-property: box-shadow;
+}
+.hvr-glow:hover, .hvr-glow:focus, .hvr-glow:active {
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+}
+
 /* Float Shadow */
 .hvr-float-shadow {
     display: inline-block;
@@ -418,8 +469,8 @@ ol i.icon-move {
     transition-property: transform;
 }
 .hvr-rotate:hover, .hvr-rotate:focus, .hvr-rotate:active {
-    -webkit-transform: rotate(4deg);
-    transform: rotate(4deg);
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
 }
 
 /* Underline From Center */

@@ -50,6 +50,9 @@ var projectSchema = new mongoose.Schema({
     ]
 });
 
+// add index
+projectSchema.index({ createdBy: 1, slug: 1 }, {unique: true});
+
 // middleware section
 // make sure that the slug is created from the name
 projectSchema.pre('save', function(next) {

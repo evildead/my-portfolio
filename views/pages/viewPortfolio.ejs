@@ -5,19 +5,31 @@
     <li class="active"><%= portfolio.createdBy.google.name %></li>
 </ol>
 
-<div class="jumbotron text-center customizedNormal bg-no-overlay">
+<div class="jumbotron text-center customizedNormalColosseo bg-no-overlay">
     <div class="row">
         <div class="col-sm-12 contentCentered">
             <img class="img-circle hvr-bounce-in" src="<%= portfolio.createdBy.google.imageUrl %>" alt="<%= portfolio.createdBy.google.name %>">
             <div class="textInTransparentBlack">
                 <h1><%= portfolio.createdBy.google.name %></h1>
                 <h2><img alt="MyPortfolio" class="img-circle hvr-bounce-in" src="/images/myPortfolio-logo-black-100.png" width="60px"><span>ortfolio</span></h2>
-                <% if ((typeof user !== 'undefined') && (user) && (user.google.id === portfolio.createdBy.google.id)) { %>
-                    <h3><a href="/portfolios/editPortfolio"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit</a></h3>
-                <% } %>
             </div>
         </div>
     </div>
+    <% if ((typeof user !== 'undefined') && (user) && (user.google.id === portfolio.createdBy.google.id)) { %>
+    <hr class="featurette-divider">
+    <div class="row">
+        <div class="col-sm-6 contentCentered">
+            <a class="btn btn-primary hvr-float-shadow" href="/portfolios/editPortfolio" role="button">
+                <span class="glyphicon glyphicon-user" aria-hidden="true"></span> Edit Profile Infos
+            </a>
+        </div>
+        <div class="col-sm-6 contentCentered">
+            <a class="btn btn-primary hvr-float-shadow" href="/portfolios/editPortfolioProjects" role="button">
+                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Edit Projects
+            </a>
+        </div>
+    </div>
+    <% } %>
 </div>
 
 <% if(errors.length > 0) { %>

@@ -1,0 +1,184 @@
+<!-- breadcrumbs -->
+<ol class="breadcrumb">
+    <li><a class="hvr-forward" href="/">Home</a></li>
+    <li><a class="hvr-forward" href="/portfolios">Portfolios</a></li>
+    <li class="active">Edit Projects</li>
+</ol>
+
+<div class="jumbotron text-center customizedNormalMachuPicchu bg-no-overlay">
+    <div class="row">
+        <div class="col-sm-12 contentCentered">
+            <img class="img-circle hvr-bounce-in" src="<%= user.google.imageUrl %>" alt="<%= user.google.name %>">
+            <div class="textInTransparentBlack">
+                <h1><%= user.google.name %></h1>
+                <h2 class="img-circle hvr-bounce-in">Edit Projects</h2>
+            </div>
+        </div>
+    </div>
+    <hr class="featurette-divider">
+    <div class="row">
+        <div class="col-sm-6 contentCentered">
+            <a class="btn btn-primary hvr-float-shadow" href="/portfolios/editPortfolio" role="button">
+                <span class="glyphicon glyphicon-user" aria-hidden="true"></span> Edit Profile Infos
+            </a>
+        </div>
+        <div class="col-sm-6 contentCentered">
+            <a class="btn btn-primary hvr-float-shadow" href="/portfolios/<%= user.google.id %>" role="button">
+                <span class="glyphicon glyphicon-picture" aria-hidden="true"></span> View Portfolio
+            </a>
+        </div>
+    </div>
+</div>
+
+<% if(errors.length > 0) { %>
+    <div class="alert alert-danger">
+        <% for(error of errors) { %>
+            <%= error %><br>
+        <% } %>
+    </div>
+<% } %>
+
+<% if(success.length > 0) { %>
+    <div class="alert alert-success">
+        <%= success %>
+    </div>
+<% } %>
+
+<form id="editPortfolioProjectsForm" action="/portfolios/editPortfolioProjects" enctype="multipart/form-data" method="POST">
+    <div data-example-id="contextual-panels-projects">
+        <div class="panel panel-primary">
+            <div class="panel-heading"><h3 class="panel-title">Projects list</h3></div>
+            <div class="panel-body">
+                <ol class='project-orderable-list'>
+                    <% for(project of portfolio.projectList) { %>
+                    <li data-id="<%= project.id %>">
+                        <i class="fa fa-arrows hvr-rotate" aria-hidden="true"></i>
+                        <span><%= project.name %></span>
+                        <span class="projectListBtnHolder">
+                            <button type="button" class="btn btn-primary hvr-float-shadow" id="btnEditProject_<%= project.slug %>"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
+                            <button type="button" class="btn btn-primary hvr-float-shadow" id="btnRemoveProject_<%= project.slug %>"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                        </span>
+                    </li>
+                    <% } %>
+                </ol>
+            </div>
+            <div class="panel-footer">
+                <button type="button" class="btn btn-primary hvr-float-shadow" id="btnAddProject"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add project</button>
+            </div>
+        </div>
+        <input type="hidden" id="hiddenProjectList" name="hiddenProjectList" value="">
+    </div>
+
+    <hr class="featurette-divider">
+
+    <!-- This div will be enabled on "Project Edit" or "Project Add" -->
+    <div id="projectDiv">
+        <div class="form-group">
+            <label for="profileTitle">Profile Title</label>
+            <input type="text" name="profileTitle" class="form-control" value="<%= portfolio.profileTitle %>">
+        </div>
+
+        <div class="form-group">
+            <label for="profileDescription">Profile Description</label>
+            <textarea name="profileDescription" id="profileDescription" class="form-control"><%= portfolio.profileDescription %></textarea>
+            <!--
+            <hr>
+            <div class="row">
+                <div class="col-sm-6">
+                    <button type="button" id="preview-btn" class="btn btn-success">preview</button>
+                </div>
+                <div class="col-sm-6">
+                    <button type="button" id="closepreview-btn" class="btn btn-success">close preview</button>
+                </div>
+            </div>
+            <hr>
+            <div id="preview-box">
+        
+            </div>
+            -->
+        </div>
+
+        <hr class="featurette-divider">
+    </div>
+
+    <div class="form-group">
+        <button type="submit" id="editPortfolioSubmitBtn" class="btn btn-success btn-lg hvr-float-shadow">Update Projects</button>
+    </div>
+</form>
+
+<script>
+    $(function () {
+        $('#profileDescription').summernote({
+            // close prettify Html
+            prettifyHtml:false,
+            toolbar: [
+                // [groupName, [list of button]]
+                ['style', ['style']],
+                ['font', ['bold', 'italic', 'underline', 'clear']],
+                ['fontname', ['fontname']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['height', ['height']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'hr']],
+                ['view', ['fullscreen', 'codeview']],
+                ['help', ['help']],
+                ['undo', ['undo', 'redo']],
+                ['highlight', ['highlight']]
+            ],
+            popover: {
+                image: [
+                    ['imagesize', ['imageSize100', 'imageSize50', 'imageSize25']],
+                    ['float', ['floatLeft', 'floatRight', 'floatNone']],
+                    ['remove', ['removeMedia']]
+                ],
+                link: [
+                    ['link', ['linkDialogShow', 'unlink']]
+                ],
+                air: [
+                    ['color', ['color']],
+                    ['font', ['bold', 'underline', 'clear']],
+                    ['para', ['ul', 'paragraph']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture']]
+                ]
+            }
+        });
+
+        $('#preview-btn').on('click', function () {
+            $('#preview-box').html( $('#profileDescription').summernote('code') );
+            prettyPrint();
+        });
+        $('#closepreview-btn').on('click', function () {
+            $('#preview-box').html('');
+        });
+
+        $('#btnCvDelete').on('click', function() {
+            $('#cvThumbnail').attr('src', "/images/genericDeletedFileThumbnail-100.png");
+            $('#cvIsDeleted').val('1');
+            $('#btnCvDelete').hide();
+            $('#btnUndoCvDelete').show();
+        });
+        $('#btnUndoCvDelete').on('click', function() {
+            $('#cvThumbnail').attr('src', "/images/genericFileThumbnail-100.png");
+            $('#cvIsDeleted').val('0');
+            $('#btnCvDelete').show();
+            $('#btnUndoCvDelete').hide();
+        });
+        
+        var sortableProjectList = $("ol.project-orderable-list").sortable();
+        
+        $('#editPortfolioForm').submit(function() {
+            var data = sortableProjectList.sortable("serialize").get();
+            var jsonString = JSON.stringify(data, null, ' ');
+            $("#hiddenProjectList").val(jsonString);
+            //event.preventDefault();
+        });
+
+        /*
+        $("#editPortfolioSubmitBtn").on("click", function() {
+            $("#hiddenProjectList").val(sortableProjectList.sortable("serialize").get());
+        });
+        */
+    });
+</script>

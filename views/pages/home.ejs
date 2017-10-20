@@ -3,7 +3,7 @@
     <li class="active">Home</li>
 </ol>
 
-<div class="jumbotron text-center customizedBig bg-no-overlay">
+<div class="jumbotron text-center customizedBigIceland bg-no-overlay">
     <div class="textInTransparentBlack">
         <h1><img alt="MyPortfolio" class="img-circle hvr-bounce-in" src="/images/myPortfolio-logo-black-100.png"><span>ortfolio</span></h1>
         <h2 class="hvr-bounce-in">Welcome to your own portfolio builder</h2>
@@ -27,23 +27,50 @@
     </div>
 <% } %>
 
+<% if ((typeof user !== 'undefined') && (user)) { %>
 <div class="row">
-    <div class="col-sm-6 contentCentered">
+    <div class="col-sm-3 contentCentered">
         <a class="btn btn-primary hvr-float-shadow" href="/portfolios" role="button">
-            <span class="glyphicon glyphicon-picture" aria-hidden="true"></span> View Portfolios
+            <span class="glyphicon glyphicon-list" aria-hidden="true"></span> List Portfolios
         </a>
     </div>
-    <% if ((typeof user !== 'undefined') && (user)) { %>
-    <div class="col-sm-6 contentCentered">
+    <div class="col-sm-3 contentCentered">
+        <a class="btn btn-primary hvr-float-shadow" href="/portfolios/<%= user.google.id %>" role="button">
+            <span class="glyphicon glyphicon-picture" aria-hidden="true"></span> View Portfolio
+        </a>
+    </div>
+    <div class="col-sm-3 contentCentered">
+        <a class="btn btn-primary hvr-float-shadow" href="/portfolios/editPortfolio" role="button">
+            <span class="glyphicon glyphicon-user" aria-hidden="true"></span> Edit Profile Infos
+        </a>
+    </div>
+    <div class="col-sm-3 contentCentered">
+        <a class="btn btn-primary hvr-float-shadow" href="/portfolios/editPortfolioProjects" role="button">
+            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Edit Projects
+        </a>
+    </div>
+</div>
+
+<hr class="featurette-divider">
+
+<div class="row">
+    <div class="col-sm-12 contentCentered">
         <a class="btn btn-primary hvr-float-shadow" href="#" role="button">
             <span class="glyphicon glyphicon-share" aria-hidden="true"></span> Share portfolio
         </a>
     </div>
-    <% } else { %>
+</div>
+<% } else { %>
+<div class="row">
+    <div class="col-sm-6 contentCentered">
+        <a class="btn btn-primary hvr-float-shadow" href="/portfolios" role="button">
+            <span class="glyphicon glyphicon-list" aria-hidden="true"></span> List Portfolios
+        </a>
+    </div>
     <div class="col-sm-6 contentCentered">
         <a class="btn btn-primary hvr-float-shadow" href="/auth/google" role="button">
             <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Login with Google
         </a>
     </div>
-    <% } %>
 </div>
+<% } %>
