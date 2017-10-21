@@ -31,6 +31,12 @@ body  {
     color: #999;
 }
 
+/* Google Prettyprint */
+.linenums li {
+    list-style-type: decimal;
+}
+
+/* Back to top */
 #back2Top {
     width: 40px;
     line-height: 40px;
@@ -101,6 +107,8 @@ body  {
 
 div.contentCentered {
     text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 a.userImage {
