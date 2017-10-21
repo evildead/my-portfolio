@@ -56,27 +56,40 @@
                 <div class="panel-heading"><h3 class="panel-title"><%- portfolio.profileTitle %></h3></div>
                 <!-- Profile Description -->
                 <div class="panel-body"> <%- portfolio.profileDescription %> </div>
-                <!-- CV -->
-                <% if(portfolio.cv.length > 0) { %>
-                <div class="panel-footer">
-                    <div class="row">
-                        <div class="col-sm-6 contentCentered">
-                            <a class="btn btn-primary hvr-float-shadow" href="<%= portfolio.cv %>" target="_blank" role="button">
-                                <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Open CV
-                            </a>
-                        </div>
-                        <div class="col-sm-6 contentCentered">
-                            <a class="btn btn-primary hvr-float-shadow" href="<%= portfolio.cv %>" download="<%= portfolio.createdBy.google.name + ' - CV' + path.extname(portfolio.cv) %>" role="button">
-                                <span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Download CV
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <% } %>
             </div>
         </div>
 
         <hr class="featurette-divider">
+
+        <!-- CV -->
+        <% if(portfolio.cv.length > 0) { %>
+        <div data-example-id="contextual-panels-cv">
+            <div class="panel panel-primary">
+                <div class="panel-heading"><h3 class="panel-title">Curriculum Vitae</h3></div>
+                <div class="panel-body">
+                    <div class="col-sm-6 col-md-4">
+                        <div class="thumbnail contentCentered">
+                            <a class="hvr-float-shadow" href="<%= portfolio.cv %>" download="<%= portfolio.createdBy.google.name + ' - CV' + path.extname(portfolio.cv) %>">
+                                <img src="/images/genericFileThumbnail-100.png" id="cvThumbnail" alt="<%= path.basename(portfolio.cv) %>">
+                            </a>
+                            <div class="caption">
+                                <h4><%= path.basename(portfolio.cv) %></h4>
+                                <p id='cvButtons'>
+                                    <a class="btn btn-primary hvr-float-shadow" href="<%= portfolio.cv %>" target="_blank" role="button">
+                                        <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Open CV
+                                    </a>
+                                    <a class="btn btn-primary hvr-float-shadow" href="<%= portfolio.cv %>" download="<%= portfolio.createdBy.google.name + ' - CV' + path.extname(portfolio.cv) %>" role="button">
+                                        <span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Download CV
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="featurette-divider">
+        <% } %>
 
         <!-- User's web links -->
         <div data-example-id="contextual-panels-weblinks">
