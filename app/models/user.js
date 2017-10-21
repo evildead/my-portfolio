@@ -26,8 +26,8 @@ var userSchema = mongoose.Schema({
     google           : {
         id           : String,
         token        : String,
-        email        : String,
-        name         : String,
+        email        : {type: String, index: true},
+        name         : {type: String, index: true},
         imageUrl     : String
     }
 

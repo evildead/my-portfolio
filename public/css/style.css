@@ -31,6 +31,32 @@ body  {
     color: #999;
 }
 
+#back2Top {
+    width: 40px;
+    line-height: 40px;
+    overflow: hidden;
+    z-index: 999;
+    display: none;
+    cursor: pointer;
+    -moz-transform: rotate(270deg);
+    -webkit-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+    transform: rotate(270deg);
+    position: fixed;
+    bottom: 50px;
+    right: 0;
+    background-color: #BBB;
+    color: rgb(51, 122, 183) !important;
+    text-align: center;
+    font-size: 30px;
+    text-decoration: none;
+}
+#back2Top:hover {
+    background-color: #DDF;
+    color: #000;
+}
+
 .jumbotron.customizedBigIceland {
     height: 500px;
     background-image: url("../images/Iceland03.jpg");
@@ -154,6 +180,11 @@ div.homePageList {
 
 span.projectListBtnHolder {
     float: right;
+}
+
+li[data-isdeleted='1'] {
+    color: #999999 !important;
+    text-decoration: line-through;
 }
 
 /* Projects' carousels */

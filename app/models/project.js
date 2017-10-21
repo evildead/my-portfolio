@@ -13,6 +13,7 @@ var projectSchema = new mongoose.Schema({
     },
     name: {
         type: String,
+        index: true,
         default: function() {
             return("Project " + (Math.floor(Math.random()*2000000000) + 1000));
         }

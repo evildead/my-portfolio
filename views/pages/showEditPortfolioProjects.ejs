@@ -51,12 +51,13 @@
             <div class="panel-body">
                 <ol class='project-orderable-list'>
                     <% for(project of portfolio.projectList) { %>
-                    <li data-id="<%= project.id %>" data-slug="<%= project.slug %>">
+                    <li data-id="<%= project.id %>" data-slug="<%= project.slug %>" data-isdeleted="0">
                         <i class="fa fa-arrows hvr-rotate" aria-hidden="true"></i>
                         <span><%= project.name %></span>
                         <span class="projectListBtnHolder">
                             <button type="button" data-toggle="tooltip" data-placement="top" title="Edit" class="btn btn-primary hvr-grow" id="btnEditProject_<%= project.slug %>"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
                             <button type="button" data-toggle="tooltip" data-placement="top" title="Remove" class="btn btn-primary hvr-grow" id="btnRemoveProject_<%= project.slug %>"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                            <button type="button" data-toggle="tooltip" data-placement="top" title="Undelete" class="btn btn-primary hvr-grow" id="btnUndeleteProject_<%= project.slug %>" style="display:none">Undelete</button>
                         </span>
                     </li>
                     <% } %>
@@ -140,7 +141,7 @@
                 ['para', ['ul', 'ol', 'paragraph']],
                 ['height', ['height']],
                 ['table', ['table']],
-                ['insert', ['link', 'picture', 'hr']],
+                ['insert', ['link', 'picture', 'video', 'hr']],
                 ['view', ['fullscreen', 'codeview']],
                 ['help', ['help']],
                 ['undo', ['undo', 'redo']],
@@ -236,7 +237,19 @@
         });
 
         $('button[id^="btnRemoveProject_"]').on("click", function() {
-            $(this).closest("li").remove();
+            var projSlug = $(this).closest("li").data('slug');
+            $(this).closest("li").data('isdeleted', 1);
+            $('#btnEditProject_' + projSlug).hide();
+            $('#btnRemoveProject_' + projSlug).hide();
+            $('#btnUndeleteProject_' + projSlug).show();
+        });
+
+        $('button[id^="btnUndeleteProject_"]').on("click", function() {
+            var projSlug = $(this).closest("li").data('slug');
+            $(this).closest("li").data('isdeleted', 0);
+            $('#btnEditProject_' + projSlug).show();
+            $('#btnRemoveProject_' + projSlug).show();
+            $('#btnUndeleteProject_' + projSlug).hide();
         });
 
         $('#btnQuitEdit').on("click", function() {
