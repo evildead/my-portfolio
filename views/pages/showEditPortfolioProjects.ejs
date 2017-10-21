@@ -51,19 +51,27 @@
             <div class="panel-body">
                 <ol class='project-orderable-list'>
                     <% for(project of portfolio.projectList) { %>
-                    <li data-id="<%= project.id %>">
+                    <li data-id="<%= project.id %>" data-slug="<%= project.slug %>">
                         <i class="fa fa-arrows hvr-rotate" aria-hidden="true"></i>
                         <span><%= project.name %></span>
                         <span class="projectListBtnHolder">
-                            <button type="button" class="btn btn-primary hvr-float-shadow" id="btnEditProject_<%= project.slug %>"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
-                            <button type="button" class="btn btn-primary hvr-float-shadow" id="btnRemoveProject_<%= project.slug %>"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                            <button type="button" data-toggle="tooltip" data-placement="top" title="Edit" class="btn btn-primary hvr-grow" id="btnEditProject_<%= project.slug %>"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></button>
+                            <button type="button" data-toggle="tooltip" data-placement="top" title="Remove" class="btn btn-primary hvr-grow" id="btnRemoveProject_<%= project.slug %>"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
                         </span>
                     </li>
                     <% } %>
                 </ol>
             </div>
             <div class="panel-footer">
-                <button type="button" class="btn btn-primary hvr-float-shadow" id="btnAddProject"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add project</button>
+                <div class="row">
+                    <div class="col-sm-6 contentCentered">
+                        <button type="button" class="btn btn-primary hvr-float-shadow" id="btnAddProject"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add project</button>
+                    </div>
+                    <div class="col-sm-6 contentCentered">
+                        <button type="button" class="btn btn-primary hvr-float-shadow" id="btnQuitEdit" style="display:none"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Quit Edit</button>
+                    </div>
+                </div>
+                
             </div>
         </div>
         <input type="hidden" id="hiddenProjectList" name="hiddenProjectList" value="">
@@ -72,15 +80,27 @@
     <hr class="featurette-divider">
 
     <!-- This div will be enabled on "Project Edit" or "Project Add" -->
-    <div id="projectDiv">
+    <div id="projectDiv" style="display:none">
+        <input type="hidden" name="projectId" id="projectId" value="0" disabled="disabled">
+        
         <div class="form-group">
-            <label for="profileTitle">Profile Title</label>
-            <input type="text" name="profileTitle" class="form-control" value="<%= portfolio.profileTitle %>">
+            <label for="projectName">Project Name</label>
+            <input type="text" name="projectName" id="projectName" class="form-control" disabled="disabled">
         </div>
 
         <div class="form-group">
-            <label for="profileDescription">Profile Description</label>
-            <textarea name="profileDescription" id="profileDescription" class="form-control"><%= portfolio.profileDescription %></textarea>
+            <label for="projectTitle">Project Title</label>
+            <input type="text" name="projectTitle" id="projectTitle" class="form-control" disabled="disabled">
+        </div>
+
+        <div class="form-group">
+            <label for="projectBriefDescription">Project Brief Description</label>
+            <textarea name="projectBriefDescription" id="projectBriefDescription" class="form-control" disabled="disabled"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="projectDetailedDescription">Project Detailed Description</label>
+            <textarea name="projectDetailedDescription" id="projectDetailedDescription" class="form-control" disabled="disabled"></textarea>
             <!--
             <hr>
             <div class="row">
@@ -108,7 +128,7 @@
 
 <script>
     $(function () {
-        $('#profileDescription').summernote({
+        $('#projectDetailedDescription').summernote({
             // close prettify Html
             prettifyHtml:false,
             toolbar: [
@@ -152,27 +172,90 @@
         $('#closepreview-btn').on('click', function () {
             $('#preview-box').html('');
         });
-
-        $('#btnCvDelete').on('click', function() {
-            $('#cvThumbnail').attr('src', "/images/genericDeletedFileThumbnail-100.png");
-            $('#cvIsDeleted').val('1');
-            $('#btnCvDelete').hide();
-            $('#btnUndoCvDelete').show();
-        });
-        $('#btnUndoCvDelete').on('click', function() {
-            $('#cvThumbnail').attr('src', "/images/genericFileThumbnail-100.png");
-            $('#cvIsDeleted').val('0');
-            $('#btnCvDelete').show();
-            $('#btnUndoCvDelete').hide();
+        
+        var sortableProjectList = $("ol.project-orderable-list").sortable({
+            handle: 'i.fa-arrows'
         });
         
-        var sortableProjectList = $("ol.project-orderable-list").sortable();
-        
-        $('#editPortfolioForm').submit(function() {
+        $('#editPortfolioProjectsForm').submit(function() {
             var data = sortableProjectList.sortable("serialize").get();
             var jsonString = JSON.stringify(data, null, ' ');
             $("#hiddenProjectList").val(jsonString);
             //event.preventDefault();
+        });
+
+        $('#btnAddProject').on("click", function() {
+            setTimeout(function() {
+                $('#projectId').val('0');
+                $('#projectId').prop("disabled", false);
+
+                $('#projectName').val('');
+                $('#projectName').prop("disabled", false);
+                
+                $('#projectTitle').val('');
+                $('#projectTitle').prop("disabled", false);
+                
+                $('#projectBriefDescription').val('');
+                $('#projectBriefDescription').prop("disabled", false);
+                
+                $('#projectDetailedDescription').val('');
+                $('#projectDetailedDescription').prop("disabled", false);
+                
+                $('#projectDiv').show();
+                $('#btnQuitEdit').show();
+            }, 100);
+        });
+
+        $('button[id^="btnEditProject_"]').on("click", function() {
+            var prId = $(this).closest("li").data("id");
+            var prList = <%- JSON.stringify(portfolio.projectList) %>;
+            for(project of prList) {
+                if(project._id == prId) {
+                    //console.log(project);
+                    $('#projectId').val(prId);
+                    $('#projectId').prop("disabled", false);
+
+                    $('#projectName').val(project.name);
+                    $('#projectName').prop("disabled", false);
+                    
+                    $('#projectTitle').val(project.title);
+                    $('#projectTitle').prop("disabled", false);
+                    
+                    $('#projectBriefDescription').val(project.briefDescription);
+                    $('#projectBriefDescription').prop("disabled", false);
+                    
+                    $('#projectDetailedDescription').summernote('code', project.detailedDescription);
+                    $('#projectDetailedDescription').prop("disabled", false);
+                    
+                    $('#projectDiv').show();
+                    $('#btnQuitEdit').show();
+
+                    break;
+                }
+            }
+        });
+
+        $('button[id^="btnRemoveProject_"]').on("click", function() {
+            $(this).closest("li").remove();
+        });
+
+        $('#btnQuitEdit').on("click", function() {
+            $('#projectId').val('0');
+
+            $('#projectName').val('');
+            $('#projectName').prop("disabled", true);
+            
+            $('#projectTitle').val('');
+            $('#projectTitle').prop("disabled", true);
+            
+            $('#projectBriefDescription').val('');
+            $('#projectBriefDescription').prop("disabled", true);
+            
+            $('#projectDetailedDescription').val('');
+            $('#projectDetailedDescription').prop("disabled", true);
+
+            $('#projectDiv').hide();
+            $('#btnQuitEdit').hide();
         });
 
         /*

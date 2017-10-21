@@ -68,6 +68,10 @@ body  {
     background-image: url("../images/Taj_Mahal01.jpg");
     min-height: 300px;
 }
+.jumbotron.customizedNormalAbstract {
+    background-image: url("../images/abstract01.jpg");
+    min-height: 300px;
+}
 
 div.contentCentered {
     text-align: center;
@@ -502,4 +506,48 @@ ol i.icon-move {
 .hvr-underline-from-center:hover:before, .hvr-underline-from-center:focus:before, .hvr-underline-from-center:active:before {
     left: 0;
     right: 0;
+}
+
+/* Trim */
+.hvr-trim {
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    box-shadow: 0 0 1px transparent;
+    position: relative;
+}
+.hvr-trim:before {
+    content: '';
+    position: absolute;
+    border: white solid 4px;
+    top: 4px;
+    left: 4px;
+    right: 4px;
+    bottom: 4px;
+    opacity: 0;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-property: opacity;
+    transition-property: opacity;
+}
+.hvr-trim:hover:before, .hvr-trim:focus:before, .hvr-trim:active:before {
+    opacity: 1;
+}
+
+/* Grow */
+.hvr-grow {
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    box-shadow: 0 0 1px transparent;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-property: transform;
+    transition-property: transform;
+}
+.hvr-grow:hover, .hvr-grow:focus, .hvr-grow:active {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
 }
