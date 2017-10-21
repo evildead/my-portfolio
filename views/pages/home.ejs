@@ -50,16 +50,6 @@
         </a>
     </div>
 </div>
-
-<hr class="featurette-divider">
-
-<div class="row">
-    <div class="col-sm-12 contentCentered">
-        <a class="btn btn-primary hvr-float-shadow" href="#" role="button">
-            <span class="glyphicon glyphicon-share" aria-hidden="true"></span> Share portfolio
-        </a>
-    </div>
-</div>
 <% } else { %>
 <div class="row">
     <div class="col-sm-6 contentCentered">
@@ -74,3 +64,28 @@
     </div>
 </div>
 <% } %>
+<hr class="featurette-divider">
+
+<div class="row">
+    <div id="share" class="col-sm-12 contentCentered"></div>
+</div>
+
+<script>
+    $(function () {
+        $("#share").jsSocials({
+            showCount: "inside",
+            showLabel: true,
+            shareIn: "popup",
+            shares: [
+                "email",
+                "twitter",
+                "facebook",
+                "googleplus",
+                "linkedin",
+                { share: "pinterest", label: "Pin this" },
+                "stumbleupon",
+                "whatsapp"
+            ]
+        });
+    });
+</script>
