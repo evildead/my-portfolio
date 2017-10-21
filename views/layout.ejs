@@ -61,10 +61,6 @@
                 </div>
 
                 <div class="collapse navbar-collapse" id="myportfolio-navbar-collapse">
-                    <ul class="nav navbar-nav navbar">
-                        <li><a href="/portfolios"><span class="glyphicon glyphicon-list" aria-hidden="true"></span> List Portfolios</a></li>
-                    </ul>
-
                     <ul class="nav navbar-nav navbar-right">
                         <% if ((typeof user !== 'undefined') && (user)) { %>
                             <!--
@@ -91,6 +87,10 @@
                                 <a href="/auth/google"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Login with Google</a>
                             </li>
                         <% } %>
+                    </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/portfolios"><span class="glyphicon glyphicon-list" aria-hidden="true"></span> List Portfolios</a></li>
                     </ul>
                 </div>
             </div>

@@ -19,7 +19,15 @@
 </div>
 
 <!-- Project's carousel -->
-<%  const carouselId = "myCarousel_" + project.slug;
+<%  // add example image to project if project.mediaList is empty
+    if(project.mediaList.length < 1) {
+        project.mediaList.push({
+            mediaUrl: "/images/TheEarthSeenFromApollo17.jpg",
+            mediaTitle: "Example image",
+            description: "This is an example image"
+        });
+    }
+    const carouselId = "myCarousel_" + project.slug;
     const carouselIndicatorsId = "myCarouselIndicators_" + project.slug;
     const carouselInnerId = "myCarouselInner_" + project.slug; %>
 <div class="row carousel-row">

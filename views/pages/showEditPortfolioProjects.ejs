@@ -51,7 +51,7 @@
             <div class="panel-body">
                 <ol class='project-orderable-list'>
                     <% for(project of portfolio.projectList) { %>
-                    <li data-id="<%= project.id %>" data-slug="<%= project.slug %>" data-isdeleted="0">
+                    <li id="liproj_<%= project.id %>" data-id="<%= project.id %>" data-slug="<%= project.slug %>" data-isdeleted="no">
                         <i class="fa fa-arrows hvr-rotate" aria-hidden="true"></i>
                         <span><%= project.name %></span>
                         <span class="projectListBtnHolder">
@@ -199,7 +199,7 @@
                 $('#projectBriefDescription').val('');
                 $('#projectBriefDescription').prop("disabled", false);
                 
-                $('#projectDetailedDescription').val('');
+                $('#projectDetailedDescription').summernote('code', '');
                 $('#projectDetailedDescription').prop("disabled", false);
                 
                 $('#projectDiv').show();
@@ -237,23 +237,28 @@
         });
 
         $('button[id^="btnRemoveProject_"]').on("click", function() {
-            var projSlug = $(this).closest("li").data('slug');
-            $(this).closest("li").data('isdeleted', 1);
-            $('#btnEditProject_' + projSlug).hide();
-            $('#btnRemoveProject_' + projSlug).hide();
-            $('#btnUndeleteProject_' + projSlug).show();
+            var myProjSlug = $(this).closest("li").data('slug');
+            $(this).closest("li")[0].dataset.isdeleted = "yes";
+            $('#btnEditProject_' + myProjSlug).hide();
+            $('#btnRemoveProject_' + myProjSlug).hide();
+            $('#btnUndeleteProject_' + myProjSlug).show();
+            var myProjId = $(this).closest("li").data('id');
+            if(myProjId == $('#projectId').val()) {
+                $('#btnQuitEdit').trigger( "click" );
+            }
         });
 
         $('button[id^="btnUndeleteProject_"]').on("click", function() {
-            var projSlug = $(this).closest("li").data('slug');
-            $(this).closest("li").data('isdeleted', 0);
-            $('#btnEditProject_' + projSlug).show();
-            $('#btnRemoveProject_' + projSlug).show();
-            $('#btnUndeleteProject_' + projSlug).hide();
+            var myProjSlug = $(this).closest("li").data('slug');
+            $(this).closest("li")[0].dataset.isdeleted = "no";
+            $('#btnEditProject_' + myProjSlug).show();
+            $('#btnRemoveProject_' + myProjSlug).show();
+            $('#btnUndeleteProject_' + myProjSlug).hide();
         });
 
         $('#btnQuitEdit').on("click", function() {
             $('#projectId').val('0');
+            $('#projectId').prop("disabled", true);
 
             $('#projectName').val('');
             $('#projectName').prop("disabled", true);

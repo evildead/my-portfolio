@@ -182,7 +182,7 @@ span.projectListBtnHolder {
     float: right;
 }
 
-li[data-isdeleted='1'] {
+li[data-isdeleted='yes'] {
     color: #999999 !important;
     text-decoration: line-through;
 }

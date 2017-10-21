@@ -73,30 +73,36 @@
     <hr class="featurette-divider">
 
     <div class="form-group">
-        <label for="cvInputFile">Curriculum Vitae</label>
-        <input type="file" id="cvInputFile" name="cvInputFile">
-        <% if(portfolio.cv.length > 0) { %>
-        <!-- <p class="help-block">You already uploaded a CV named <%= path.basename(portfolio.cv) %></p> -->
-        <div class="row">
-            <div class="col-sm-6 col-md-4">
-                <div class="thumbnail contentCentered">
-                    <a class="hvr-float-shadow" href="<%= portfolio.cv %>" download="<%= portfolio.createdBy.google.name + ' - CV' + path.extname(portfolio.cv) %>">
-                        <img src="/images/genericFileThumbnail-100.png" id="cvThumbnail" alt="<%= path.basename(portfolio.cv) %>">
-                    </a>
-                    <div class="caption">
-                        <h4><%= path.basename(portfolio.cv) %></h4>
-                        <p id='cvButtons'>
-                            <button type="button" class="btn btn-primary hvr-float-shadow" id="btnCvDelete">Delete</button>
-                            <button type="button" class="btn btn-primary hvr-float-shadow" id="btnUndoCvDelete" style="display:none">Undelete</button>
-                        </p>
+        <div data-example-id="contextual-panels-cv">
+            <div class="panel panel-primary">
+                <div class="panel-heading"><h3 class="panel-title">Curriculum Vitae</h3></div>
+                <div class="panel-body">
+                    <input type="file" id="cvInputFile" name="cvInputFile">
+                    <% if(portfolio.cv.length > 0) { %>
+                    <!-- <p class="help-block">You already uploaded a CV named <%= path.basename(portfolio.cv) %></p> -->
+                    <div class="row">
+                        <div class="col-sm-6 col-md-4">
+                            <div class="thumbnail contentCentered">
+                                <a class="hvr-float-shadow" href="<%= portfolio.cv %>" download="<%= portfolio.createdBy.google.name + ' - CV' + path.extname(portfolio.cv) %>">
+                                    <img src="/images/genericFileThumbnail-100.png" id="cvThumbnail" alt="<%= path.basename(portfolio.cv) %>">
+                                </a>
+                                <div class="caption">
+                                    <h4><%= path.basename(portfolio.cv) %></h4>
+                                    <p id='cvButtons'>
+                                        <button type="button" class="btn btn-primary hvr-float-shadow" id="btnCvDelete">Delete</button>
+                                        <button type="button" class="btn btn-primary hvr-float-shadow" id="btnUndoCvDelete" style="display:none">Undelete</button>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    <input type="hidden" name="cvIsDeleted" id="cvIsDeleted" value="0">
+                    <% } else { %>
+                    <p class="help-block">No uploaded CV so far</p>
+                    <% } %>
                 </div>
             </div>
         </div>
-        <input type="hidden" name="cvIsDeleted" id="cvIsDeleted" value="0">
-        <% } else { %>
-        <p class="help-block">No uploaded CV so far</p>
-        <% } %>
     </div>
 
     <hr class="featurette-divider">
@@ -181,22 +187,6 @@
 
     <hr class="featurette-divider">
 
-    <div data-example-id="contextual-panels-projects">
-        <div class="panel panel-primary">
-            <div class="panel-heading"><h3 class="panel-title">Projects list</h3></div>
-            <div class="panel-body">
-                <ol class='project-orderable-list'>
-                    <% for(project of portfolio.projectList) { %>
-                    <li data-id="<%= project.id %>"><i class="fa fa-arrows hvr-rotate" aria-hidden="true"></i> <%= project.name %></li>
-                    <% } %>
-                </ol>
-            </div>
-        </div>
-        <input type="hidden" id="hiddenProjectList" name="hiddenProjectList" value="">
-    </div>
-
-    <hr class="featurette-divider">
-
     <div class="form-group">
         <button type="submit" id="editPortfolioSubmitBtn" class="btn btn-success btn-lg hvr-float-shadow">Update all</button>
     </div>
@@ -262,12 +252,7 @@
             $('#btnUndoCvDelete').hide();
         });
         
-        var sortableProjectList = $("ol.project-orderable-list").sortable();
-        
         $('#editPortfolioForm').submit(function() {
-            var data = sortableProjectList.sortable("serialize").get();
-            var jsonString = JSON.stringify(data, null, ' ');
-            $("#hiddenProjectList").val(jsonString);
             //event.preventDefault();
         });
 

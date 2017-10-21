@@ -1,9 +1,7 @@
 // User model
 const User = require('../models/user');
-
 // Project model
 const Project = require('../models/project');
-
 // Portfolio model
 const Portfolio = require('../models/portfolio');
 
@@ -397,24 +395,6 @@ function processEditPortfolio(req, res) {
                 }
             }
 
-            // check the hiddenProjectList string
-            if( (req.body.hiddenProjectList !== 'undefined') &&
-                (req.body.hiddenProjectList) &&
-                (req.body.hiddenProjectList.length > 0) ) {
-                // parse string to JSON
-                const hiddenProjectListJson = JSON.parse(req.body.hiddenProjectList);
-                
-                if((Array.isArray(hiddenProjectListJson)) && (hiddenProjectListJson.length > 0)) {
-                    const tmpProjectList = hiddenProjectListJson[0];
-                    var portfolioProjectList = [];
-                    for(obj of tmpProjectList) {
-                        portfolioProjectList.push(obj.id);
-                    }
-                    
-                    portfolio.projectList = portfolioProjectList;
-                }
-            }
-
             /////////////  CV File  ///////////////////////////////////////////////////////////////////////////////////
             // A CV file is present in req object
             if((req.files !== 'undefined') && (req.files) && (Array.isArray(req.files)) && (req.files.length > 0)) {
@@ -597,5 +577,141 @@ function showEditPortfolioProjects(req, res) {
  * @param {response} res 
  */
 function processEditPortfolioProjects(req, res) {
-    
+    Portfolio.findOne({'createdBy' : req.user.id})
+    .populate('createdBy')
+    .populate('projectList')
+    .exec(function(err, portfolio) {
+        if(err) {
+            // set a error flash message
+            req.flash('errors', 'Oooops: Error occurred while looking for portfolio for user ' + req.user.google.name);
+            
+            // redirect to the home page
+            res.redirect('/');
+        }
+
+        // No portfolio found for user req.user
+        if(portfolio == null) {
+            // set a error flash message
+            req.flash('errors', 'Oooops: no portfolio found for user ' + req.user.google.name);
+            
+            // redirect to the edit portfolio page
+            res.redirect(`/portfolios/editPortfolioProjects`);
+        }
+        // A portfolio already exists for user req.user
+        else {
+            const myPromises = [];
+
+            // check the hiddenProjectList string
+            if( (req.body.hiddenProjectList !== 'undefined') &&
+                (req.body.hiddenProjectList) &&
+                (req.body.hiddenProjectList.length > 0) ) {
+                // parse string to JSON
+                const hiddenProjectListJson = JSON.parse(req.body.hiddenProjectList);
+                
+                if((Array.isArray(hiddenProjectListJson)) && (hiddenProjectListJson.length > 0)) {
+                    const tmpProjectList = hiddenProjectListJson[0];
+                    var portfolioProjectList = [];
+                    for(obj of tmpProjectList) {
+                        if(obj.isdeleted == "no") {
+                            portfolioProjectList.push(obj.id);
+                        }
+                        else {
+                            // add a 'remove element promise'
+                            myPromises.push(
+                                Project.remove({'_id': obj.id}, (err) => {
+                                    if(err) {
+                                        console.log("Failed to delete project: " + obj.slug);
+                                    }
+                                })
+                            );
+                        }
+                    }
+                    
+                    // update portfolio's projectList
+                    portfolio.projectList = portfolioProjectList;
+                }
+                else {
+                    // set a error flash message
+                    req.flash('errors', 'Oooops: cannot find the project list structure while editing portfolio for user ' + req.user.google.name);
+                    // redirect to the edit portfolio page
+                    res.redirect(`/portfolios/editPortfolioProjects`);
+                }
+            }
+            else {
+                // set a error flash message
+                req.flash('errors', 'Oooops: cannot find the project list structure while editing portfolio for user ' + req.user.google.name);
+                // redirect to the edit portfolio page
+                res.redirect(`/portfolios/editPortfolioProjects`);
+            }
+
+            // Check if there's a project to be added/updated
+            if((req.body.projectId !== 'undefined') && (req.body.projectId)) {
+                // add a new project
+                if(req.body.projectId == '0') {
+                    const newProject = new Project();
+                    newProject.createdBy = req.user.id;
+                    newProject.name = req.body.projectName;
+                    newProject.title = req.body.projectTitle;
+                    newProject.briefDescription = req.body.projectBriefDescription;
+                    newProject.detailedDescription = req.body.projectDetailedDescription;
+                    newProject.mediaList = [];
+                    // add promise
+                    myPromises.push(
+                        // add the newProject to mongoDB
+                        newProject.save((err) => {
+                            if(err) {
+                                throw err;
+                            }
+                            portfolio.projectList.push(newProject.id);
+                        })
+                    );
+                }
+                // update an existing project
+                else {
+                    // look for the project created by user.id with slug = req.params.projectslug
+                    Project.findOne({'_id' : req.body.projectId})
+                        .populate('createdBy')
+                        .exec(function(err, project) {
+                            if(err) { throw err; }
+                            
+                            // cannot find project
+                            if(project == null) {
+                                // set a error flash message
+                                req.flash('errors', 'Oooops: Cannot update project for user ' + req.user.google.name);
+                                // redirect to the home page
+                                res.redirect('/');
+                            }
+                            // project found
+                            else {
+                                project.name = req.body.projectName;
+                                project.title = req.body.projectTitle;
+                                project.briefDescription = req.body.projectBriefDescription;
+                                project.detailedDescription = req.body.projectDetailedDescription;
+                                // add promise
+                                myPromises.push(
+                                    // update project to mongoDB
+                                    project.save((err) => {
+                                        if(err) {
+                                            throw err;
+                                        }
+                                    })
+                                );
+                            }
+                        });
+                }
+            }
+            
+            // Update the portfolio at the end of the execution of all the promises
+            Promise.all(myPromises).then(values => {
+                // update the portfolio
+                portfolio.save((err) => {
+                    if(err) { throw err; }
+                    // set a successful flash message
+                    req.flash('success', 'Successfully updated portfolio!');
+                    // redirect to the projects editing page
+                    res.redirect(`/portfolios/editPortfolioProjects`);
+                });
+            });
+        }
+    });
 }
