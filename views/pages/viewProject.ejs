@@ -9,10 +9,13 @@
 <div class="jumbotron text-center customizedNormalAbstract bg-no-overlay">
     <div class="row">
         <div class="col-sm-12 contentCentered">
-            <img class="img-circle hvr-bounce-in" src="<%= project.createdBy.google.imageUrl %>" alt="<%= project.createdBy.google.name %>">
             <div class="textInTransparentBlack">
-                <h1><%= project.createdBy.google.name %></h1>
-                <h2 class="hvr-bounce-in">Project: "<%= project.name %>"</h2>
+                <h1><img alt="MyPortfolio" class="img-circle hvr-bounce-in" src="/images/myPortfolio-logo-black-100.png"><span>ortfolio</span></h1>
+                <h2>
+                    <img class="img-circle hvr-bounce-in" src="<%= project.createdBy.google.imageUrl %>" alt="<%= project.createdBy.google.name %>">
+                    <%= project.createdBy.google.name %>
+                </h2>
+                <h3 class="jumbotronSubTitle"><%= project.name %></h3>
             </div>
         </div>
     </div>

@@ -8,10 +8,12 @@
 <div class="jumbotron text-center customizedNormalAbstract bg-no-overlay">
     <div class="row">
         <div class="col-sm-12 contentCentered">
-            <img class="img-circle hvr-bounce-in" src="<%= portfolio.createdBy.google.imageUrl %>" alt="<%= portfolio.createdBy.google.name %>">
             <div class="textInTransparentBlack">
-                <h1><%= portfolio.createdBy.google.name %></h1>
-                <h2><img alt="MyPortfolio" class="img-circle hvr-bounce-in" src="/images/myPortfolio-logo-black-100.png" width="60px"><span>ortfolio</span></h2>
+                <h1><img alt="MyPortfolio" class="img-circle hvr-bounce-in" src="/images/myPortfolio-logo-black-100.png"><span>ortfolio</span></h1>
+                <h2>
+                    <img class="img-circle hvr-bounce-in" src="<%= portfolio.createdBy.google.imageUrl %>" alt="<%= portfolio.createdBy.google.name %>">
+                    <%= portfolio.createdBy.google.name %>
+                </h2>
             </div>
         </div>
     </div>

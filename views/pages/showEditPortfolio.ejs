@@ -5,13 +5,16 @@
     <li class="active">Edit Profile Infos</li>
 </ol>
 
-<div class="jumbotron text-center customizedNormalChichenItza bg-no-overlay">
+<div class="jumbotron text-center customizedBigColosseo bg-no-overlay">
     <div class="row">
         <div class="col-sm-12 contentCentered">
-            <img class="img-circle hvr-bounce-in" src="<%= user.google.imageUrl %>" alt="<%= user.google.name %>">
             <div class="textInTransparentBlack">
-                <h1><%= user.google.name %></h1>
-                <h2 class="hvr-bounce-in">Edit Profile Infos</h2>
+                <h1><img alt="MyPortfolio" class="img-circle hvr-bounce-in" src="/images/myPortfolio-logo-black-100.png"><span>ortfolio</span></h1>
+                <h2>
+                    <img class="img-circle hvr-bounce-in" src="<%= user.google.imageUrl %>" alt="<%= user.google.name %>">
+                    <%= user.google.name %>
+                </h2>
+                <h3 class="jumbotronSubTitle">Edit Profile Infos</h3>
             </div>
         </div>
     </div>

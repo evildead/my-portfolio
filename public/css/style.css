@@ -67,6 +67,10 @@ body  {
     height: 500px;
     background-image: url("../images/Iceland03.jpg");
 }
+.jumbotron.customizedBigColosseo {
+    min-height: 450px;
+    background-image: url("../images/Colosseo02.jpg");
+}
 
 .jumbotron.customizedNormalIceland {
     background-image: url("../images/Iceland02.jpg");
@@ -265,6 +269,10 @@ li[data-isdeleted='yes'] {
     /*border-bottom-left-radius: 10px;*/
     padding-top: 50px;
     padding-bottom: 20px;
+}
+
+.jumbotronSubTitle {
+    padding-bottom: 10px;
 }
 
 ul.nav.nav-tabs {

@@ -6,15 +6,16 @@
 
 <div class="jumbotron text-center customizedNormalColosseo bg-no-overlay">
     <div class="row">
-        <div class="col-sm-12 contentCentered">
-            <h1 class="textInTransparentBlack"><span class="hvr-bounce-in">Portfolios List</span></h1>
+        <div class="col-sm-12 contentCentered textInTransparentBlack">
+            <h1><img alt="MyPortfolio" class="img-circle hvr-bounce-in" src="/images/myPortfolio-logo-black-100.png"><span>ortfolio</span></h1>
+            <h2><span>Profiles</span></h2>
         </div>
     </div>
 </div>
 
 <div class="row">
     <% for(var portfolio of portfolios) { %>
-        <div class="col-sm-4 col-sm-offset-1 contentCentered userPortfolio hvr-glow">
+        <div class="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-1 contentCentered userPortfolio hvr-glow">
             <a href="/portfolios/<%= portfolio.createdBy.google.id %>">
                 <img class="img-circle hvr-bounce-in" src="<%= portfolio.createdBy.google.imageUrl %>" alt="<%= portfolio.createdBy.google.name %>">
             </a>
