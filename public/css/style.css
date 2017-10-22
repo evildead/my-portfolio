@@ -237,7 +237,7 @@ li[data-isdeleted='yes'] {
 
 /* Force images added with Summernote to remain inside the borders when "Large Devices, Wide Screens" are used */
 @media only screen and (max-width : 1200px) {
-    div.panel-body img {
+    div.summernoteContents img {
         max-width: -webkit-fill-available;
         width: auto !important;
         display: block;
