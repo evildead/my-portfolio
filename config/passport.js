@@ -2,8 +2,35 @@
 // will be only possible by using the Google account
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
+// Async and mkdirp modules
+const async = require('async'),
+    mkdirp = require('mkdirp');
+
 // load up the user model
 var User = require('../app/models/user');
+
+initUserFolderStructure = function(userId, externCallback) {
+    // Use async.parallel to create two folder structures in parallel: 
+    // '/public/users/{userId}/cv' and '/public/users/{userId}/media'
+    async.parallel([
+        function(callback) { //This is the first task, and `callback` is its callback task
+            mkdirp('./public/users/' + userId + '/cv', function (err) {
+                if (err) console.error(err);
+                //Now we have created the folder structure, so let's tell Async that this task is done
+                callback();
+            });
+        },
+        function(callback) { //This is the second task, and `callback` is its callback task
+            mkdirp('./public/users/' + userId + '/media', function (err) {
+                if (err) console.error(err);
+                //Now we have created the folder structure, so let's tell Async that this task is done
+                callback();
+            });
+        },
+    ], function(err) { //This is the final callback
+        externCallback();
+    });
+}
 
 module.exports = function(passport) {
 
@@ -55,14 +82,19 @@ module.exports = function(passport) {
                         user.google.email = profile.emails[0].value; // pull the first email
                         user.google.imageUrl = profile.photos[0].value; // pull the first image
 
-                        user.save(function(err) {
-                            if (err)
-                                throw err;
-                            return done(null, user);
+                        initUserFolderStructure(profile.id, () => {
+                            user.save(function(err) {
+                                if (err) {
+                                    throw err;
+                                }
+                                return done(null, user);
+                            });
                         });
                     }
 
-                    return done(null, user);
+                    initUserFolderStructure(profile.id, () => {
+                        return done(null, user);
+                    });
                 }
                 else {
                     var newUser = new User();
@@ -73,11 +105,13 @@ module.exports = function(passport) {
                     newUser.google.email    = profile.emails[0].value; // pull the first email
                     newUser.google.imageUrl = profile.photos[0].value; // pull the first image
 
-                    newUser.save(function(err) {
-                        if (err) {
-                            throw err;
-                        }
-                        return done(null, newUser);
+                    initUserFolderStructure(profile.id, () => {
+                        newUser.save(function(err) {
+                            if (err) {
+                                throw err;
+                            }
+                            return done(null, newUser);
+                        });
                     });
                 }
             });
@@ -93,11 +127,13 @@ module.exports = function(passport) {
             user.google.email = profile.emails[0].value; // pull the first email
             user.google.imageUrl = profile.photos[0].value; // pull the first image
 
-            user.save(function(err) {
-                if (err) {
-                    throw err;
-                }
-                return done(null, user);
+            initUserFolderStructure(profile.id, () => {
+                user.save(function(err) {
+                    if (err) {
+                        throw err;
+                    }
+                    return done(null, user);
+                });
             });
         }
 
