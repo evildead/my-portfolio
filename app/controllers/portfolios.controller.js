@@ -17,8 +17,8 @@ module.exports = {
     viewPortfolioList: viewPortfolioList,
     viewPortfolio: viewPortfolio,
     viewProject: viewProject,
-    showEditPortfolio: showEditPortfolio,
-    processEditPortfolio: processEditPortfolio,
+    showEditPortfolioInfos: showEditPortfolioInfos,
+    processEditPortfolioInfos: processEditPortfolioInfos,
     showEditPortfolioProjects: showEditPortfolioProjects,
     processEditPortfolioProjects: processEditPortfolioProjects
 }
@@ -255,7 +255,7 @@ function viewProject(req, res) {
  * @param {request} req 
  * @param {response} res 
  */
-function showEditPortfolio(req, res) {
+function showEditPortfolioInfos(req, res) {
     Portfolio.findOne({'createdBy' : req.user.id})
         .populate('createdBy')
         .populate('projectList')
@@ -281,7 +281,7 @@ function showEditPortfolio(req, res) {
                         res.redirect('/');
                     }
 
-                    res.render('pages/showEditPortfolio', {
+                    res.render('pages/showEditPortfolioInfos', {
                         user : req.user,
                         portfolio: newUserPortfolio,
                         path: path,
@@ -292,7 +292,7 @@ function showEditPortfolio(req, res) {
             }
             // A portfolio already exists for user req.user
             else {
-                res.render('pages/showEditPortfolio', {
+                res.render('pages/showEditPortfolioInfos', {
                     user : req.user,
                     portfolio: portfolio,
                     path: path,
@@ -308,7 +308,7 @@ function showEditPortfolio(req, res) {
  * @param {request} req 
  * @param {response} res 
  */
-function processEditPortfolio(req, res) {
+function processEditPortfolioInfos(req, res) {
     // validate information
     req.checkBody('profileTitle', 'profileTitle is required!').notEmpty();
     req.checkBody('profileDescription', 'profileDescription is required!').notEmpty();
@@ -317,7 +317,7 @@ function processEditPortfolio(req, res) {
     const errors = req.validationErrors();
     if(errors) {
         req.flash('errors', errors.map(err => err.msg));
-        return res.redirect(`/portfolios/editPortfolio`);
+        return res.redirect(`/portfolios/editPortfolioInfos`);
     }
 
     Portfolio.findOne({'createdBy' : req.user.id})
@@ -338,7 +338,7 @@ function processEditPortfolio(req, res) {
             req.flash('errors', 'Oooops: no portfolio found for user ' + req.user.google.name);
             
             // redirect to the edit portfolio page
-            res.redirect(`/portfolios/editPortfolio`);
+            res.redirect(`/portfolios/editPortfolioInfos`);
         }
         // A portfolio already exists for user req.user
         else {
@@ -432,7 +432,7 @@ function processEditPortfolio(req, res) {
                                 // set a successful flash message
                                 req.flash('success', 'Successfully updated portfolio!');
 
-                                res.redirect('/portfolios/editPortfolio');
+                                res.redirect('/portfolios/editPortfolioInfos');
                             });
                         });
                     });
@@ -462,7 +462,7 @@ function processEditPortfolio(req, res) {
                             // set a successful flash message
                             req.flash('success', 'Successfully updated portfolio!');
             
-                            res.redirect('/portfolios/editPortfolio');
+                            res.redirect('/portfolios/editPortfolioInfos');
                         });
                     });
                 }
@@ -492,7 +492,7 @@ function processEditPortfolio(req, res) {
                             // set a successful flash message
                             req.flash('success', 'Successfully updated portfolio!');
             
-                            res.redirect('/portfolios/editPortfolio');
+                            res.redirect('/portfolios/editPortfolioInfos');
                         });
                     });
                 }
@@ -509,7 +509,7 @@ function processEditPortfolio(req, res) {
                         // set a successful flash message
                         req.flash('success', 'Successfully updated portfolio!');
         
-                        res.redirect('/portfolios/editPortfolio');
+                        res.redirect('/portfolios/editPortfolioInfos');
                     });
                 }
             }

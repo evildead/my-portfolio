@@ -47,7 +47,7 @@
     </div>
 <% } %>
 
-<form id="editPortfolioForm" action="/portfolios/editPortfolio" enctype="multipart/form-data" method="POST">
+<form id="editPortfolioInfosForm" action="/portfolios/editPortfolioInfos" enctype="multipart/form-data" method="POST">
     <div class="form-group">
         <label for="profileTitle">Profile Title</label>
         <input type="text" name="profileTitle" class="form-control" value="<%= portfolio.profileTitle %>">
@@ -191,7 +191,7 @@
     <hr class="featurette-divider">
 
     <div class="form-group">
-        <button type="submit" id="editPortfolioSubmitBtn" class="btn btn-success btn-lg hvr-float-shadow">Update all</button>
+        <button type="submit" id="editPortfolioInfosSubmitBtn" class="btn btn-success btn-lg hvr-float-shadow">Update all</button>
     </div>
 </form>
 
@@ -255,12 +255,12 @@
             $('#btnUndoCvDelete').hide();
         });
         
-        $('#editPortfolioForm').submit(function() {
+        $('#editPortfolioInfosForm').submit(function() {
             //event.preventDefault();
         });
 
         /*
-        $("#editPortfolioSubmitBtn").on("click", function() {
+        $("#editPortfolioInfosSubmitBtn").on("click", function() {
             $("#hiddenProjectList").val(sortableProjectList.sortable("serialize").get());
         });
         */

@@ -31,7 +31,7 @@ router.get('/auth/google', passport.authenticate('google', { scope : ['profile',
 // the callback after Google has authenticated the user
 router.get('/auth/google/callback',
     passport.authenticate('google', {
-        successRedirect : '/portfolios/editPortfolio',
+        successRedirect : '/portfolios/editPortfolioInfos',
         failureRedirect : '/'
     })
 );
@@ -49,10 +49,10 @@ router.get('/portfolios', portfoliosController.viewPortfolioList);
 router.get('/portfolios/createDummy', isLoggedIn, portfoliosController.createDummy);
 
 // route for showing logged user's portfolio infos editing page
-router.get('/portfolios/editPortfolio', isLoggedIn, portfoliosController.showEditPortfolio);
+router.get('/portfolios/editPortfolioInfos', isLoggedIn, portfoliosController.showEditPortfolioInfos);
 
 // route to update logged user's portfolio infos
-router.post('/portfolios/editPortfolio', isLoggedIn, multerupload.any(), portfoliosController.processEditPortfolio);
+router.post('/portfolios/editPortfolioInfos', isLoggedIn, multerupload.any(), portfoliosController.processEditPortfolioInfos);
 
 // route for showing logged user's portfolio projects editing page
 router.get('/portfolios/editPortfolioProjects', isLoggedIn, portfoliosController.showEditPortfolioProjects);
