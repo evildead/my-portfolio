@@ -121,7 +121,6 @@
                         if (deferred.state() === 'pending') {
                             deferred.reject();
                         }
-                        PR.prettyPrint();
                     });
 
                     ui.showDialog(self.$dialog);

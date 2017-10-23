@@ -123,6 +123,56 @@
         </div>
 
         <hr class="featurette-divider">
+
+        <div data-example-id="contextual-panels-media">
+            <div class="panel panel-primary">
+                <div class="panel-heading"><h3 class="panel-title">Media list</h3></div>
+                <div class="panel-body">
+                    <ol class='media-orderable-list'>
+                        
+                    </ol>
+                </div>
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col-sm-6 contentCentered">
+                            <button type="button" class="btn btn-primary hvr-float-shadow" id="btnAddMedia"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Image</button>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <input type="hidden" id="hiddenMediaList" name="hiddenMediaList" disabled="disabled" value="">
+
+        <!-- Bootstrap modal dialog -->
+        <div class="modal fade" id="imageSelectModal" tabindex="-1" role="dialog" aria-labelledby="imageSelectModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="imageSelectModalLabel">Select Image</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="imageurl" class="control-label">Image URL:</label>
+                                <input type="text" class="form-control" id="imageurl">
+                            </div>
+                            <div class="form-group">
+                                <label for="imageinput" class="control-label">Image File:</label>
+                                <input type="file" class="form-control" id="imageinput">
+                            </div>
+                            <input type="hidden" id="imageid">
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="modalSetImageBtn">Set Image</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <div class="form-group">
@@ -180,34 +230,89 @@
         var sortableProjectList = $("ol.project-orderable-list").sortable({
             handle: 'i.fa-arrows'
         });
+
+        var sortableMediaList = $("ol.media-orderable-list").sortable({
+            handle: 'i.fa-arrows'
+        });
         
         $('#editPortfolioProjectsForm').submit(function() {
             var data = sortableProjectList.sortable("serialize").get();
             var jsonString = JSON.stringify(data, null, ' ');
             $("#hiddenProjectList").val(jsonString);
+
+            var dataMedia = sortableMediaList.sortable("serialize").get();
+            var jsonStringMedia = JSON.stringify(dataMedia, null, ' ');
+            $("#hiddenMediaList").val(jsonStringMedia);
             //event.preventDefault();
         });
 
-        $('#btnAddProject').on("click", function() {
-            setTimeout(function() {
-                $('#projectId').val('0');
-                $('#projectId').prop("disabled", false);
+        /**
+         * function createLi
+         * inputMedia can be a media object or null (it mean we have to create a brand new li)
+         */
+        function createLi(inputMedia) {
+            let myMedia;
+            let myDataIsCreated = 'no';
+            if(inputMedia) {
+                myMedia = inputMedia;
+            }
+            else {
+                myMedia = {
+                    _id: '' + Math.floor((Math.random() * 2000000000) + 1),
+                    mediaUrl: '',
+                    mediaTitle: '',
+                    description: ''
+                };
+                myDataIsCreated = 'yes';
+            }
 
-                $('#projectName').val('');
-                $('#projectName').prop("disabled", false);
-                
-                $('#projectTitle').val('');
-                $('#projectTitle').prop("disabled", false);
-                
-                $('#projectBriefDescription').val('');
-                $('#projectBriefDescription').prop("disabled", false);
-                
-                $('#projectDetailedDescription').summernote('code', '');
-                $('#projectDetailedDescription').prop("disabled", false);
-                
-                $('#projectDiv').show();
-                $('#btnQuitEdit').show();
-            }, 100);
+            return $(
+                '<li class="mediaLi" id="limedia_'+myMedia._id+'"\
+                data-id="'+myMedia._id+'" data-iscreated="'+myDataIsCreated+'" data-isdeleted="no"\
+                data-mediaurl="'+myMedia.mediaUrl+'" data-mediatitle="'+myMedia.mediaTitle+'"\
+                data-mediadescription="'+myMedia.description+'">\
+                <div class="mediaLiItem">\
+                    <div class="mediaLiItemImg">\
+                        <div class="mediaLiItemImgImage">\
+                            <i class="fa fa-arrows hvr-rotate" aria-hidden="true"></i>\
+                            <span><img id="mediaImage_'+myMedia._id+'" src="'+myMedia.mediaUrl+'"></span>\
+                        </div>\
+                        <div class="mediaLiItemImgEditButton">\
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#imageSelectModal" data-imageid="'+myMedia._id+'">Edit image</button>\
+                        </div>\
+                    </div>\
+                    <div class="mediaLiItemTitles">\
+                        <div class="mediaLiItemTitlesLabel">Title:</div>\
+                        <input type="text" id="mediaInputTitle_'+myMedia._id+'" class="mediaLiItemTitlesTitleVal" value="'+myMedia.mediaTitle+'">\
+                        <div class="mediaLiItemTitlesLabel">Description:</div>\
+                        <input type="text" id="mediaInputDescription_'+myMedia._id+'" class="mediaLiItemTitlesDescriptionVal" value="'+myMedia.description+'">\
+                    </div>\
+                </div></li>'
+            );
+        }
+
+        $('#btnAddProject').on("click", function() {
+            $('#projectId').val('0');
+            $('#projectId').prop("disabled", false);
+
+            $('#projectName').val('');
+            $('#projectName').prop("disabled", false);
+            
+            $('#projectTitle').val('');
+            $('#projectTitle').prop("disabled", false);
+            
+            $('#projectBriefDescription').val('');
+            $('#projectBriefDescription').prop("disabled", false);
+            
+            $('#projectDetailedDescription').summernote('code', '');
+            $('#projectDetailedDescription').prop("disabled", false);
+
+            $("ol.media-orderable-list").empty();
+            $('#hiddenMediaList').val('');
+            $('#hiddenMediaList').prop("disabled", false);
+            
+            $('#projectDiv').show();
+            $('#btnQuitEdit').show();
         });
 
         $('button[id^="btnEditProject_"]').on("click", function() {
@@ -230,6 +335,15 @@
                     
                     $('#projectDetailedDescription').summernote('code', project.detailedDescription);
                     $('#projectDetailedDescription').prop("disabled", false);
+
+                    $('#hiddenMediaList').val('');
+                    $('#hiddenMediaList').prop("disabled", false);
+                    $("ol.media-orderable-list").empty();
+
+                    for(media of project.mediaList) {
+                        let newLiImage = createLi(media);
+                        newLiImage.appendTo('ol.media-orderable-list');
+                    }
                     
                     $('#projectDiv').show();
                     $('#btnQuitEdit').show();
@@ -275,8 +389,63 @@
             $('#projectDetailedDescription').val('');
             $('#projectDetailedDescription').prop("disabled", true);
 
+            $("ol.media-orderable-list").empty();
+            $('#hiddenMediaList').val('');
+            $('#hiddenMediaList').prop("disabled", true);
+
             $('#projectDiv').hide();
             $('#btnQuitEdit').hide();
+        });
+
+        $(document).on('input', 'input[id^="mediaInputTitle_"]', function(e) {
+            $(this).closest("li")[0].dataset.mediatitle = $(this).val();
+        });
+
+        $(document).on('input', 'input[id^="mediaInputDescription_"]', function(e) {
+            $(this).closest("li")[0].dataset.mediadescription = $(this).val();
+        });
+
+        $('#btnAddMedia').on('click', function() {
+            let newLiImage = createLi(null);
+            newLiImage.appendTo('ol.media-orderable-list');
+        });
+
+        $('#imageSelectModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var imageid = button.data('imageid'); // Extract info from data-imageid attribute
+            //console.log(imageid);
+            var modal = $(this);
+            modal.find('.modal-body #imageid').val(imageid);
+        });
+
+        function setImageUrl() {
+            $('#mediaImage_' + $("#imageid").val()).attr("src", $('#imageurl').val());
+            $('#mediaImage_' + $("#imageid").val()).closest("li")[0].dataset.imageurl = $('#imageurl').val();
+            $("#dialogform").dialog("close");
+        }
+
+        function setImageData(inputData) {
+            $('#mediaImage_' + $("#imageid").val()).attr("src", inputData);
+            $('#mediaImage_' + $("#imageid").val()).closest("li")[0].dataset.imageurl = inputData;
+        }
+
+        function openImageFile(event) {
+            var input = event.target;
+            var reader = new FileReader();
+            reader.onload = function() {
+                setImageData(reader.result);
+                $("#imageSelectModal").modal("hide");
+            };
+            reader.readAsDataURL(input.files[0]);
+        };
+        
+        $(document).on('change', '#imageinput', function(event) {
+            openImageFile(event);
+        });
+
+        $('#modalSetImageBtn').on('click', function() {
+            setImageUrl();
+            $("#imageSelectModal").modal("hide");
         });
 
         /*
