@@ -182,6 +182,19 @@
 
 <script>
     $(function () {
+        function isUrlValid(url) {
+            return /^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(url);
+        }
+
+        function modalFormReset() {
+            $('#imageurl').val('');
+            $('#imageid').val('');
+            $('#imageinput').replaceWith(
+                $('#imageinput').clone(true)
+            );
+            $('#imageinput').val('');
+        }
+
         $('#projectDetailedDescription').summernote({
             // close prettify Html
             prettifyHtml:false,
@@ -426,15 +439,25 @@
             modal.find('.modal-body #imageid').val(imageid);
         });
 
+        $('#imageSelectModal').on('hidden.bs.modal', function (e) {
+            modalFormReset();
+        });
+
         function setImageUrl() {
-            $('#mediaImage_' + $("#imageid").val()).attr("src", $('#imageurl').val());
-            $('#mediaImage_' + $("#imageid").val()).closest("li")[0].dataset.imageurl = $('#imageurl').val();
-            $("#dialogform").dialog("close");
+            if(isUrlValid($('#imageurl').val())) {
+                $('#mediaImage_' + $("#imageid").val()).attr("src", $('#imageurl').val());
+                $('#mediaImage_' + $("#imageid").val()).closest("li")[0].dataset.mediaurl = $('#imageurl').val();
+                return true;
+            }
+            else {
+                alert("Url " + $('#imageurl').val() + " is not valid");
+                return false;
+            }
         }
 
         function setImageData(inputData) {
             $('#mediaImage_' + $("#imageid").val()).attr("src", inputData);
-            $('#mediaImage_' + $("#imageid").val()).closest("li")[0].dataset.imageurl = inputData;
+            $('#mediaImage_' + $("#imageid").val()).closest("li")[0].dataset.mediaurl = inputData;
         }
 
         function openImageFile(event) {
@@ -452,8 +475,9 @@
         });
 
         $('#modalSetImageBtn').on('click', function() {
-            setImageUrl();
-            $("#imageSelectModal").modal("hide");
+            if(setImageUrl()) {
+                $("#imageSelectModal").modal("hide");
+            }
         });
 
         $(document).on('click', 'button[id^="btnRemoveMedia_"]', function(event) {
