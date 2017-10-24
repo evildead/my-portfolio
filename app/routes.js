@@ -42,6 +42,12 @@ router.get('/auth/google/callback',
 // route for showing the profile page
 router.get('/account', isLoggedIn, authController.showAccount);
 
+// route for show erase account page
+router.get('/eraseAccount', isLoggedIn, portfoliosController.showEraseAccount);
+
+// route for handling the account removal
+router.post('/eraseAccount', isLoggedIn, portfoliosController.processEraseAccount);
+
 // route for logging out
 router.get('/logout', authController.doLogout);
 

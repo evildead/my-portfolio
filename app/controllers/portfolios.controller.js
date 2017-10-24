@@ -12,6 +12,8 @@ const path = require('path'),                       // require path module
 
 module.exports = {
     createDummy: createDummy,
+    showEraseAccount: showEraseAccount,
+    processEraseAccount: processEraseAccount,
     viewPortfolioList: viewPortfolioList,
     viewPortfolio: viewPortfolio,
     viewProject: viewProject,
@@ -83,19 +85,19 @@ function eraseAccount(user) {
         }
 
         // remove all user's projects from MongoDb
-        Project.remove({'createdBy' : req.user.id}, (err) => {
+        Project.remove({'createdBy' : user.id}, (err) => {
             if (err) {
                 console.log(err);
             }
 
             // remove user's portfolio from MongoDb
-            Portfolio.remove({'createdBy' : req.user.id}, (err) => {
+            Portfolio.remove({'createdBy' : user.id}, (err) => {
                 if (err) {
                     console.log(err);
                 }
 
                 // remove user from MongoDb
-                User.remove({'createdBy' : req.user.id}, (err) => {
+                User.remove({_id: user.id}, (err) => {
                     if (err) {
                         console.log(err);
                     }
@@ -260,6 +262,27 @@ function createDummy(req, res) {
             res.redirect(`/portfolios/${req.user.google.id}`);
         });
     });
+}
+
+/**
+ * View the erase account page
+ * @param {request} req 
+ * @param {response} res 
+ */
+function showEraseAccount(req, res) {
+    res.render('pages/showEraseAccount', {
+        user : req.user
+    });
+}
+
+/**
+ * Perform the account removal
+ * @param {request} req 
+ * @param {response} res 
+ */
+function processEraseAccount(req, res) {
+    eraseAccount(req.user);
+    res.redirect(`/logout`);
 }
 
 /**

@@ -1,0 +1,32 @@
+<!-- breadcrumbs -->
+<ol class="breadcrumb">
+    <li class="active">Erase account</li>
+</ol>
+
+<div class="jumbotron text-center customizedNormalAbstract bg-no-overlay">
+    <div class="row">
+        <div class="col-sm-12 contentCentered textInTransparentBlack">
+            <h1><img alt="MyPortfolio" class="img-circle hvr-bounce-in" src="/images/myPortfolio-logo-black-100.png"><span>ortfolio</span></h1>
+            <h2><span><i class="fa fa-frown-o" aria-hidden="true"></i> Erase account</span></h2>
+        </div>
+    </div>
+</div>
+
+<form id="eraseAccountForm" action="/eraseAccount" enctype="multipart/form-data" method="POST">
+    <div class="form-group">
+        <div class="alert alert-danger contentCentered" role="alert">
+            <h3><%= user.google.name %>, are you really sure that you want to erase your account?</h3>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 col-sm-offset-1">
+                <a class="btn btn-primary hvr-float-shadow" href="/" role="button">
+                    <span class="glyphicon glyphicon-link" aria-hidden="true"></span> No, take me back to the home page
+                </a>
+            </div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-4 col-sm-offset-1">
+                <button type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Yes, I do want to erase my account</button>
+            </div>
+        </div>
+    </div>
+</form>
