@@ -5,12 +5,10 @@ const Project = require('../models/project');
 // Portfolio model
 const Portfolio = require('../models/portfolio');
 
-// require path module
-const path = require('path');
-// require fs module
-const fs = require('fs');
-// require summernote image saver
-const summernoteSave = require('summernote-nodejs');
+const path = require('path'),                       // require path module
+    fs = require('fs'),                             // require fs module
+    summernoteSave = require('summernote-nodejs'),  // require summernote image saver
+    rimraf = require('rimraf');                     // require rimraf (rm -Rf)
 
 module.exports = {
     createDummy: createDummy,
@@ -21,6 +19,153 @@ module.exports = {
     processEditPortfolioInfos: processEditPortfolioInfos,
     showEditPortfolioProjects: showEditPortfolioProjects,
     processEditPortfolioProjects: processEditPortfolioProjects
+}
+
+/**
+ * Check valid url
+ * @param {String} url 
+ */
+function isUrlValid(url) {
+    return /^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(url);
+}
+
+/**
+ * Check if url is a valid relative url for user's media
+ * @param {String} url 
+ * @param {Number} userId 
+ */
+function isValidUserMediaUrl(url, userId) {
+    if(url.startsWith('/users/' + userId +'/media/')) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+// function to slugify a project name
+function slugifyProject(text) {
+    return text.toString().toLowerCase()
+        .replace(/\s+/g, '-') // Replace spaces with -
+        .replace(/[^\w\-]+/g, '') // Remove all non-word chars
+        .replace(/\-\-+/g, '-') // Replace multiple - with single -
+        .replace(/^-+/, '') // Trim - from start of text
+        .replace(/-+$/, '') // Trim - from end of text
+        .replace(/-/g, '_'); // Replace remaining '-' with '_'
+}
+
+/**
+ * Transform the asynchronous function rimraf "recursive folder remove" to Promise
+ * @param {String} folderName 
+ */
+function removeRecursiveFolderPromise(folderName) {
+    return new Promise(function(resolve, reject) {
+        rimraf(folderName, function(err) {
+            if (err) {
+                reject(err);
+            }
+            else {
+                resolve();
+            }
+        });
+    });
+}
+
+/**
+ * Erase user's account => both fs folder structure and database
+ * @param {Object} user 
+ */
+function eraseAccount(user) {
+    // recursive remove public/users/{userId} folder from file system
+    rimraf('./public/users/' + user.google.id, function(err) {
+        if (err) {
+            console.log(err);
+        }
+
+        // remove all user's projects from MongoDb
+        Project.remove({'createdBy' : req.user.id}, (err) => {
+            if (err) {
+                console.log(err);
+            }
+
+            // remove user's portfolio from MongoDb
+            Portfolio.remove({'createdBy' : req.user.id}, (err) => {
+                if (err) {
+                    console.log(err);
+                }
+
+                // remove user from MongoDb
+                User.remove({'createdBy' : req.user.id}, (err) => {
+                    if (err) {
+                        console.log(err);
+                    }
+                });
+            });
+        });
+    });
+}
+
+/**
+ * Save dataImageText to file and return the relative path.
+ * Return empty string on error
+ * @param {String} dataImageText 
+ * @param {String} pathToSaveImg 
+ * @param {String} baseUrl 
+ * @param {Boolean} append 
+ */
+function saveDataImage(dataImageText, pathToSaveImg = path.join(path.join(process.cwd(), 'images')), baseUrl = '', append = true) {
+    if(!dataImageText.startsWith('data:')) {
+        return '';
+    }
+
+    var splitted = dataImageText.split(';');
+    if(splitted.length < 2) {
+        return '';
+    }
+
+    var contentType = splitted[0];
+    var encContent = splitted[1];
+    if(encContent.length < 6) {
+        return '';
+    }
+    if (encContent.substr(0,6) != 'base64') {
+        return '';
+    }
+
+    var imgBase64 = encContent.substr(6);
+    var imgFilename = imgBase64.substr(1,8).replace(/[^\w\s]/gi, '') + Date.now() + String(Math.random() * (900000000)).replace('.',''); // Generate a unique filename
+    
+    var imgExt = '';
+    switch(contentType.split(':')[1]) {
+        case 'image/jpeg': imgExt = 'jpg'; break;
+        case 'image/gif': imgExt = 'gif'; break;
+        case 'image/png': imgExt = 'png'; break;
+        default: return ''; 
+    }
+
+    if (!fs.existsSync(pathToSaveImg)){
+        fs.mkdirSync(pathToSaveImg);
+    }
+    
+    var imgPath = path.join(pathToSaveImg, imgFilename+'.'+imgExt);
+    var base64Data = encContent.replace(/^base64,/, "");
+    fs.writeFile(imgPath, base64Data, 'base64', function(err) {
+        console.log(err); // Something went wrong trying to save Image
+    });
+    
+    if(baseUrl) {
+        var formattedBaseUrl = (((baseUrl[baseUrl.len - 1]) == '/')? baseUrl : (baseUrl+'/'));
+    }
+    else {
+        var formattedBaseUrl = './';
+    }
+
+    if(append){
+        return formattedBaseUrl+pathToSaveImg+'/'+imgFilename+'.'+imgExt;
+    }
+    else {
+        return formattedBaseUrl+imgFilename+'.'+imgExt;
+    }
 }
 
 /**
@@ -102,8 +247,6 @@ function createDummy(req, res) {
     });
 
     Promise.all([promise1, promise2]).then(values => { 
-        //console.log(values);
-
         // save the portfolio
         newUserPortfolio.save((err) => {
             if(err) {
@@ -166,8 +309,6 @@ function viewPortfolio(req, res) {
             throw err;
         }
 
-        //console.log(user);
-
         if(user == null) {
             // set a error flash message
             req.flash('errors', 'Oooops: No user found with id ' + req.params.googleid);
@@ -211,8 +352,6 @@ function viewProject(req, res) {
             throw err;
         }
 
-        //console.log(user);
-
         if(user == null) {
             // set a error flash message
             req.flash('errors', 'Oooops: No user found with id ' + req.params.googleid);
@@ -228,8 +367,6 @@ function viewProject(req, res) {
                 if(err) {
                     throw err;
                 }
-        
-                //console.log(project);
         
                 if(project == null) {
                     // set a error flash message
@@ -616,7 +753,11 @@ function processEditPortfolioProjects(req, res) {
                             portfolioProjectList.push(obj.id);
                         }
                         else {
-                            // add a 'remove element promise'
+                            // add a 'remove media project folder promise'
+                            myPromises.push(
+                                removeRecursiveFolderPromise('./public/users/' + req.user.google.id + '/media/' + obj.slug)
+                            );
+                            // add a 'remove project from mongoDb promise'
                             myPromises.push(
                                 Project.remove({'_id': obj.id}, (err) => {
                                     if(err) {
@@ -655,6 +796,53 @@ function processEditPortfolioProjects(req, res) {
                     newProject.briefDescription = req.body.projectBriefDescription;
                     newProject.detailedDescription = req.body.projectDetailedDescription;
                     newProject.mediaList = [];
+
+                    /**
+                     * Handle project images here
+                     */
+                    if( (req.body.hiddenMediaList !== 'undefined') &&
+                        (req.body.hiddenMediaList) &&
+                        (req.body.hiddenMediaList.length > 0) ) {
+                        // parse string to JSON
+                        let hiddenMediaListJson = JSON.parse(req.body.hiddenMediaList);
+                        
+                        if((Array.isArray(hiddenMediaListJson)) && (hiddenMediaListJson.length > 0)) {
+                            let tmpMediaList = hiddenMediaListJson[0];
+                            let projectMediaList = [];
+                            for(obj of tmpMediaList) {
+                                if(obj.isdeleted == "no") {
+                                    if(isUrlValid(obj.mediaurl) || isValidUserMediaUrl(obj.mediaurl, req.user.google.id)) {
+                                        projectMediaList.push({
+                                            mediaUrl: obj.mediaurl,
+                                            mediaTitle: obj.mediatitle,
+                                            description: obj.mediadescription
+                                        });
+                                    }
+                                    // check if we have a Data Text Image
+                                    else if(obj.mediaurl.startsWith('data:')) {
+                                        let pathToSaveImg = "./public/users/" + req.user.google.id + "/media/" + slugifyProject(newProject.name);
+                                        let baseUrl = "/users/" + req.user.google.id + "/media/" + slugifyProject(newProject.name);
+                                        let outputSave = saveDataImage(obj.mediaurl,  // mediaurl data
+                                                                       pathToSaveImg, // destinationFolder
+                                                                       baseUrl,       // baseUrl
+                                                                       false);        // append
+                                        if(isValidUserMediaUrl(outputSave, req.user.google.id)) {
+                                            projectMediaList.push({
+                                                mediaUrl: outputSave,
+                                                mediaTitle: obj.mediatitle,
+                                                description: obj.mediadescription
+                                            });
+                                        }
+                                    }
+                                }
+                                else {
+                                    // remove file if it was a local one
+                                }
+                            }
+                            newProject.mediaList = projectMediaList;
+                        }
+                    }
+
                     // add promise
                     myPromises.push(
                         // add the newProject to mongoDB
@@ -681,22 +869,69 @@ function processEditPortfolioProjects(req, res) {
                                 // redirect to the home page
                                 res.redirect('/');
                             }
+                            
                             // project found
-                            else {
-                                project.name = req.body.projectName;
-                                project.title = req.body.projectTitle;
-                                project.briefDescription = req.body.projectBriefDescription;
-                                project.detailedDescription = req.body.projectDetailedDescription;
-                                // add promise
-                                myPromises.push(
-                                    // update project to mongoDB
-                                    project.save((err) => {
-                                        if(err) {
-                                            throw err;
+                            project.name = req.body.projectName;
+                            project.title = req.body.projectTitle;
+                            project.briefDescription = req.body.projectBriefDescription;
+                            project.detailedDescription = req.body.projectDetailedDescription;
+
+                            /**
+                             * Handle project images here
+                             */
+                            if( (req.body.hiddenMediaList !== 'undefined') &&
+                                (req.body.hiddenMediaList) &&
+                                (req.body.hiddenMediaList.length > 0) ) {
+                                // parse string to JSON
+                                let hiddenMediaListJson = JSON.parse(req.body.hiddenMediaList);
+                                
+                                if((Array.isArray(hiddenMediaListJson)) && (hiddenMediaListJson.length > 0)) {
+                                    let tmpMediaList = hiddenMediaListJson[0];
+                                    let projectMediaList = [];
+                                    for(obj of tmpMediaList) {
+                                        if(obj.isdeleted == "no") {
+                                            if(isUrlValid(obj.mediaurl) || isValidUserMediaUrl(obj.mediaurl, req.user.google.id)) {
+                                                projectMediaList.push({
+                                                    mediaUrl: obj.mediaurl,
+                                                    mediaTitle: obj.mediatitle,
+                                                    description: obj.mediadescription
+                                                });
+                                            }
+                                            // check if we have a Data Text Image
+                                            else if(obj.mediaurl.startsWith('data:')) {
+                                                let pathToSaveImg = "./public/users/" + req.user.google.id + "/media/" + slugifyProject(project.name);
+                                                let baseUrl = "/users/" + req.user.google.id + "/media/" + slugifyProject(project.name);
+                                                let outputSave = saveDataImage(obj.mediaurl,  // mediaurl data
+                                                                               pathToSaveImg, // destinationFolder
+                                                                               baseUrl,       // baseUrl
+                                                                               false);        // append
+                                                console.log(outputSave);
+                                                if(isValidUserMediaUrl(outputSave, req.user.google.id)) {
+                                                    projectMediaList.push({
+                                                        mediaUrl: outputSave,
+                                                        mediaTitle: obj.mediatitle,
+                                                        description: obj.mediadescription
+                                                    });
+                                                }
+                                            }
                                         }
-                                    })
-                                );
+                                        else {
+                                            // remove file if it was a local one
+                                        }
+                                    }
+                                    project.mediaList = projectMediaList;
+                                }
                             }
+
+                            // add promise
+                            myPromises.push(
+                                // update project to mongoDB
+                                project.save((err) => {
+                                    if(err) {
+                                        throw err;
+                                    }
+                                })
+                            );
                         });
                 }
             }
