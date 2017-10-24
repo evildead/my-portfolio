@@ -194,6 +194,10 @@ span.projectListBtnHolder {
     float: right;
 }
 
+span.mediaListBtnHolder {
+    float: right;
+}
+
 li[data-isdeleted='yes'] {
     color: #999999 !important;
     text-decoration: line-through;
@@ -353,6 +357,22 @@ div.mediaLiItem {
     height: 140px;
     vertical-align: middle;
 }
+div.mediaLiItem i.fa-arrows {
+    float: left;
+}
+.carousel.slide.smallCarousel {
+    height: 140px !important;
+    float: left !important;
+    width: 40% !important;
+}
+.item.active.smallCarousel {
+    height: 140px !important;
+}
+.carousel-caption.smallCarousel {
+    bottom: 0px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
 div.mediaLiItemImg {
     height: 140px;
     width: 40%;
@@ -371,14 +391,14 @@ div.mediaLiItemImgEditButton {
 }
 div.mediaLiItemTitles {
     height: 140px;
-    width: 40%;
+    width: 50%;
     float: left;
     padding-left: 10px;
     padding-right: 20px;
     padding-top: 10px;
 }
 ol.media-orderable-list img {
-    max-height: 100px;
+    max-height: 140px;
     max-width: 400px;
 }
 div.mediaLiItemTitles p {

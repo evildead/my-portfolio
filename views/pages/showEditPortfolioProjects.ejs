@@ -259,7 +259,7 @@
             else {
                 myMedia = {
                     _id: '' + Math.floor((Math.random() * 2000000000) + 1),
-                    mediaUrl: '',
+                    mediaUrl: '/images/imagePlaceholder.jpg',
                     mediaTitle: '',
                     description: ''
                 };
@@ -272,13 +272,17 @@
                 data-mediaurl="'+myMedia.mediaUrl+'" data-mediatitle="'+myMedia.mediaTitle+'"\
                 data-mediadescription="'+myMedia.description+'">\
                 <div class="mediaLiItem">\
-                    <div class="mediaLiItemImg">\
-                        <div class="mediaLiItemImgImage">\
-                            <i class="fa fa-arrows hvr-rotate" aria-hidden="true"></i>\
-                            <span><img id="mediaImage_'+myMedia._id+'" src="'+myMedia.mediaUrl+'"></span>\
-                        </div>\
-                        <div class="mediaLiItemImgEditButton">\
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#imageSelectModal" data-imageid="'+myMedia._id+'">Edit image</button>\
+                    <i class="fa fa-arrows hvr-rotate" aria-hidden="true"></i>\
+                    <div class="carousel slide smallCarousel" data-ride="carousel">\
+                        <div class="carousel-inner" role="listbox">\
+                            <div class="item active smallCarousel">\
+                                <img id="mediaImage_'+myMedia._id+'" class="img-responsive center-block" src="'+myMedia.mediaUrl+'">\
+                                <div class="container">\
+                                    <div class="carousel-caption textInTransparentBlack smallCarousel">\
+                                        <button type="button" id="btnEditImage_'+myMedia._id+'" class="btn btn-primary" data-toggle="modal" data-target="#imageSelectModal" data-imageid="'+myMedia._id+'">Edit image</button>\
+                                    </div>\
+                                </div>\
+                            </div>\
                         </div>\
                     </div>\
                     <div class="mediaLiItemTitles">\
@@ -287,6 +291,10 @@
                         <div class="mediaLiItemTitlesLabel">Description:</div>\
                         <input type="text" id="mediaInputDescription_'+myMedia._id+'" class="mediaLiItemTitlesDescriptionVal" value="'+myMedia.description+'">\
                     </div>\
+                    <span class="mediaListBtnHolder">\
+                        <button type="button" data-toggle="tooltip" data-placement="top" title="Remove" class="btn btn-primary hvr-grow" id="btnRemoveMedia_'+myMedia._id+'"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>\
+                        <button type="button" data-toggle="tooltip" data-placement="top" title="Undelete" class="btn btn-primary hvr-grow" id="btnUndeleteMedia_'+myMedia._id+'" style="display:none">Undelete</button>\
+                    </span>\
                 </div></li>'
             );
         }
@@ -446,6 +454,31 @@
         $('#modalSetImageBtn').on('click', function() {
             setImageUrl();
             $("#imageSelectModal").modal("hide");
+        });
+
+        $(document).on('click', 'button[id^="btnRemoveMedia_"]', function(event) {
+            if($(this).closest("li").data('iscreated') == "yes") {
+                $(this).closest("li").remove();
+            }
+            else {
+                $(this).closest("li")[0].dataset.isdeleted = "yes";
+                let myMediaId = $(this).closest("li").data('id');
+                $('#btnUndeleteMedia_' + myMediaId).show();
+                $('#btnRemoveMedia_' + myMediaId).hide();
+                $('#mediaInputTitle_' + myMediaId).prop("readonly", true);
+                $('#mediaInputDescription_' + myMediaId).prop("readonly", true);
+                $('#btnEditImage_' + myMediaId).prop("disabled", true);
+            }
+        });
+
+        $(document).on('click', 'button[id^="btnUndeleteMedia_"]', function(event) {
+            $(this).closest("li")[0].dataset.isdeleted = "no";
+            let myMediaId = $(this).closest("li").data('id');
+            $('#btnUndeleteMedia_' + myMediaId).hide();
+            $('#btnRemoveMedia_' + myMediaId).show();
+            $('#mediaInputTitle_' + myMediaId).prop("readonly", false);
+                $('#mediaInputDescription_' + myMediaId).prop("readonly", false);
+                $('#btnEditImage_' + myMediaId).prop("disabled", false);
         });
 
         /*
