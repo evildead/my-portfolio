@@ -5,5 +5,10 @@ module.exports = {
             user : req.user,
             errors: req.flash('errors')
         });
+    },
+    showTermsOfUse: (req, res) => {
+        res.render('pages/termsOfUse', {
+            
+        });
     }
 };

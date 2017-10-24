@@ -25,6 +25,9 @@ module.exports = router;
 // main routes
 router.get('/', mainController.showHome);
 
+// route for showing the "Terms of Use" page
+router.get('/termsofuse', mainController.showTermsOfUse);
+
 // Google OAuth authentication
 router.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
 

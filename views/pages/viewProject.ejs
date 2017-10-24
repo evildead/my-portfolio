@@ -15,9 +15,19 @@
                     <img class="img-circle hvr-bounce-in" src="<%= project.createdBy.google.imageUrl %>" alt="<%= project.createdBy.google.name %>">
                     <%= project.createdBy.google.name %>
                 </h2>
-                <h3 class="jumbotronSubTitle"><%= project.name %></h3>
+                <!-- <h3 class="jumbotronSubTitle"><%= project.name %></h3> -->
             </div>
         </div>
+    </div>
+</div>
+
+<!-- Project's details -->
+<div data-example-id="contextual-panels-project">
+    <div class="panel panel-primary">
+        <!-- Project's title -->
+        <div class="panel-heading"><h3 class="panel-title bigger-title"><%- project.title %></h3></div>
+        <!-- Detailed Description -->
+        <div class="panel-body summernoteContents"> <%- project.detailedDescription %> </div>
     </div>
 </div>
 
@@ -81,16 +91,6 @@
         </div>
     </div>
         
-</div>
-
-<!-- Project's details -->
-<div data-example-id="contextual-panels-project">
-    <div class="panel panel-primary">
-        <!-- Project's title -->
-        <div class="panel-heading"><h3 class="panel-title"><%- project.title %></h3></div>
-        <!-- Detailed Description -->
-        <div class="panel-body summernoteContents"> <%- project.detailedDescription %> </div>
-    </div>
 </div>
 
 <hr class="featurette-divider">

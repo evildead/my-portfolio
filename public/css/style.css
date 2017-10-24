@@ -158,6 +158,11 @@ div.weblinks {
     color: white !important;
 }
 
+.panel-title.bigger-title {
+    font-size: 18px !important;
+    font-weight: bold !important;
+}
+
 div.homePageList {
     text-align: left;
     padding-bottom: 10px;
