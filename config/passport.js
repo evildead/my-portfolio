@@ -2,15 +2,15 @@
 // will be only possible by using the Google account
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
-// Async and mkdirp modules
-const async = require('async'),
-    mkdirp = require('mkdirp');
+const async = require('async'),     // require async
+    fsExtra = require('fs-extra');  // require fs-extra
 
 // load up the user model
 var User = require('../app/models/user');
 
 initUserFolderStructure = function(userId, externCallback) {
-    // Use async.parallel to create two folder structures in parallel: 
+    /*
+    // OLD Implementation Use async.parallel to create two folder structures in parallel: 
     // '/public/users/{userId}/cv' and '/public/users/{userId}/media'
     async.parallel([
         function(callback) { //This is the first task, and `callback` is its callback task
@@ -22,6 +22,28 @@ initUserFolderStructure = function(userId, externCallback) {
         },
         function(callback) { //This is the second task, and `callback` is its callback task
             mkdirp('./public/users/' + userId + '/media', function (err) {
+                if (err) console.error(err);
+                //Now we have created the folder structure, so let's tell Async that this task is done
+                callback();
+            });
+        },
+    ], function(err) { //This is the final callback
+        externCallback();
+    });
+    */
+
+    // OLD Implementation Use async.parallel to create two folder structures in parallel: 
+    // '/public/users/{userId}/cv' and '/public/users/{userId}/media'
+    async.parallel([
+        function(callback) { //This is the first task, and `callback` is its callback task
+            fsExtra.ensureDir('./public/users/' + userId + '/cv', (err) => {
+                if (err) console.error(err);
+                //Now we have created the folder structure, so let's tell Async that this task is done
+                callback();
+            });
+        },
+        function(callback) { //This is the second task, and `callback` is its callback task
+            fsExtra.ensureDir('./public/users/' + userId + '/media', (err) => {
                 if (err) console.error(err);
                 //Now we have created the folder structure, so let's tell Async that this task is done
                 callback();

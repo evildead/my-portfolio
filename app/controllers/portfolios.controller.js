@@ -8,7 +8,7 @@ const Portfolio = require('../models/portfolio');
 const path = require('path'),                       // require path module
     fs = require('fs'),                             // require fs module
     summernoteSave = require('summernote-nodejs'),  // require summernote image saver
-    rimraf = require('rimraf');                     // require rimraf (rm -Rf)
+    fsExtra = require('fs-extra');                  // require fs-extra
 
 module.exports = {
     createDummy: createDummy,
@@ -57,9 +57,23 @@ function slugifyProject(text) {
 }
 
 /**
+ * Return a map built from project.mediaList array
+ * @param {Object} project 
+ */
+function projectMediaListToMap(project) {
+    let outMediaMap = new Map();
+    for(media of project.mediaList) {
+        outMediaMap.set(media.id, media);
+    }
+
+    return outMediaMap;
+}
+
+/**
  * Transform the asynchronous function rimraf "recursive folder remove" to Promise
  * @param {String} folderName 
  */
+/*
 function removeRecursiveFolderPromise(folderName) {
     return new Promise(function(resolve, reject) {
         rimraf(folderName, function(err) {
@@ -72,13 +86,23 @@ function removeRecursiveFolderPromise(folderName) {
         });
     });
 }
+*/
 
 /**
  * Erase user's account => both fs folder structure and database
  * @param {Object} user 
  */
 function eraseAccount(user) {
-    // recursive remove public/users/{userId} folder from file system
+    // Promise Usage
+    fsExtra.remove('./public/users/' + user.google.id)      // recursive remove public/users/{userId} folder from file system
+        .then(Project.remove({'createdBy' : user.id}))      // remove all user's projects from MongoDb
+        .then(Portfolio.remove({'createdBy' : user.id}))    // remove user's portfolio from MongoDb
+        .then(User.remove({_id: user.id}))                  // remove user from MongoDb
+        .catch(err => {
+            console.error(err)
+        });
+
+    /*
     rimraf('./public/users/' + user.google.id, function(err) {
         if (err) {
             console.log(err);
@@ -105,6 +129,7 @@ function eraseAccount(user) {
             });
         });
     });
+    */
 }
 
 /**
@@ -778,11 +803,11 @@ function processEditPortfolioProjects(req, res) {
                         else {
                             // add a 'remove media project folder promise'
                             myPromises.push(
-                                removeRecursiveFolderPromise('./public/users/' + req.user.google.id + '/media/' + obj.slug)
+                                fsExtra.remove('./public/users/' + req.user.google.id + '/media/' + obj.slug)
                             );
                             // add a 'remove project from mongoDb promise'
                             myPromises.push(
-                                Project.remove({'_id': obj.id}, (err) => {
+                                Project.remove({_id: obj.id}, (err) => {
                                     if(err) {
                                         console.log("Failed to delete project: " + obj.slug);
                                     }
@@ -858,9 +883,6 @@ function processEditPortfolioProjects(req, res) {
                                         }
                                     }
                                 }
-                                else {
-                                    // remove file if it was a local one
-                                }
                             }
                             newProject.mediaList = projectMediaList;
                         }
@@ -880,7 +902,7 @@ function processEditPortfolioProjects(req, res) {
                 // update an existing project
                 else {
                     // look for the project created by user.id with slug = req.params.projectslug
-                    Project.findOne({'_id' : req.body.projectId})
+                    Project.findOne({_id : req.body.projectId})
                         .populate('createdBy')
                         .exec(function(err, project) {
                             if(err) { throw err; }
@@ -898,6 +920,8 @@ function processEditPortfolioProjects(req, res) {
                             project.title = req.body.projectTitle;
                             project.briefDescription = req.body.projectBriefDescription;
                             project.detailedDescription = req.body.projectDetailedDescription;
+
+                            let projectMediaMap = projectMediaListToMap(project);
 
                             /**
                              * Handle project images here
@@ -938,8 +962,14 @@ function processEditPortfolioProjects(req, res) {
                                                 }
                                             }
                                         }
-                                        else {
-                                            // remove file if it was a local one
+                                        // remove file if it was a local one
+                                        else if((obj.isdeleted == "yes") && (projectMediaMap.get(obj.id)) && (isValidUserMediaUrl(projectMediaMap.get(obj.id)))) {
+                                            let mediaInMap = projectMediaMap.get(obj.id);
+                                            if((mediaInMap) && isValidUserMediaUrl(mediaInMap.mediaUrl)) {
+                                                myPromises.push(
+                                                    fsExtra.remove('./public' + mediaInMap.mediaUrl)
+                                                );
+                                            }
                                         }
                                     }
                                     project.mediaList = projectMediaList;

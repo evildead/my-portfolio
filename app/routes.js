@@ -2,7 +2,10 @@
 const express = require('express'),
     router = express.Router(),
     multer = require('multer'),
-    multerupload = multer({ dest: 'uploads/' }),
+    multerupload = multer({
+        dest: 'uploads/',
+        limits: { fieldSize: 25 * 1024 * 1024 }
+    }),
     mainController = require('./controllers/main.controller'),
     authController = require('./controllers/auth.controller'),
     portfoliosController = require('./controllers/portfolios.controller');
