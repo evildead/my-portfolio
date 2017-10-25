@@ -936,7 +936,15 @@ function processEditPortfolioProjects(req, res) {
                                     let tmpMediaList = hiddenMediaListJson[0];
                                     let projectMediaList = [];
                                     for(obj of tmpMediaList) {
+                                        let mediaInMap = projectMediaMap.get(obj.id);
                                         if(obj.isdeleted == "no") {
+                                            // If user edited the image, we must remove the old one if it was a local image
+                                            if((mediaInMap) && (mediaInMap.mediaUrl != obj.mediaurl) && isValidUserMediaUrl(mediaInMap.mediaUrl)) {
+                                                myPromises.push(
+                                                    fsExtra.remove('./public' + mediaInMap.mediaUrl)
+                                                );
+                                            }
+
                                             if(isUrlValid(obj.mediaurl) || isValidUserMediaUrl(obj.mediaurl, req.user.google.id)) {
                                                 projectMediaList.push({
                                                     mediaUrl: obj.mediaurl,
@@ -952,7 +960,6 @@ function processEditPortfolioProjects(req, res) {
                                                                                pathToSaveImg, // destinationFolder
                                                                                baseUrl,       // baseUrl
                                                                                false);        // append
-                                                console.log(outputSave);
                                                 if(isValidUserMediaUrl(outputSave, req.user.google.id)) {
                                                     projectMediaList.push({
                                                         mediaUrl: outputSave,
@@ -963,11 +970,18 @@ function processEditPortfolioProjects(req, res) {
                                             }
                                         }
                                         // remove file if it was a local one
-                                        else if((obj.isdeleted == "yes") && (projectMediaMap.get(obj.id)) && (isValidUserMediaUrl(projectMediaMap.get(obj.id)))) {
-                                            let mediaInMap = projectMediaMap.get(obj.id);
+                                        else if(obj.isdeleted == "yes") {
+                                            console.log(mediaInMap);
                                             if((mediaInMap) && isValidUserMediaUrl(mediaInMap.mediaUrl)) {
                                                 myPromises.push(
-                                                    fsExtra.remove('./public' + mediaInMap.mediaUrl)
+                                                    fsExtra.remove('./public' + mediaInMap.mediaUrl, (err) => {
+                                                        if(err) {
+                                                            console.error(err);
+                                                        }
+                                                        else {
+                                                            console.log("Removed folder: " + './public' + mediaInMap.mediaUrl);
+                                                        }
+                                                    })
                                                 );
                                             }
                                         }
