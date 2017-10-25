@@ -8,7 +8,7 @@ module.exports = {
     },
     showTermsOfUse: (req, res) => {
         res.render('pages/termsOfUse', {
-            
+            user : req.user
         });
     }
 };
