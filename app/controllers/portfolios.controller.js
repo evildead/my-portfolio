@@ -581,9 +581,17 @@ function processEditPortfolioInfos(req, res) {
             }
 
             /////////////  CV File  ///////////////////////////////////////////////////////////////////////////////////
-            // A CV file is present in req object
+            let cvObj = null;
             if((req.files !== 'undefined') && (req.files) && (Array.isArray(req.files)) && (req.files.length > 0)) {
-                const cvObj = req.files[0];
+                for(tmpFile of req.files) {
+                    if(tmpFile.fieldname == "cvInputFile") {
+                        cvObj = tmpFile;
+                        break;
+                    }
+                }
+            }
+            // A CV file is present in req object
+            if(cvObj) {
                 const publicCVFolder = "/users/" + req.user.google.id + "/cv/";
                 
                 // A cv file was already uploaded
