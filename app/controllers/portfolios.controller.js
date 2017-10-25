@@ -177,7 +177,7 @@ function saveDataImage(dataImageText, pathToSaveImg = path.join(path.join(proces
     var imgPath = path.join(pathToSaveImg, imgFilename+'.'+imgExt);
     var base64Data = encContent.replace(/^base64,/, "");
     fs.writeFile(imgPath, base64Data, 'base64', function(err) {
-        console.log(err); // Something went wrong trying to save Image
+        console.error(err); // Something went wrong trying to save Image
     });
     
     if(baseUrl) {
@@ -591,7 +591,7 @@ function processEditPortfolioInfos(req, res) {
                     // remove any previous uploaded CV files
                     fs.unlink("./public" + portfolio.cv, (err, result) => {
                         if(err) {
-                            console.log("Failed to delete old cv file: " + err);
+                            console.error("Failed to delete old cv file: " + err);
                         }
 
                         // move file from upload folder to user's cv folder
@@ -660,7 +660,7 @@ function processEditPortfolioInfos(req, res) {
                     // remove any previous uploaded CV files
                     fs.unlink("./public" + portfolio.cv, (err, result) => {
                         if(err) {
-                            console.log("Failed to delete old cv file: " + err);
+                            console.error("Failed to delete old cv file: " + err);
                         }
 
                         portfolio.cv = '';
@@ -809,7 +809,7 @@ function processEditPortfolioProjects(req, res) {
                             myPromises.push(
                                 Project.remove({_id: obj.id}, (err) => {
                                     if(err) {
-                                        console.log("Failed to delete project: " + obj.slug);
+                                        console.error("Failed to delete project: " + obj.slug);
                                     }
                                 })
                             );
@@ -939,7 +939,7 @@ function processEditPortfolioProjects(req, res) {
                                         let mediaInMap = projectMediaMap.get(obj.id);
                                         if(obj.isdeleted == "no") {
                                             // If user edited the image, we must remove the old one if it was a local image
-                                            if((mediaInMap) && (mediaInMap.mediaUrl != obj.mediaurl) && isValidUserMediaUrl(mediaInMap.mediaUrl)) {
+                                            if((mediaInMap) && (mediaInMap.mediaUrl != obj.mediaurl) && isValidUserMediaUrl(mediaInMap.mediaUrl, req.user.google.id)) {
                                                 myPromises.push(
                                                     fsExtra.remove('./public' + mediaInMap.mediaUrl)
                                                 );
@@ -971,15 +971,11 @@ function processEditPortfolioProjects(req, res) {
                                         }
                                         // remove file if it was a local one
                                         else if(obj.isdeleted == "yes") {
-                                            console.log(mediaInMap);
-                                            if((mediaInMap) && isValidUserMediaUrl(mediaInMap.mediaUrl)) {
+                                            if((mediaInMap) && isValidUserMediaUrl(mediaInMap.mediaUrl, req.user.google.id)) {
                                                 myPromises.push(
                                                     fsExtra.remove('./public' + mediaInMap.mediaUrl, (err) => {
                                                         if(err) {
                                                             console.error(err);
-                                                        }
-                                                        else {
-                                                            console.log("Removed folder: " + './public' + mediaInMap.mediaUrl);
                                                         }
                                                     })
                                                 );
