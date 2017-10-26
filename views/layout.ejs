@@ -63,7 +63,7 @@
 
                 <div class="collapse navbar-collapse" id="myportfolio-navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
-                        <% if ((typeof user !== 'undefined') && (user)) { %>
+                        <% if ((typeof user !== 'undefined') && (user) && (!user.mustacceptterms)) { %>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle userImage" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                     <img class="img-circle" alt="<%= user.google.name %>" src="<%= user.google.imageUrl %>"> <span class="caret"></span>

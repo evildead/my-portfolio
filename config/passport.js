@@ -2,57 +2,10 @@
 // will be only possible by using the Google account
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
-const async = require('async'),     // require async
-    fsExtra = require('fs-extra');  // require fs-extra
-
 // load up the user model
 var User = require('../app/models/user');
 
-initUserFolderStructure = function(userId, externCallback) {
-    /*
-    // OLD Implementation Use async.parallel to create two folder structures in parallel: 
-    // '/public/users/{userId}/cv' and '/public/users/{userId}/media'
-    async.parallel([
-        function(callback) { //This is the first task, and `callback` is its callback task
-            mkdirp('./public/users/' + userId + '/cv', function (err) {
-                if (err) console.error(err);
-                //Now we have created the folder structure, so let's tell Async that this task is done
-                callback();
-            });
-        },
-        function(callback) { //This is the second task, and `callback` is its callback task
-            mkdirp('./public/users/' + userId + '/media', function (err) {
-                if (err) console.error(err);
-                //Now we have created the folder structure, so let's tell Async that this task is done
-                callback();
-            });
-        },
-    ], function(err) { //This is the final callback
-        externCallback();
-    });
-    */
-
-    // OLD Implementation Use async.parallel to create two folder structures in parallel: 
-    // '/public/users/{userId}/cv' and '/public/users/{userId}/media'
-    async.parallel([
-        function(callback) { //This is the first task, and `callback` is its callback task
-            fsExtra.ensureDir('./public/users/' + userId + '/cv', (err) => {
-                if (err) console.error(err);
-                //Now we have created the folder structure, so let's tell Async that this task is done
-                callback();
-            });
-        },
-        function(callback) { //This is the second task, and `callback` is its callback task
-            fsExtra.ensureDir('./public/users/' + userId + '/media', (err) => {
-                if (err) console.error(err);
-                //Now we have created the folder structure, so let's tell Async that this task is done
-                callback();
-            });
-        },
-    ], function(err) { //This is the final callback
-        externCallback();
-    });
-}
+const initUserFolderStructure = require('../app/utilities').initUserFolderStructure;
 
 module.exports = function(passport) {
 
@@ -86,8 +39,6 @@ module.exports = function(passport) {
 
     },
     function(req, token, refreshToken, profile, done) {
-        //console.log(profile);
-
         // check if the user is already logged in
         if (!req.user) {
 
@@ -114,10 +65,21 @@ module.exports = function(passport) {
                         });
                     }
 
-                    initUserFolderStructure(profile.id, () => {
+                    if(!user.mustacceptterms) {
+                        initUserFolderStructure(profile.id, () => {
+                            user.save(function(err) {
+                                if (err) {
+                                    throw err;
+                                }
+                                return done(null, user);
+                            });
+                        });
+                    }
+                    else {
                         return done(null, user);
-                    });
+                    }
                 }
+                // brand new user
                 else {
                     var newUser = new User();
 
@@ -126,14 +88,13 @@ module.exports = function(passport) {
                     newUser.google.name     = profile.displayName;
                     newUser.google.email    = profile.emails[0].value; // pull the first email
                     newUser.google.imageUrl = profile.photos[0].value; // pull the first image
-
-                    initUserFolderStructure(profile.id, () => {
-                        newUser.save(function(err) {
-                            if (err) {
-                                throw err;
-                            }
-                            return done(null, newUser);
-                        });
+                    newUser.mustacceptterms = true;     // the new user must accept terms of use before creating the account on MyPortfolio
+                    
+                    newUser.save(function(err) {
+                        if (err) {
+                            throw err;
+                        }
+                        return done(null, newUser);
                     });
                 }
             });
@@ -143,10 +104,10 @@ module.exports = function(passport) {
             // user already exists and is logged in, we have to link accounts
             var user = req.user; // pull the user out of the session
 
-            user.google.id    = profile.id;
-            user.google.token = token;
-            user.google.name  = profile.displayName;
-            user.google.email = profile.emails[0].value; // pull the first email
+            user.google.id       = profile.id;
+            user.google.token    = token;
+            user.google.name     = profile.displayName;
+            user.google.email    = profile.emails[0].value; // pull the first email
             user.google.imageUrl = profile.photos[0].value; // pull the first image
 
             initUserFolderStructure(profile.id, () => {

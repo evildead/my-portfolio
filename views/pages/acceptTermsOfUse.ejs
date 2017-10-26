@@ -1,0 +1,53 @@
+<!-- breadcrumbs -->
+<ol class="breadcrumb">
+    <li class="active">Terms Of Use Acceptance</li>
+</ol>
+
+<div class="jumbotron text-center customizedNormalAbstract bg-no-overlay">
+    <div class="row">
+        <div class="col-sm-12 contentCentered textInTransparentBlack">
+            <h1><img alt="MyPortfolio" class="img-circle hvr-bounce-in" src="/images/myPortfolio-logo-black-100.png"><span>ortfolio</span></h1>
+            <h2><span>Terms Of Use Acceptance</span></h2>
+        </div>
+    </div>
+</div>
+
+<form id="acceptTermsOfUseForm" action="/accepttermsofuse" method="POST">
+    <div data-example-id="contextual-panels-termsofuse">
+        <div class="panel panel-primary">
+            <!-- Terms of Use title -->
+            <div class="panel-heading">
+                <h3 class="panel-title bigger-title">Terms Of Use, Privacy Policy and Cookie Policy</h3>
+                <hr class="featurette-divider">
+                <h4 class="panel-title bigger-title">Go to the end of the page to accept</h4>
+            </div>
+            <!-- Detailed Description -->
+            <div class="panel-body summernoteContents"> <%- termscontent %> </div>
+            <!-- Footer containing buttons -->
+            <div class="panel-footer">
+                <div class="row">
+                    <div class="col-sm-4 col-sm-offset-1">
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="acceptRadios" id="acceptRadios1" value="0" checked>
+                                I do not accept the Terms of Use
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="acceptRadios" id="acceptRadios2" value="1">
+                                I accept the terms of use
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2"></div>
+
+                    <div class="col-sm-4 col-sm-offset-1">
+                        <button type="submit" class="btn btn-primary hvr-float-shadow"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Submit my choice</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

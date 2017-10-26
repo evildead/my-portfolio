@@ -10,10 +10,24 @@ const express = require('express'),
     authController = require('./controllers/auth.controller'),
     portfoliosController = require('./controllers/portfolios.controller');
 
+const fs = require('fs');
+
 // route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {
-    // if user is authenticated in the session, pass the control to the "next()" handler
-    if (req.isAuthenticated()) {
+    // if user is authenticated in the session and the terms of use have been accepted, pass the control to the "next()" handler
+    if (req.isAuthenticated() && !req.user.mustacceptterms) {
+        return next();
+    }
+
+    // otherwise redirect him to the home page
+    res.redirect('/');
+}
+
+// route middleware to make sure a user is temporarily logged in to accept terms of use
+function isLoggedInToAcceptTerms(req, res, next) {
+    //console.log(req.user);
+    // if user is authenticated in the session and the terms of use have not been accepted, pass the control to the "next()" handler
+    if (req.isAuthenticated() && req.user.mustacceptterms) {
         return next();
     }
 
@@ -36,14 +50,29 @@ router.get('/auth/google', passport.authenticate('google', { scope : ['profile',
 
 // the callback after Google has authenticated the user
 router.get('/auth/google/callback',
-    passport.authenticate('google', {
-        successRedirect : '/portfolios/editPortfolioInfos',
-        failureRedirect : '/'
-    })
-);
+    passport.authenticate('google', {failureRedirect : '/'}),    // on failure Google authentication
+    function(req, res) {        // on correct Google authentication
+        // User must accept the terms of use before creating the account
+        if(req.user.mustacceptterms) {
+            fs.readFile('./public/assets/termsOfUse.html', (err, data) => {
+                if (err) throw err;
+                res.render('pages/acceptTermsOfUse', {
+                    user : req.user,
+                    termscontent: data
+                });
+            });
+        }
+        // User has already accepted the terms of use
+        else {
+            res.redirect('/portfolios/editPortfolioInfos');
+        }
+});
 
 // route for showing the profile page
 router.get('/account', isLoggedIn, authController.showAccount);
+
+// route for handling the terms of use acceptance
+router.post('/accepttermsofuse', isLoggedInToAcceptTerms, authController.processAcceptTermsOfUse);
 
 // route for show erase account page
 router.get('/eraseAccount', isLoggedIn, portfoliosController.showEraseAccount);

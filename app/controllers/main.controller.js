@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 module.exports = {
     // show the home page
     showHome: (req, res) => {
@@ -7,8 +9,12 @@ module.exports = {
         });
     },
     showTermsOfUse: (req, res) => {
-        res.render('pages/termsOfUse', {
-            user : req.user
+        fs.readFile('./public/assets/termsOfUse.html', (err, data) => {
+            if (err) throw err;
+            res.render('pages/termsOfUse', {
+                user : req.user,
+                termscontent: data
+            });
         });
     }
 };

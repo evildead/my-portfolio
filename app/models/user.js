@@ -28,9 +28,13 @@ var userSchema = mongoose.Schema({
         token        : String,
         email        : {type: String, index: true},
         name         : {type: String, index: true},
-        imageUrl     : String
+        imageUrl     : String,
+        eslug        : String
+    },
+    mustacceptterms  : {
+        type: Boolean,
+        default: 'false'
     }
-
 });
 
 // generating a hash
@@ -43,5 +47,24 @@ userSchema.methods.validPassword = function(password) {
     return bcrypt.compareSync(password, this.local.password);
 };
 
+// make sure that the google.eslug is created from google.email
+// when we execute save, the terms will have been accepted
+userSchema.pre('save', function(next) {
+    this.google.eslug = eslugify(this.google.email);
+    next();
+});
+
 // create the model for users and expose it to our app
 module.exports = mongoose.model('User', userSchema);
+
+// function to slugify a google email
+function eslugify(email) {
+    let splitted = email.split('@');
+    if(splitted.length > 0) {
+        return splitted[0].toString().toLowerCase();
+    }
+    // invalid email
+    else {
+        return '';
+    }
+}

@@ -10,6 +10,10 @@ const path = require('path'),                       // require path module
     summernoteSave = require('summernote-nodejs'),  // require summernote image saver
     fsExtra = require('fs-extra');                  // require fs-extra
 
+const isUrlValid = require('../utilities').isUrlValid;
+const isValidUserMediaUrl = require('../utilities').isValidUserMediaUrl;
+const slugifyProject = require('../utilities').slugifyProject;
+
 module.exports = {
     createDummy: createDummy,
     showEraseAccount: showEraseAccount,
@@ -21,39 +25,6 @@ module.exports = {
     processEditPortfolioInfos: processEditPortfolioInfos,
     showEditPortfolioProjects: showEditPortfolioProjects,
     processEditPortfolioProjects: processEditPortfolioProjects
-}
-
-/**
- * Check valid url
- * @param {String} url 
- */
-function isUrlValid(url) {
-    return /^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(url);
-}
-
-/**
- * Check if url is a valid relative url for user's media
- * @param {String} url 
- * @param {Number} userId 
- */
-function isValidUserMediaUrl(url, userId) {
-    if(url.startsWith('/users/' + userId +'/media/')) {
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-
-// function to slugify a project name
-function slugifyProject(text) {
-    return text.toString().toLowerCase()
-        .replace(/\s+/g, '-') // Replace spaces with -
-        .replace(/[^\w\-]+/g, '') // Remove all non-word chars
-        .replace(/\-\-+/g, '-') // Replace multiple - with single -
-        .replace(/^-+/, '') // Trim - from start of text
-        .replace(/-+$/, '') // Trim - from end of text
-        .replace(/-/g, '_'); // Replace remaining '-' with '_'
 }
 
 /**
@@ -70,66 +41,21 @@ function projectMediaListToMap(project) {
 }
 
 /**
- * Transform the asynchronous function rimraf "recursive folder remove" to Promise
- * @param {String} folderName 
- */
-/*
-function removeRecursiveFolderPromise(folderName) {
-    return new Promise(function(resolve, reject) {
-        rimraf(folderName, function(err) {
-            if (err) {
-                reject(err);
-            }
-            else {
-                resolve();
-            }
-        });
-    });
-}
-*/
-
-/**
  * Erase user's account => both fs folder structure and database
  * @param {Object} user 
  */
-function eraseAccount(user) {
+function eraseAccount(user, externalCallback) {
     // Promise Usage
     fsExtra.remove('./public/users/' + user.google.id)      // recursive remove public/users/{userId} folder from file system
-        .then(Project.remove({'createdBy' : user.id}))      // remove all user's projects from MongoDb
-        .then(Portfolio.remove({'createdBy' : user.id}))    // remove user's portfolio from MongoDb
-        .then(User.remove({_id: user.id}))                  // remove user from MongoDb
+        .then(() => Project.remove({'createdBy' : user.id}))      // remove all user's projects from MongoDb
+        .then(() => Portfolio.remove({'createdBy' : user.id}))    // remove user's portfolio from MongoDb
+        .then(() => User.remove({_id: user.id}))                  // remove user from MongoDb
+        .then(() => {
+            externalCallback();
+        })
         .catch(err => {
             console.error(err)
         });
-
-    /*
-    rimraf('./public/users/' + user.google.id, function(err) {
-        if (err) {
-            console.log(err);
-        }
-
-        // remove all user's projects from MongoDb
-        Project.remove({'createdBy' : user.id}, (err) => {
-            if (err) {
-                console.log(err);
-            }
-
-            // remove user's portfolio from MongoDb
-            Portfolio.remove({'createdBy' : user.id}, (err) => {
-                if (err) {
-                    console.log(err);
-                }
-
-                // remove user from MongoDb
-                User.remove({_id: user.id}, (err) => {
-                    if (err) {
-                        console.log(err);
-                    }
-                });
-            });
-        });
-    });
-    */
 }
 
 /**
@@ -177,7 +103,9 @@ function saveDataImage(dataImageText, pathToSaveImg = path.join(path.join(proces
     var imgPath = path.join(pathToSaveImg, imgFilename+'.'+imgExt);
     var base64Data = encContent.replace(/^base64,/, "");
     fs.writeFile(imgPath, base64Data, 'base64', function(err) {
-        console.error(err); // Something went wrong trying to save Image
+        if(err) {
+            console.error(err); // Something went wrong trying to save Image
+        }
     });
     
     if(baseUrl) {
@@ -306,8 +234,9 @@ function showEraseAccount(req, res) {
  * @param {response} res 
  */
 function processEraseAccount(req, res) {
-    eraseAccount(req.user);
-    res.redirect(`/logout`);
+    eraseAccount(req.user, () => {
+        res.redirect(`/logout`);
+    });
 }
 
 /**
