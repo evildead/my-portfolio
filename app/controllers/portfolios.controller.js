@@ -212,7 +212,7 @@ function createDummy(req, res) {
             req.flash('success', 'Successfully created dummy portfolio!');
 
             // redirect to the newly created portfolio
-            res.redirect(`/portfolios/${req.user.google.id}`);
+            res.redirect(`/portfolios/${req.user.google.eslug}`);
         });
     });
 }
@@ -281,14 +281,14 @@ function viewPortfolioList(req, res) {
  * @param {response} res 
  */
 function viewPortfolio(req, res) {
-    User.findOne({'google.id' : req.params.googleid}, function(err, user) {
+    User.findOne({$or: [{'google.id' : req.params.googleid}, {'google.eslug' : req.params.googleid}]}, function(err, user) {
         if(err) {
             throw err;
         }
 
         if(user == null) {
             // set a error flash message
-            req.flash('errors', 'Oooops: No user found with id ' + req.params.googleid);
+            req.flash('errors', 'Oooops: No user found => ' + req.params.googleid);
             
             // redirect to the home page
             res.redirect('/');
@@ -324,14 +324,14 @@ function viewPortfolio(req, res) {
  * @param {response} res 
  */
 function viewProject(req, res) {
-    User.findOne({'google.id' : req.params.googleid}, function(err, user) {
+    User.findOne({$or: [{'google.id' : req.params.googleid}, {'google.eslug' : req.params.googleid}]}, function(err, user) {
         if(err) {
             throw err;
         }
 
         if(user == null) {
             // set a error flash message
-            req.flash('errors', 'Oooops: No user found with id ' + req.params.googleid);
+            req.flash('errors', 'Oooops: No user found => ' + req.params.googleid);
             
             // redirect to the home page
             res.redirect('/');

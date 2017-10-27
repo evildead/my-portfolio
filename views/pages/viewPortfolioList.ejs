@@ -16,11 +16,11 @@
 <div class="row">
     <% for(var portfolio of portfolios) { %>
         <div class="col-xs-10 col-xs-offset-1 col-sm-4 col-sm-offset-1 contentCentered userPortfolio hvr-glow">
-            <a href="/portfolios/<%= portfolio.createdBy.google.id %>">
+            <a href="/portfolios/<%= portfolio.createdBy.google.eslug %>">
                 <img class="img-circle hvr-bounce-in" src="<%= portfolio.createdBy.google.imageUrl %>" alt="<%= portfolio.createdBy.google.name %>">
             </a>
             <h2><%= portfolio.createdBy.google.name %></h2>
-            <a class="btn btn-primary hvr-float-shadow" href="/portfolios/<%= portfolio.createdBy.google.id %>" role="button">
+            <a class="btn btn-primary hvr-float-shadow" href="/portfolios/<%= portfolio.createdBy.google.eslug %>" role="button">
                 <span class="glyphicon glyphicon-link" aria-hidden="true"></span> Go!
             </a>
         </div>

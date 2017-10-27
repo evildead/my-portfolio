@@ -101,8 +101,8 @@ router.get('/portfolios/editPortfolioProjects', isLoggedIn, portfoliosController
 // route to update logged user's portfolio projects
 router.post('/portfolios/editPortfolioProjects', isLoggedIn, multerupload.any(), portfoliosController.processEditPortfolioProjects);
 
-// route for viewing the portfolio page
+// route for viewing the portfolio page (google id can be also the email slug)
 router.get('/portfolios/:googleid', portfoliosController.viewPortfolio);
 
-// route for viewing the project page
+// route for viewing the project page (google id can be also the email slug)
 router.get('/portfolios/:googleid/:projectslug', portfoliosController.viewProject);
