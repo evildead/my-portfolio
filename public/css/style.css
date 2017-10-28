@@ -64,8 +64,14 @@ body  {
 }
 
 .jumbotron.customizedBigIceland {
-    height: 500px;
-    background-image: url("../images/Iceland03.jpg");
+    height: 700px;
+    background-image: url("../images/Iceland01.jpg");
+}
+@media only screen and (max-width : 768px) {
+    .jumbotron.customizedBigIceland {
+        height: 780px !important;
+        background-image: url("../images/Iceland01.jpg");
+    }
 }
 .jumbotron.customizedBigColosseo {
     min-height: 450px;
@@ -137,6 +143,42 @@ div.weblinks {
     margin-right: 50px;
 }
 
+.homeConcept {
+    color: white !important;
+    border-radius: 6px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 10px;
+    padding-top: 30px;
+    text-align: left;
+    margin-top: 50px;
+    margin-bottom: 30px;
+}
+
+p.homeConceptText {
+    font-size: 17px !important;
+    font-family: monospace;
+}
+
+@media only screen and (max-width : 768px) {
+    .homeConcept {
+        color: white !important;
+        border-radius: 6px;
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-bottom: 10px;
+        padding-top: 30px;
+        text-align: left;
+        margin-top: 20px;
+        margin-bottom: 30px;
+    }
+
+    p.homeConceptText {
+        font-size: 15px !important;
+        font-family: monospace;
+    }
+}
+
 .userdetails {
     background-color: rgba(255, 255, 255, 0.7);
     border-radius: 10px;
@@ -179,6 +221,10 @@ div.homePageList {
     margin-bottom: 20px;
 }
 
+.jssocials-share-link {
+    border-radius: 50%;
+}
+
 .backInBlack {
     background-color: black;
 }
@@ -192,7 +238,7 @@ div.homePageList {
     background-color: #778899;
 }
 .backInCustomLightBlue {
-    background-color: #337AB7
+    background-color: #337AB7;
 }
 
 span.projectListBtnHolder {

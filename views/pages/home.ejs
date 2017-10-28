@@ -9,39 +9,51 @@
         <h2>Welcome to your own portfolio builder</h2>
     </div>
 
-    <div class="textInTransparentBlack homePageList">
-        <ul>
-            <li><span class="hvr-forward"><span class="glyphicon glyphicon-briefcase" aria-hidden="true"></span> MyPortfolio allows you to create a modern resume with great visual impact, in few easy steps</span></li>
-            <li><span class="hvr-forward"><span class="glyphicon glyphicon-share" aria-hidden="true"></span> You can share your projects efficiently and in no time</span></li>
-            <li><span class="hvr-forward"><span class="glyphicon glyphicon-picture" aria-hidden="true"></span> Thanks to its compact and outstanding design, portfolios fit perfectly on any device</span></li>
-            <li><span class="hvr-forward"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> ...enjoy</span></li>
-        </ul>
+    <div class="textInTransparentBlack homeConcept">
+        <p class="homeConceptText"><span class="hvr-forward"><span class="glyphicon glyphicon-briefcase" aria-hidden="true"></span> MyPortfolio allows you to create a modern resume with great visual impact, in few easy steps</span></p>
+        <p class="homeConceptText"><span class="hvr-forward"><span class="glyphicon glyphicon-share" aria-hidden="true"></span> You can share your projects efficiently and in no time</span></p>
+        <p class="homeConceptText"><span class="hvr-forward"><span class="glyphicon glyphicon-picture" aria-hidden="true"></span> Thanks to its compact and outstanding design, portfolios fit perfectly on any device</span></p>
+        <p class="homeConceptText"><span class="hvr-forward"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> ...enjoy</span></p>
     </div>
 
-    <!--
-    <div class="textInTransparentBlack homePageList">
-        <ul>
-            <li><span class="hvr-forward">Access with your Google account to create and update your own portfolio</span></li>
-            <li><span class="hvr-forward">Share your portfolio</span></li>
-            <li><span class="hvr-forward">View other users' portfolios</span></li>
-            <li><span class="hvr-forward">...enjoy <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></span></li>
-        </ul>
-    </div>
-    -->
-</div>
-
-<!--
-<div data-example-id="contextual-panels-myportfolioconcept">
-    <div class="panel panel-primary">
-        <div class="panel-heading"><h3 class="panel-title bigger-title">MyPortfolio concept</h3></div>
-        <div class="panel-body summernoteContents">
-            <p><b>MyPortfolio</b> allows you to <u>create a modern curriculum</u> with <u>great visual impact</u> in <u>few easy steps</u>.</p>
-            <p>Thanks to its <u>compact and outstanding design</u>, you can <u>share your projects efficiently and in no time</u>.</p>
-            <p><u>View portfolios on any device</u></p>
+    <% if ((typeof user !== 'undefined') && (user)) { %>
+    <div class="row">
+        <div class="col-sm-3 contentCentered">
+            <a class="btn btn-success hvr-float-shadow" href="/portfolios" role="button">
+                <span class="glyphicon glyphicon-list" aria-hidden="true"></span> List Portfolios
+            </a>
+        </div>
+        <div class="col-sm-3 contentCentered">
+            <a class="btn btn-success hvr-float-shadow" href="/portfolios/<%= user.google.eslug %>" role="button">
+                <span class="glyphicon glyphicon-picture" aria-hidden="true"></span> View Portfolio
+            </a>
+        </div>
+        <div class="col-sm-3 contentCentered">
+            <a class="btn btn-success hvr-float-shadow" href="/portfolios/editPortfolioInfos" role="button">
+                <span class="glyphicon glyphicon-user" aria-hidden="true"></span> Edit Profile Infos
+            </a>
+        </div>
+        <div class="col-sm-3 contentCentered">
+            <a class="btn btn-success hvr-float-shadow" href="/portfolios/editPortfolioProjects" role="button">
+                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Edit Projects
+            </a>
         </div>
     </div>
+    <% } else { %>
+    <div class="row">
+        <div class="col-sm-6 contentCentered">
+            <a class="btn btn-success btn-lg hvr-float-shadow" href="/portfolios" role="button">
+                <span class="glyphicon glyphicon-list" aria-hidden="true"></span> List Portfolios
+            </a>
+        </div>
+        <div class="col-sm-6 contentCentered">
+            <a class="btn btn-success btn-lg hvr-float-shadow" href="/auth/google" role="button">
+                <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Login with Google
+            </a>
+        </div>
+    </div>
+    <% } %>
 </div>
--->
 
 <% if(errors.length > 0) { %>
     <div class="alert alert-danger">
@@ -51,45 +63,6 @@
     </div>
 <% } %>
 
-<% if ((typeof user !== 'undefined') && (user)) { %>
-<div class="row">
-    <div class="col-sm-3 contentCentered">
-        <a class="btn btn-primary hvr-float-shadow" href="/portfolios" role="button">
-            <span class="glyphicon glyphicon-list" aria-hidden="true"></span> List Portfolios
-        </a>
-    </div>
-    <div class="col-sm-3 contentCentered">
-        <a class="btn btn-primary hvr-float-shadow" href="/portfolios/<%= user.google.eslug %>" role="button">
-            <span class="glyphicon glyphicon-picture" aria-hidden="true"></span> View Portfolio
-        </a>
-    </div>
-    <div class="col-sm-3 contentCentered">
-        <a class="btn btn-primary hvr-float-shadow" href="/portfolios/editPortfolioInfos" role="button">
-            <span class="glyphicon glyphicon-user" aria-hidden="true"></span> Edit Profile Infos
-        </a>
-    </div>
-    <div class="col-sm-3 contentCentered">
-        <a class="btn btn-primary hvr-float-shadow" href="/portfolios/editPortfolioProjects" role="button">
-            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Edit Projects
-        </a>
-    </div>
-</div>
-<% } else { %>
-<div class="row">
-    <div class="col-sm-6 contentCentered">
-        <a class="btn btn-primary hvr-float-shadow" href="/portfolios" role="button">
-            <span class="glyphicon glyphicon-list" aria-hidden="true"></span> List Portfolios
-        </a>
-    </div>
-    <div class="col-sm-6 contentCentered">
-        <a class="btn btn-primary hvr-float-shadow" href="/auth/google" role="button">
-            <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Login with Google
-        </a>
-    </div>
-</div>
-<% } %>
-<hr class="featurette-divider">
-
 <div class="row">
     <div id="share" class="col-sm-12 contentCentered"></div>
 </div>
@@ -97,19 +70,10 @@
 <script>
     $(function () {
         $("#share").jsSocials({
-            showCount: "inside",
-            showLabel: true,
+            showCount: false,
+            showLabel: false,
             shareIn: "popup",
-            shares: [
-                "email",
-                "twitter",
-                "facebook",
-                "googleplus",
-                "linkedin",
-                { share: "pinterest", label: "Pin this" },
-                "stumbleupon",
-                "whatsapp"
-            ]
+            shares: ["email", "twitter", "facebook", "googleplus", "linkedin", "pinterest", "stumbleupon", "whatsapp"]
         });
     });
 </script>
