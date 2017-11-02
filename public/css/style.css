@@ -338,7 +338,11 @@ ul.nav.nav-tabs {
 body.dragging, body.dragging * {
     cursor: move !important;
 }
-  
+
+i.fa {
+    cursor: all-scroll;
+}
+
 .dragged {
     position: absolute;
     opacity: 0.5;
