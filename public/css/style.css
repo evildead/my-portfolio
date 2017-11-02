@@ -339,7 +339,7 @@ body.dragging, body.dragging * {
     cursor: move !important;
 }
 
-i.fa {
+i.fa.fa-arrows {
     cursor: all-scroll;
 }
 
