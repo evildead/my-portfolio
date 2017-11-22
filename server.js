@@ -49,7 +49,7 @@ app.use(passport.session()); // persistent login sessions
 require('./config/passport')(passport); // pass passport for configuration
 
 // set the routes
-app.use(require('./app/routes')); // pass passport for routing
+app.use(require('./app/routes'));
 
 // start our server
 app.listen(port, () => {

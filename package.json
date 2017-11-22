@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --timeout 10000"
   },
   "repository": {
     "type": "git",
@@ -13,10 +13,7 @@
   },
   "author": "Danilo Carrabino",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/evildead/my-portfolio/issues"
-  },
-  "homepage": "https://github.com/evildead/my-portfolio#readme",
+  "homepage": "http://myportfolio.danilocarrabino.net",
   "dependencies": {
     "async": "^2.5.0",
     "bcrypt-nodejs": "0.0.3",
@@ -38,5 +35,10 @@
     "passport-local": "^1.0.0",
     "passport-twitter": "^1.0.4",
     "summernote-nodejs": "^1.0.4"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-http": "^3.0.0",
+    "mocha": "^4.0.1"
   }
 }
