@@ -13,7 +13,7 @@ const path = require('path'),                       // require path module
 const isUrlValid = require('../utilities').isUrlValid;
 const isValidUserMediaUrl = require('../utilities').isValidUserMediaUrl;
 const slugifyProject = require('../utilities').slugifyProject;
-const getProjectAndAdjacents = require('../utilities').getProjectAndAdjacents;
+const getProjectAndAdjacents = require('../db-utilities').getProjectAndAdjacents;
 
 module.exports = {
     createDummy: createDummy,
