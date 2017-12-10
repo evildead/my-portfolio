@@ -13,6 +13,7 @@ const path = require('path'),                       // require path module
 const isUrlValid = require('../utilities').isUrlValid;
 const isValidUserMediaUrl = require('../utilities').isValidUserMediaUrl;
 const slugifyProject = require('../utilities').slugifyProject;
+const getProjectAndAdjacents = require('../utilities').getProjectAndAdjacents;
 
 module.exports = {
     createDummy: createDummy,
@@ -324,41 +325,31 @@ function viewPortfolio(req, res) {
  * @param {response} res 
  */
 function viewProject(req, res) {
-    User.findOne({$or: [{'google.id' : req.params.googleid}, {'google.eslug' : req.params.googleid}]}, function(err, user) {
+    getProjectAndAdjacents(req.params.googleid, req.params.projectslug, (err, obj) => {
         if(err) {
-            throw err;
-        }
-
-        if(user == null) {
-            // set a error flash message
-            req.flash('errors', 'Oooops: No user found => ' + req.params.googleid);
-            
-            // redirect to the home page
-            res.redirect('/');
+            if(err instanceof Error) {
+                if(err.message.toLowerCase == 'no user found') {
+                    // set a error flash message
+                    req.flash('errors', 'Oooops: No user found => ' + req.params.googleid);
+                }
+                else if(err.message.toLowerCase == 'no project found') {
+                    // set a error flash message
+                    req.flash('errors', 'Oooops: No project "' + req.params.projectslug + '" found for user ' + req.params.googleid);
+                }
+                // redirect to the home page
+                res.redirect('/');
+            }
+            else {
+                throw err;
+            }
         }
         else {
-            // look for the project created by user.id with slug = req.params.projectslug
-            Project.findOne({'createdBy' : user.id, 'slug' : req.params.projectslug})
-                .populate('createdBy')
-                .exec(function(err, project) {
-                if(err) {
-                    throw err;
-                }
-        
-                if(project == null) {
-                    // set a error flash message
-                    req.flash('errors', 'Oooops: No project "' + req.params.projectslug + '" found for user ' + user.google.name);
-                    
-                    // redirect to the home page
-                    res.redirect('/');
-                }
-                else {
-                    res.render('pages/viewProject', {
-                        user : req.user,
-                        project: project,
-                        errors: req.flash('errors')
-                    });
-                }
+            res.render('pages/viewProject', {
+                user : req.user,
+                project: obj.current,
+                succProject: obj.successive,
+                prevProject: obj.previous,
+                errors: req.flash('errors')
             });
         }
     });

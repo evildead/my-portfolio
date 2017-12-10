@@ -19,6 +19,34 @@
             </div>
         </div>
     </div>
+    <% if ( (prevProject) || (succProject) ||
+            ((typeof user !== 'undefined') && (user) && (user.google.id === project.createdBy.google.id))
+          ) { %>
+    <hr class="featurette-divider">
+    <div class="row">
+        <div class="col-sm-4 contentCentered">
+            <% if (prevProject) { %>
+            <a class="btn btn-primary hvr-float-shadow" href="/portfolios/<%= project.createdBy.google.eslug %>/<%= prevProject.slug %>" role="button">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> <%= prevProject.name %>
+            </a>
+            <% } %>
+        </div>
+        <div class="col-sm-4 contentCentered">
+            <% if ((typeof user !== 'undefined') && (user) && (user.google.id === project.createdBy.google.id)) { %>
+                <a class="btn btn-primary hvr-float-shadow" href="/portfolios/editPortfolioProjects" role="button">
+                    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Edit Projects
+                </a>
+            <% } %>
+        </div>
+        <div class="col-sm-4 contentCentered">
+            <% if (succProject) { %>
+                <a class="btn btn-primary hvr-float-shadow" href="/portfolios/<%= project.createdBy.google.eslug %>/<%= succProject.slug %>" role="button">
+                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> <%= succProject.name %>
+                </a>
+            <% } %>
+        </div>
+    </div>
+    <% } %>
 </div>
 
 <!-- Project's details -->
