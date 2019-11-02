@@ -1,6 +1,6 @@
 {
   "name": "my-portfolio",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Build your own portfolio",
   "main": "server.js",
   "scripts": {
